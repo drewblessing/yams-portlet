@@ -16,10 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package org.gnenc.yams.portlet;
+package org.gnenc.yams.portlet.util;
 
-import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.PropsUtil;
 
-public class Accounts extends MVCPortlet {
-
+public class YAMSPropsValues {
+	
+	public static final String YAMS_LDAP_BASE_PROVIDER_URL = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_BASE_PROVIDER_URL);
+	
+	public static final String YAMS_LDAP_BASE_DN = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_BASE_DN);
+	
+	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_SECURITY_PRINCIPAL);
+	
+	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS);
+	
 }
