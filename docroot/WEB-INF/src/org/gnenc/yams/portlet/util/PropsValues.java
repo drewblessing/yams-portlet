@@ -1,4 +1,3 @@
-<%
 /**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
@@ -17,11 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-%>
+package org.gnenc.yams.portlet.util;
 
-<%@include file="/html/portlet/init.jsp" %>
-<%@ page import="org.gnenc.yams.portlet.util.YAMSPropsValues" %>
+import com.liferay.portal.kernel.util.PropsUtil;
 
-<%=YAMSPropsValues.YAMS_LDAP_BASE_PROVIDER_URL %>
-
-YAMS Account Management System
+public class PropsValues {
+	
+	public static final String YAMS_LDAP_BASE_PROVIDER_URL = PropsUtil.get(PropsKeys.YAMS_LDAP_BASE_PROVIDER_URL);
+	
+	public static final String YAMS_LDAP_BASE_DN = PropsUtil.get(PropsKeys.YAMS_LDAP_BASE_DN);
+	
+	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = PropsUtil.get(PropsKeys.YAMS_LDAP_SECURITY_PRINCIPAL);
+	
+	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = PropsUtil.get(PropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS);
+	
+}

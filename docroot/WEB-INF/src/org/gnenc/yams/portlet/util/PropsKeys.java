@@ -18,16 +18,13 @@
  **/
 package org.gnenc.yams.portlet.util;
 
-import com.liferay.portal.kernel.util.PropsUtil;
-
-public class YAMSPropsValues {
+public class PropsKeys {
 	
-	public static final String YAMS_LDAP_BASE_PROVIDER_URL = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_BASE_PROVIDER_URL);
+	public static final String YAMS_LDAP_BASE_PROVIDER_URL = "yams.ldap.base.provider.url";
 	
-	public static final String YAMS_LDAP_BASE_DN = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_BASE_DN);
+	public static final String YAMS_LDAP_BASE_DN = "yams.ldap.base.dn";
 	
-	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_SECURITY_PRINCIPAL);
+	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = "yams.ldap.security.principal";
 	
-	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = PropsUtil.get(YAMSPropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS);
-	
+	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = "yams.ldap.security.credentials";
 }
