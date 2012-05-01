@@ -21,13 +21,16 @@
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="org.gnenc.yams.portlet.Accounts" %>
 
 <%@ page import="javax.portlet.WindowState" %>
 
+<%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 
+<liferay-theme:defineObjects />
 <portlet:defineObjects />

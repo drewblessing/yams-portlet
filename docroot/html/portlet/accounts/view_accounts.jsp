@@ -21,4 +21,10 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%
+String redirect = ParamUtil.getString(request, "redirect");
+%>
+
+<liferay-ui:header backURL="<%= redirect %>" title="view-all" />
+
 Not yet implemented.

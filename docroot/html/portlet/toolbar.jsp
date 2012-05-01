@@ -22,12 +22,14 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
+String redirect = PortalUtil.getCurrentURL(renderRequest);
 String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
 %>
 
 <div class="lfr-portlet-toolbar">
 	<portlet:renderURL var="viewUsersURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 		<portlet:param name="jspPage" value="/html/portlet/accounts/view_accounts.jsp" />
+		<portlet:param name="redirect" value="<%= redirect %>" />
 	</portlet:renderURL>
 	
 	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("view-all") ? "current" : StringPool.BLANK %>">
