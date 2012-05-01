@@ -19,15 +19,19 @@
  **/
 %>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/portlet/init.jsp" %>
 
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%
+String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
+%>
 
-<%@ page import="org.gnenc.yams.portlet.Accounts" %>
-
-<%@ page import="javax.portlet.WindowState" %>
-
-<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
-<%@ page import="com.liferay.portal.kernel.util.StringPool" %>
-
-<portlet:defineObjects />
+<div class="lfr-portlet-toolbar">
+	<portlet:renderURL var="viewUsersURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
+		<portlet:param name="jspPage" value="/html/portlet/accounts/view_accounts.jsp" />
+	</portlet:renderURL>
+	
+	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("view-all") ? "current" : StringPool.BLANK %>">
+		<a href="<%= viewUsersURL %>"><liferay-ui:message key="view-all" /></a>
+	</span>
+	
+</div>

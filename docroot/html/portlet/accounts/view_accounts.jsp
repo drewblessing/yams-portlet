@@ -19,15 +19,6 @@
  **/
 %>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/portlet/init.jsp" %>
 
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
-
-<%@ page import="org.gnenc.yams.portlet.Accounts" %>
-
-<%@ page import="javax.portlet.WindowState" %>
-
-<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
-<%@ page import="com.liferay.portal.kernel.util.StringPool" %>
-
-<portlet:defineObjects />
+Not yet implemented.

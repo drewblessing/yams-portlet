@@ -20,6 +20,6 @@
 %>
 
 
-<%@include file="/html/portlet/init.jsp" %>
+<%@ include file="/html/portlet/init.jsp" %>
 
-YAMS Account Management System
+<%@ include file="/html/portlet/toolbar.jsp" %>
