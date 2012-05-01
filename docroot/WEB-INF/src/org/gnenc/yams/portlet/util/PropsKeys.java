@@ -1,4 +1,3 @@
-<%
 /**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
@@ -17,10 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-%>
+package org.gnenc.yams.portlet.util;
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
-<%@ page import="org.gnenc.yams.portlet.Accounts" %>
-
-<portlet:defineObjects />
+public class PropsKeys {
+	
+	public static final String YAMS_LDAP_BASE_PROVIDER_URL = "yams.ldap.base.provider.url";
+	
+	public static final String YAMS_LDAP_BASE_DN = "yams.ldap.base.dn";
+	
+	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = "yams.ldap.security.principal";
+	
+	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = "yams.ldap.security.credentials";
+}
