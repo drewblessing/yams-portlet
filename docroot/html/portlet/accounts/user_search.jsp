@@ -19,9 +19,10 @@
  **/
 %>
 
-
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%@ include file="/html/portlet/toolbar.jsp" %>
 
-<liferay-ui:header title="search-accounts" />
+<liferay-ui:header title="search" />
+
+Search page

@@ -1,4 +1,3 @@
-<%
 /**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
@@ -17,11 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-%>
+package org.gnenc.yams.portlet.accounts.search;
 
+import org.gnenc.yams.model.Account;
 
-<%@ include file="/html/portlet/init.jsp" %>
+import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 
-<%@ include file="/html/portlet/toolbar.jsp" %>
+/**
+ * @author Drew A. Blessing
+ */
+public class AccountSearch extends SearchContainer<Account> {
 
-<liferay-ui:header title="search-accounts" />
+	
+}

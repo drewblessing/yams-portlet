@@ -7,7 +7,7 @@
 		<portlet-class>org.gnenc.yams.portlet.Accounts</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
-			<value>/html/portlet/accounts/view.jsp</value>
+			<value>/html/portlet/accounts/user_search.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

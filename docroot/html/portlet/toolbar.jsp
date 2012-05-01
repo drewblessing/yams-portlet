@@ -23,13 +23,24 @@
 
 <%
 String redirect = PortalUtil.getCurrentURL(renderRequest);
-String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
+String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 %>
 
 <div class="lfr-portlet-toolbar">
+	<portlet:renderURL var="searchUsersURL" >
+		<portlet:param name="jspPage" value="/html/portlet/accounts/user_search.jsp" />
+		<portlet:param name="redirect" value="<%= redirect %>" />
+		<portlet:param name="toolbarItem" value="search" />
+	</portlet:renderURL>
+	
+	<span class="lfr-toolbar-button search-button <%= toolbarItem.equals("search") ? "current" : StringPool.BLANK %>">
+		<a href="<%= searchUsersURL %>"><liferay-ui:message key="search" /></a>
+	</span>
+	
 	<portlet:renderURL var="viewUsersURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 		<portlet:param name="jspPage" value="/html/portlet/accounts/view_accounts.jsp" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
+		<portlet:param name="toolbarItem" value="view-all" />
 	</portlet:renderURL>
 	
 	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("view-all") ? "current" : StringPool.BLANK %>">
