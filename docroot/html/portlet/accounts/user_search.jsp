@@ -22,7 +22,7 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-SearchContainer searchContainer = (SearchContainer)request.getAttribute("liferay-ui:search:searchContainer");
+AccountSearch searchContainer = (AccountSearch)request.getAttribute("liferay-ui:search:searchContainer");
 
 AccountDisplayTerms displayTerms = (AccountDisplayTerms)searchContainer.getDisplayTerms();
 %>

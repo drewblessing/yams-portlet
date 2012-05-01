@@ -25,4 +25,18 @@
 
 <liferay-ui:header title="search" />
 
-Search not yet implemented.
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/accounts/search.jsp");
+
+SearchContainer accountSearch = new AccountSearch(renderRequest, "cur2", portletURL);
+accountSearch.setRowChecker(new RowChecker(renderResponse));
+%>
+
+<liferay-ui:search-container searchContainer="<%= accountSearch %>" >
+	<liferay-ui:search-form 
+		page="/html/portlet/accounts/user_search.jsp" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+</liferay-ui:search-container>
