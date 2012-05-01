@@ -18,6 +18,12 @@
  **/
 package org.gnenc.yams.portlet.util;
 
+/**
+ * Property key definitions
+ * 
+ * @author Drew A. Blessing
+ *
+ */
 public class PropsKeys {
 	
 	public static final String YAMS_LDAP_BASE_PROVIDER_URL = "yams.ldap.base.provider.url";

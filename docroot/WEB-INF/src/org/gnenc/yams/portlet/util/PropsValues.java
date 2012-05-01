@@ -20,6 +20,12 @@ package org.gnenc.yams.portlet.util;
 
 import com.liferay.portal.kernel.util.PropsUtil;
 
+/**
+ * Property value assignment
+ * 
+ * @author Drew A. Blessing
+ *
+ */
 public class PropsValues {
 	
 	public static final String YAMS_LDAP_BASE_PROVIDER_URL = PropsUtil.get(PropsKeys.YAMS_LDAP_BASE_PROVIDER_URL);
