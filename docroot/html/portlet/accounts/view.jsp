@@ -22,6 +22,4 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ include file="/html/portlet/toolbar.jsp" %>
-
-<liferay-ui:header title="search-accounts" />
+<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNT_DEFAULT_VIEW %>" />

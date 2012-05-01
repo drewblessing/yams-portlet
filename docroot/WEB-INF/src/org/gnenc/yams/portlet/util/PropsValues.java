@@ -36,4 +36,7 @@ public class PropsValues {
 	
 	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = PropsUtil.get(PropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS);
 	
+	public static final String YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW = 
+			"/html/portlet/accounts/" + PropsUtil.get(PropsKeys.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW) + ".jsp";
+	
 }

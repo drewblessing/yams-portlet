@@ -21,8 +21,26 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ include file="/html/portlet/toolbar.jsp" %>
+<%
+SearchContainer searchContainer = (SearchContainer)request.getAttribute("liferay-ui:search:searchContainer");
 
-<liferay-ui:header title="search" />
+AccountDisplayTerms displayTerms = (AccountDisplayTerms)searchContainer.getDisplayTerms();
+%>
 
-Search page
+<liferay-ui:search-toggle
+	buttonLabel="search"
+	displayTerms="<%= displayTerms %>"
+	id="toggle_id_accounts_admin_account_search"
+>
+	<aui:fieldset>
+		<aui:input name="<%= AccountDisplayTerms.FIRST_NAME %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.LAST_NAME %>" size="20" value="" />
+		
+		<aui:input name="<%= AccountDisplayTerms.EMAIL_ADDRESS %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.JOB_TITLE %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.GROUP %>" size="20" value="" />
+	</aui:fieldset>
+</liferay-ui:search-toggle>

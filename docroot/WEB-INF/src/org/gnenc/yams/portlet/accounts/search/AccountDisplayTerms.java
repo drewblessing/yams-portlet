@@ -21,12 +21,99 @@ package org.gnenc.yams.portlet.accounts.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+/**
+ * Modeled after com.liferay.portlet.usersadmin.search.AccountDisplayTerms
+ * written by Brian Wing Shun Chan
+ * 
+ * @author Drew A. Blessing
+ */
 public class AccountDisplayTerms extends DisplayTerms {
+	
+	public static final String EMAIL_ADDRESS = "emailAddress";
+
+	public static final String FIRST_NAME = "firstName";
+	
+	public static final String GROUP = "group";
+	
+	public static final String JOB_TITLE = "jobTitle";
+
+	public static final String LAST_NAME = "lastName";
+
+	public static final String STATUS = "status";
 
 	public AccountDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);
-		// TODO Auto-generated constructor stub
+
+		String statusString = ParamUtil.getString(portletRequest, STATUS);
+
+		if (Validator.isNotNull(statusString)) {
+			status = GetterUtil.getInteger(statusString);
+		}
+
+		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
+		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
+		group = ParamUtil.getString(portletRequest, GROUP);
+		jobTitle = ParamUtil.getString(portletRequest, JOB_TITLE);
+		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 	}
+	
+	public String getEmailAddress() {
+		return emailAddress;
+		
+	}
+
+	public String getFirstName() {
+		return firstName;
+		
+	}
+	
+	public String getGroup() {
+		return group;
+		
+	}
+	
+	public String getJobTitle() {
+		return jobTitle;
+		
+	}
+
+	public String getLastName() {
+		return lastName;
+		
+	}
+	
+	public boolean isActive() {
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			return true;
+			
+		}
+		else {
+			return false;
+			
+		}
+		
+	}
+	
+	public int getStatus() {
+		return status;
+		
+	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+		
+	}
+	
+	protected String emailAddress;
+	protected String firstName;
+	protected String group;
+	protected String jobTitle;
+	protected String lastName;
+	protected int status;
 
 }

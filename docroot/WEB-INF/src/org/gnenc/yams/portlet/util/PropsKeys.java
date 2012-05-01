@@ -33,4 +33,6 @@ public class PropsKeys {
 	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = "yams.ldap.security.principal";
 	
 	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = "yams.ldap.security.credentials";
+	
+	public static final String YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW = "yams.portlet.accounts.default.view";
 }
