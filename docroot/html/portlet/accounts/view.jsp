@@ -19,8 +19,7 @@
  **/
 %>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
-<%@ page import="org.gnenc.yams.portlet.Accounts" %>
+<%@include file="/html/portlet/init.jsp" %>
 
-<portlet:defineObjects />
+YAMS Account Management System
