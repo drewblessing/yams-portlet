@@ -1,7 +1,5 @@
-YAMS Account Management System for Liferay
-============
-
-yams-portlet
+YAMS Account Management System for Liferay (yams-portlet)
+=========================================================
 
 What is it?
 -----------
