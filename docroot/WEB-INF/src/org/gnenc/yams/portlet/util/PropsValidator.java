@@ -18,7 +18,7 @@ public class PropsValidator {
 
 	private static void validateUrlProps(RenderRequest request) throws YAMSMalformedUrlException {
 		for (String key : urlPropsKeys) {
-			if (Validator.isUrl(PropsUtil.get(key))) 
+			if (!Validator.isUrl(PropsUtil.get(key))) 
 				SessionErrors.add(request,YAMSMalformedUrlException.class.getName());
 //				throw new YAMSMalformedUrlException(
 //						"Malformed URL for YAMS property key: " + key
