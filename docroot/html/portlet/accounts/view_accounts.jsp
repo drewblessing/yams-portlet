@@ -19,7 +19,14 @@
  **/
 %>
 
-
 <%@ include file="/html/portlet/init.jsp" %>
 
-<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW %>" />
+<%@ include file="/html/portlet/toolbar.jsp" %>
+
+<%
+String backURL = ParamUtil.getString(request, "redirect");
+%>
+
+<liferay-ui:header backURL="<%= backURL %>" title="view-all" />
+
+Not yet implemented.

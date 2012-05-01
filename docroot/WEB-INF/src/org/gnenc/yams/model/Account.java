@@ -1,4 +1,3 @@
-<%
 /**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
@@ -17,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-%>
+package org.gnenc.yams.model;
 
+public class Account {
 
-<%@ include file="/html/portlet/init.jsp" %>
-
-<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW %>" />
+}
