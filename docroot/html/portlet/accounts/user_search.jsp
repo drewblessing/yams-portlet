@@ -19,7 +19,28 @@
  **/
 %>
 
-
 <%@ include file="/html/portlet/init.jsp" %>
 
-<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW %>" />
+<%
+AccountSearch searchContainer = (AccountSearch)request.getAttribute("liferay-ui:search:searchContainer");
+
+AccountDisplayTerms displayTerms = (AccountDisplayTerms)searchContainer.getDisplayTerms();
+%>
+
+<liferay-ui:search-toggle
+	buttonLabel="search"
+	displayTerms="<%= displayTerms %>"
+	id="toggle_id_accounts_admin_account_search"
+>
+	<aui:fieldset>
+		<aui:input name="<%= AccountDisplayTerms.FIRST_NAME %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.LAST_NAME %>" size="20" value="" />
+		
+		<aui:input name="<%= AccountDisplayTerms.EMAIL_ADDRESS %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.JOB_TITLE %>" size="20" value="" />
+
+		<aui:input name="<%= AccountDisplayTerms.GROUP %>" size="20" value="" />
+	</aui:fieldset>
+</liferay-ui:search-toggle>

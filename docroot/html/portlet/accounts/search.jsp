@@ -19,7 +19,24 @@
  **/
 %>
 
-
 <%@ include file="/html/portlet/init.jsp" %>
 
-<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW %>" />
+<%@ include file="/html/portlet/toolbar.jsp" %>
+
+<liferay-ui:header title="search" />
+
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/accounts/search.jsp");
+
+SearchContainer accountSearch = new AccountSearch(renderRequest, "cur2", portletURL);
+accountSearch.setRowChecker(new RowChecker(renderResponse));
+%>
+
+<liferay-ui:search-container searchContainer="<%= accountSearch %>" >
+	<liferay-ui:search-form 
+		page="/html/portlet/accounts/user_search.jsp" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+</liferay-ui:search-container>
