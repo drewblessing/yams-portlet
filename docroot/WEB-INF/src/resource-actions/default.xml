@@ -2,7 +2,7 @@
 
 <resource-action-mapping>
 	<portlet-resource>
-		<portlet-name>accounts</portlet-name>
+		<portlet-name>search</portlet-name>
 		<permissions>
 			<supports>
 				<action-key>ADD_TO_PAGE</action-key>

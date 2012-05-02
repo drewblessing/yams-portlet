@@ -1,3 +1,4 @@
+<%
 /**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
@@ -16,10 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package org.gnenc.yams.portlet;
+%>
 
-import com.liferay.util.bridges.mvc.MVCPortlet;
+<%@ include file="/html/portlet/init.jsp" %>
 
-public class Accounts extends MVCPortlet {
+<%@ include file="/html/portlet/toolbar.jsp" %>
 
-}
+<liferay-ui:header title="search" />
+
+<%
+	PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/searchs/search.jsp");
+
+SearchContainer userSearch = new UserSearch(renderRequest, "yams", portletURL);
+userSearch.setRowChecker(new RowChecker(renderResponse));
+%>
+
+<liferay-ui:search-container searchContainer="<%= userSearch %>" >
+	<liferay-ui:search-form 
+		page="/html/portlet/search/user_search.jsp" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+	<div class="separator" /><!-- Separator --></div>
+	
+</liferay-ui:search-container>

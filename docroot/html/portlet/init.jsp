@@ -27,9 +27,9 @@
 <%@ taglib uri="http://liferay.com/tld/util" prefix="util" %>
 
 <%@ page import="org.gnenc.yams.model.Account" %>
-<%@ page import="org.gnenc.yams.portlet.Accounts" %>
-<%@ page import="org.gnenc.yams.portlet.accounts.search.AccountDisplayTerms" %>
-<%@ page import="org.gnenc.yams.portlet.accounts.search.AccountSearch" %>
+<%@ page import="org.gnenc.yams.portlet.Search" %>
+<%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
+<%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
 
 <%@ page import="javax.portlet.PortletMode" %>
