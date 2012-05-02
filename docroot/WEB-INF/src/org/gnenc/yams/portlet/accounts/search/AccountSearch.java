@@ -57,13 +57,13 @@ public class AccountSearch extends SearchContainer<Account> {
 		headerNames.add("first-name");
 		headerNames.add("last-name");
 		headerNames.add("email-address");
-		headerNames.add("job-title");
+		headerNames.add("position");
 		headerNames.add("group");
 		
 		orderableHeaders.put("first-name", "first-name");
 		orderableHeaders.put("last-name", "last-name");
 		orderableHeaders.put("email-address", "email-address");
-		orderableHeaders.put("job-title", "job-title");
+		orderableHeaders.put("position", "position");
 		orderableHeaders.put("group", "group");
 	}
 	
@@ -106,7 +106,7 @@ public class AccountSearch extends SearchContainer<Account> {
 		iteratorURL.setParameter(
 				AccountDisplayTerms.GROUP, displayTerms.getGroup());
 		iteratorURL.setParameter(
-				AccountDisplayTerms.JOB_TITLE, displayTerms.getJobTitle());
+				AccountDisplayTerms.POSITION, displayTerms.getPosition());
 		iteratorURL.setParameter(
 			AccountDisplayTerms.LAST_NAME, displayTerms.getLastName());
 

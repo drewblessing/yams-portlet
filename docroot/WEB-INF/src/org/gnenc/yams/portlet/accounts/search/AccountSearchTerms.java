@@ -20,7 +20,7 @@ public class AccountSearchTerms extends AccountDisplayTerms {
 		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = DAOParamUtil.getString(portletRequest, FIRST_NAME);
 		group = DAOParamUtil.getString(portletRequest, GROUP);
-		jobTitle = DAOParamUtil.getString(portletRequest, JOB_TITLE);
+		position = DAOParamUtil.getString(portletRequest, POSITION);
 		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
 		status = ParamUtil.getInteger(
 			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);
