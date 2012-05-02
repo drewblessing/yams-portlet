@@ -39,7 +39,7 @@ AccountDisplayTerms displayTerms = (AccountDisplayTerms)searchContainer.getDispl
 		
 		<aui:input name="<%= AccountDisplayTerms.EMAIL_ADDRESS %>" size="20" value="" />
 
-		<aui:input name="<%= AccountDisplayTerms.JOB_TITLE %>" size="20" value="" />
+		<aui:input name="<%= AccountDisplayTerms.POSITION %>" size="20" value="" />
 
 		<aui:input name="<%= AccountDisplayTerms.GROUP %>" size="20" value="" />
 	</aui:fieldset>

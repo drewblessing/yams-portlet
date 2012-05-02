@@ -40,7 +40,7 @@ public class AccountDisplayTerms extends DisplayTerms {
 	
 	public static final String GROUP = "group";
 	
-	public static final String JOB_TITLE = "jobTitle";
+	public static final String POSITION = "position";
 
 	public static final String LAST_NAME = "lastName";
 
@@ -58,7 +58,7 @@ public class AccountDisplayTerms extends DisplayTerms {
 		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
 		group = ParamUtil.getString(portletRequest, GROUP);
-		jobTitle = ParamUtil.getString(portletRequest, JOB_TITLE);
+		position = ParamUtil.getString(portletRequest, POSITION);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 	}
 	
@@ -77,8 +77,8 @@ public class AccountDisplayTerms extends DisplayTerms {
 		
 	}
 	
-	public String getJobTitle() {
-		return jobTitle;
+	public String getPosition() {
+		return position;
 		
 	}
 
@@ -112,7 +112,7 @@ public class AccountDisplayTerms extends DisplayTerms {
 	protected String emailAddress;
 	protected String firstName;
 	protected String group;
-	protected String jobTitle;
+	protected String position;
 	protected String lastName;
 	protected int status;
 
