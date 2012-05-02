@@ -67,7 +67,7 @@ public class UserSearch extends SearchContainer<Account> {
 		orderableHeaders.put("group", "group");
 	}
 	
-	public static final String EMPTY_RESULTS_MESSAGE = "no-accounts-were-found";
+	public static final String EMPTY_RESULTS_MESSAGE = "no-users-were-found";
 	
 	public UserSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 		this(portletRequest, DEFAULT_CUR_PARAM, iteratorURL);
@@ -124,16 +124,16 @@ public class UserSearch extends SearchContainer<Account> {
 				Validator.isNotNull(orderByType)) {
 
 				preferences.setValue(
-					"accounts", "users-order-by-col", orderByCol);
+					"users", "users-order-by-col", orderByCol);
 				preferences.setValue(
-					"accounts", "users-order-by-type",
+					"users", "users-order-by-type",
 					orderByType);
 			}
 			else {
 				orderByCol = preferences.getValue(
-					"accounts", "users-order-by-col", "last-name");
+					"users", "users-order-by-col", "last-name");
 				orderByType = preferences.getValue(
-					"accounts", "users-order-by-type", "asc");
+					"users", "users-order-by-type", "asc");
 			}
 
 			OrderByComparator orderByComparator =

@@ -21,10 +21,7 @@ package org.gnenc.yams.portlet.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
  * Modeled after com.liferay.portlet.usersadmin.search.AccountDisplayTerms
@@ -34,86 +31,29 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  */
 public class OrganizationDisplayTerms extends DisplayTerms {
 	
-	public static final String EMAIL_ADDRESS = "emailAddress";
+	public static final String NAME = "name";
 
-	public static final String FIRST_NAME = "firstName";
-	
-	public static final String GROUP = "group";
-	
-	public static final String POSITION = "position";
-
-	public static final String LAST_NAME = "lastName";
-
-	public static final String STATUS = "status";
+	public static final String LOCATION = "location";
 
 	public OrganizationDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);
 
-		String statusString = ParamUtil.getString(portletRequest, STATUS);
-
-		if (Validator.isNotNull(statusString)) {
-			status = GetterUtil.getInteger(statusString);
-		}
-
-		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
-		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
-		group = ParamUtil.getString(portletRequest, GROUP);
-		position = ParamUtil.getString(portletRequest, POSITION);
-		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
-	}
-	
-	public String getEmailAddress() {
-		return emailAddress;
-		
-	}
-
-	public String getFirstName() {
-		return firstName;
+		name = ParamUtil.getString(portletRequest, NAME);
+		location = ParamUtil.getString(portletRequest, LOCATION);
 		
 	}
 	
-	public String getGroup() {
-		return group;
+	public String getLocation() {
+		return name;
 		
 	}
 	
-	public String getPosition() {
-		return position;
-		
-	}
-
-	public String getLastName() {
-		return lastName;
+	public String getName() {
+		return name;
 		
 	}
 	
-	public boolean isActive() {
-		if (status == WorkflowConstants.STATUS_APPROVED) {
-			return true;
-			
-		}
-		else {
-			return false;
-			
-		}
-		
-	}
-	
-	public int getStatus() {
-		return status;
-		
-	}
-	
-	public void setStatus(int status) {
-		this.status = status;
-		
-	}
-	
-	protected String emailAddress;
-	protected String firstName;
-	protected String group;
-	protected String position;
-	protected String lastName;
-	protected int status;
+	protected String name;
+	protected String location;
 
 }

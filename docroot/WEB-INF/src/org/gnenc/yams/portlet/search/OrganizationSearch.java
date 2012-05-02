@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
@@ -32,18 +31,15 @@ import org.gnenc.yams.model.Account;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortalPreferences;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.UserSearch
+ * Modeled after com.liferay.portlet.Organizationsadmin.search.OrganizationSearch
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing
@@ -54,20 +50,14 @@ public class OrganizationSearch extends SearchContainer<Account> {
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	
 	static {
-		headerNames.add("first-name");
-		headerNames.add("last-name");
-		headerNames.add("email-address");
-		headerNames.add("position");
-		headerNames.add("group");
+		headerNames.add("name");
+		headerNames.add("location");
 		
-		orderableHeaders.put("first-name", "first-name");
-		orderableHeaders.put("last-name", "last-name");
-		orderableHeaders.put("email-address", "email-address");
-		orderableHeaders.put("position", "position");
-		orderableHeaders.put("group", "group");
+		orderableHeaders.put("fname", "name");
+		orderableHeaders.put("location", "location");
 	}
 	
-	public static final String EMPTY_RESULTS_MESSAGE = "no-accounts-were-found";
+	public static final String EMPTY_RESULTS_MESSAGE = "no-organizations-were-found";
 	
 	public OrganizationSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 		this(portletRequest, DEFAULT_CUR_PARAM, iteratorURL);
@@ -78,37 +68,16 @@ public class OrganizationSearch extends SearchContainer<Account> {
 		PortletURL iteratorURL) {
 
 		super(
-			portletRequest, new UserDisplayTerms(portletRequest),
-			new UserSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
+			portletRequest, new OrganizationDisplayTerms(portletRequest),
+			new OrganizationSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
 			iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
-		PortletConfig portletConfig =
-			(PortletConfig)portletRequest.getAttribute(
-				JavaConstants.JAVAX_PORTLET_CONFIG);
-
-		UserDisplayTerms displayTerms = (UserDisplayTerms)getDisplayTerms();
-		UserSearchTerms searchTerms = (UserSearchTerms)getSearchTerms();
-
-		String portletName = portletConfig.getPortletName();
-
-		if (!portletName.equals(PortletKeys.USERS_ADMIN)) {
-			displayTerms.setStatus(WorkflowConstants.STATUS_APPROVED);
-			searchTerms.setStatus(WorkflowConstants.STATUS_APPROVED);
-		}
+		OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)getDisplayTerms();
 
 		iteratorURL.setParameter(
-			UserDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
-
+			OrganizationDisplayTerms.NAME, displayTerms.getName());
 		iteratorURL.setParameter(
-			UserDisplayTerms.EMAIL_ADDRESS, displayTerms.getEmailAddress());
-		iteratorURL.setParameter(
-			UserDisplayTerms.FIRST_NAME, displayTerms.getFirstName());
-		iteratorURL.setParameter(
-				UserDisplayTerms.GROUP, displayTerms.getGroup());
-		iteratorURL.setParameter(
-				UserDisplayTerms.POSITION, displayTerms.getPosition());
-		iteratorURL.setParameter(
-			UserDisplayTerms.LAST_NAME, displayTerms.getLastName());
+			OrganizationDisplayTerms.LOCATION, displayTerms.getLocation());
 
 		try {
 			PortalPreferences preferences =
@@ -124,20 +93,20 @@ public class OrganizationSearch extends SearchContainer<Account> {
 				Validator.isNotNull(orderByType)) {
 
 				preferences.setValue(
-					"accounts", "users-order-by-col", orderByCol);
+					"organizations", "organizations-order-by-col", orderByCol);
 				preferences.setValue(
-					"accounts", "users-order-by-type",
+					"organizations", "organizations-order-by-type",
 					orderByType);
 			}
 			else {
 				orderByCol = preferences.getValue(
-					"accounts", "users-order-by-col", "last-name");
+					"organizations", "organizations-order-by-col", "last-name");
 				orderByType = preferences.getValue(
-					"accounts", "users-order-by-type", "asc");
+					"organizations", "organizations-order-by-type", "asc");
 			}
 
 			OrderByComparator orderByComparator =
-				UsersAdminUtil.getUserOrderByComparator(
+				UsersAdminUtil.getOrganizationOrderByComparator(
 					orderByCol, orderByType);
 
 			setOrderableHeaders(orderableHeaders);
