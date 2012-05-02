@@ -29,7 +29,7 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("jspPage", "/html/portlet/accounts/search.jsp");
 
-SearchContainer accountSearch = new AccountSearch(renderRequest, "cur2", portletURL);
+SearchContainer accountSearch = new AccountSearch(renderRequest, "yams", portletURL);
 accountSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 
@@ -38,5 +38,7 @@ accountSearch.setRowChecker(new RowChecker(renderResponse));
 		page="/html/portlet/accounts/user_search.jsp" 
 		servletContext="<%=this.getServletContext() %>" 
 	/>
+	
+	<div class="separator" /><!-- Separator --></div>
 	
 </liferay-ui:search-container>
