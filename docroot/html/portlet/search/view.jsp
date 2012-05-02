@@ -22,4 +22,4 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<jsp:include page="<%=PropsValues.YAMS_PORTLET_ACCOUNTS_DEFAULT_VIEW %>" />
+<%-- <jsp:include page="<%=PropsValues.YAMS_PORTLET_SEARCH_DEFAULT_VIEW %>" /> --%>

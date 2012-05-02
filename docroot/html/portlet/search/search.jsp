@@ -21,26 +21,24 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%
-AccountSearch searchContainer = (AccountSearch)request.getAttribute("liferay-ui:search:searchContainer");
+<%@ include file="/html/portlet/toolbar.jsp" %>
 
-AccountDisplayTerms displayTerms = (AccountDisplayTerms)searchContainer.getDisplayTerms();
+<liferay-ui:header title="search" />
+
+<%
+	PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/searchs/search.jsp");
+
+SearchContainer userSearch = new UserSearch(renderRequest, "yams", portletURL);
+userSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 
-<liferay-ui:search-toggle
-	buttonLabel="search"
-	displayTerms="<%= displayTerms %>"
-	id="toggle_id_accounts_admin_account_search"
->
-	<aui:fieldset>
-		<aui:input name="<%= AccountDisplayTerms.FIRST_NAME %>" size="20" value="" />
-
-		<aui:input name="<%= AccountDisplayTerms.LAST_NAME %>" size="20" value="" />
-		
-		<aui:input name="<%= AccountDisplayTerms.EMAIL_ADDRESS %>" size="20" value="" />
-
-		<aui:input name="<%= AccountDisplayTerms.POSITION %>" size="20" value="" />
-
-		<aui:input name="<%= AccountDisplayTerms.GROUP %>" size="20" value="" />
-	</aui:fieldset>
-</liferay-ui:search-toggle>
+<liferay-ui:search-container searchContainer="<%= userSearch %>" >
+	<liferay-ui:search-form 
+		page="/html/portlet/search/user_search.jsp" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+	<div class="separator" /><!-- Separator --></div>
+	
+</liferay-ui:search-container>

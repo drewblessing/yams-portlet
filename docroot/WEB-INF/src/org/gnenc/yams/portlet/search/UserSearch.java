@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package org.gnenc.yams.portlet.accounts.search;
+package org.gnenc.yams.portlet.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
  * 
  * @author Drew A. Blessing
  */
-public class AccountSearch extends SearchContainer<Account> {
+public class UserSearch extends SearchContainer<Account> {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
@@ -69,25 +69,25 @@ public class AccountSearch extends SearchContainer<Account> {
 	
 	public static final String EMPTY_RESULTS_MESSAGE = "no-accounts-were-found";
 	
-	public AccountSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
+	public UserSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 		this(portletRequest, DEFAULT_CUR_PARAM, iteratorURL);
 	}
 
-	public AccountSearch(
+	public UserSearch(
 		PortletRequest portletRequest, String curParam,
 		PortletURL iteratorURL) {
 
 		super(
-			portletRequest, new AccountDisplayTerms(portletRequest),
-			new AccountSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
+			portletRequest, new UserDisplayTerms(portletRequest),
+			new UserSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
 			iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
 		PortletConfig portletConfig =
 			(PortletConfig)portletRequest.getAttribute(
 				JavaConstants.JAVAX_PORTLET_CONFIG);
 
-		AccountDisplayTerms displayTerms = (AccountDisplayTerms)getDisplayTerms();
-		AccountSearchTerms searchTerms = (AccountSearchTerms)getSearchTerms();
+		UserDisplayTerms displayTerms = (UserDisplayTerms)getDisplayTerms();
+		UserSearchTerms searchTerms = (UserSearchTerms)getSearchTerms();
 
 		String portletName = portletConfig.getPortletName();
 
@@ -97,18 +97,18 @@ public class AccountSearch extends SearchContainer<Account> {
 		}
 
 		iteratorURL.setParameter(
-			AccountDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
+			UserDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
 
 		iteratorURL.setParameter(
-			AccountDisplayTerms.EMAIL_ADDRESS, displayTerms.getEmailAddress());
+			UserDisplayTerms.EMAIL_ADDRESS, displayTerms.getEmailAddress());
 		iteratorURL.setParameter(
-			AccountDisplayTerms.FIRST_NAME, displayTerms.getFirstName());
+			UserDisplayTerms.FIRST_NAME, displayTerms.getFirstName());
 		iteratorURL.setParameter(
-				AccountDisplayTerms.GROUP, displayTerms.getGroup());
+				UserDisplayTerms.GROUP, displayTerms.getGroup());
 		iteratorURL.setParameter(
-				AccountDisplayTerms.POSITION, displayTerms.getPosition());
+				UserDisplayTerms.POSITION, displayTerms.getPosition());
 		iteratorURL.setParameter(
-			AccountDisplayTerms.LAST_NAME, displayTerms.getLastName());
+			UserDisplayTerms.LAST_NAME, displayTerms.getLastName());
 
 		try {
 			PortalPreferences preferences =
@@ -150,7 +150,7 @@ public class AccountSearch extends SearchContainer<Account> {
 		}
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(AccountSearch.class);
+	private static Log _log = LogFactoryUtil.getLog(UserSearch.class);
 
 	
 }

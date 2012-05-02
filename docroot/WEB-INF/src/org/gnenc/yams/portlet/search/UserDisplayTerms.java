@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package org.gnenc.yams.portlet.accounts.search;
+package org.gnenc.yams.portlet.search;
 
 import javax.portlet.PortletRequest;
 
@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  * 
  * @author Drew A. Blessing
  */
-public class AccountDisplayTerms extends DisplayTerms {
+public class UserDisplayTerms extends DisplayTerms {
 	
 	public static final String EMAIL_ADDRESS = "emailAddress";
 
@@ -46,7 +46,7 @@ public class AccountDisplayTerms extends DisplayTerms {
 
 	public static final String STATUS = "status";
 
-	public AccountDisplayTerms(PortletRequest portletRequest) {
+	public UserDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);
 
 		String statusString = ParamUtil.getString(portletRequest, STATUS);

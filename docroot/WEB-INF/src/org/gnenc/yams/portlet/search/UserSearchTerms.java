@@ -1,4 +1,4 @@
-package org.gnenc.yams.portlet.accounts.search;
+package org.gnenc.yams.portlet.search;
 
 import javax.portlet.PortletRequest;
 
@@ -12,9 +12,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  * 
  * @author Drew A. Blessing
  */
-public class AccountSearchTerms extends AccountDisplayTerms {
+public class UserSearchTerms extends UserDisplayTerms {
 
-	public AccountSearchTerms(PortletRequest portletRequest) {
+	public UserSearchTerms(PortletRequest portletRequest) {
 		super(portletRequest);
 
 		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
