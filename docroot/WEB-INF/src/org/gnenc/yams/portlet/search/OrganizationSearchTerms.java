@@ -3,8 +3,6 @@ package org.gnenc.yams.portlet.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
  * Modeled after com.liferay.portlet.usersadmin.search.AccountSearchTerms
@@ -12,18 +10,13 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  * 
  * @author Drew A. Blessing
  */
-public class OrganizationSearchTerms extends UserDisplayTerms {
+public class OrganizationSearchTerms extends OrganizationDisplayTerms {
 
 	public OrganizationSearchTerms(PortletRequest portletRequest) {
 		super(portletRequest);
 
-		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
-		firstName = DAOParamUtil.getString(portletRequest, FIRST_NAME);
-		group = DAOParamUtil.getString(portletRequest, GROUP);
-		position = DAOParamUtil.getString(portletRequest, POSITION);
-		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
-		status = ParamUtil.getInteger(
-			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);
+		name = DAOParamUtil.getString(portletRequest, NAME);
+		location = DAOParamUtil.getString(portletRequest, LOCATION);
 	}
 
 }
