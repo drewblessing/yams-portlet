@@ -1,5 +1,4 @@
-<%
-/**
+<%/**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
  *  This file is part of the YAMS portlet.
@@ -16,26 +15,30 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
- **/
-%>
-
+ **/%>
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%-- <jsp:include page="<%=PropsValues.YAMS_PORTLET_SEARCH_DEFAULT_VIEW %>" /> --%>
-
-<portlet:renderURL var="portletURL" />
-
 <%
-String tabValue = ParamUtil.getString(request, "tab", "users");
-String tabsURL = "/html/portlet/search/tabs/" + tabValue.trim() + ".jsp";
-String tabNames = "users,organizations";
+UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
+
+UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
 %>
 
-<liferay-ui:tabs 
-	names="users,organizations"
-	param="tab" 
-	value="<%=tabValue %>"
-	url="<%=portletURL %>" />
-	
-<jsp:include page="<%=tabsURL %>" />
+<liferay-ui:search-toggle
+	buttonLabel="search"
+	displayTerms="<%=displayTerms%>"
+	id="toggle_id_search_organizations"
+>
+	<aui:fieldset>
+		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" value="" />
+
+		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" value="" />
+		
+		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" value="" />
+
+		<aui:input name="<%=UserDisplayTerms.POSITION%>" size="20" value="" />
+
+		<aui:input name="<%=UserDisplayTerms.GROUP%>" size="20" value="" />
+	</aui:fieldset>
+</liferay-ui:search-toggle>
