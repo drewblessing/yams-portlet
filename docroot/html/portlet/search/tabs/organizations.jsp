@@ -1,4 +1,5 @@
-<%/**
+<%
+/**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
  *  This file is part of the YAMS portlet.
@@ -15,30 +16,27 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
- **/%>
+ **/
+%>
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%
-UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
+<liferay-ui:header title="search-organizations" />
 
-UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/search/tabs/organizations.jsp");
+
+SearchContainer userSearch = new UserSearch(renderRequest, "orgs", portletURL);
+userSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 
-<liferay-ui:search-toggle
-	buttonLabel="search"
-	displayTerms="<%=displayTerms%>"
-	id="toggle_id_accounts_admin_account_search"
->
-	<aui:fieldset>
-		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" value="" />
-		
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.POSITION%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.GROUP%>" size="20" value="" />
-	</aui:fieldset>
-</liferay-ui:search-toggle>
+<liferay-ui:search-container searchContainer="<%= userSearch %>" >
+	<liferay-ui:search-form 
+		page="/html/portlet/search/organizations/search_form.jsp" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+	<div class="separator" /><!-- Separator --></div>
+	
+</liferay-ui:search-container>

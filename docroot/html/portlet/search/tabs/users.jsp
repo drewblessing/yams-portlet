@@ -21,21 +21,19 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ include file="/html/portlet/toolbar.jsp" %>
-
-<liferay-ui:header title="search" />
+<liferay-ui:header title="search-users" />
 
 <%
-	PortletURL portletURL = renderResponse.createRenderURL();
-portletURL.setParameter("jspPage", "/html/portlet/searchs/search.jsp");
+PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", "/html/portlet/search/tabs/users.jsp");
 
-SearchContainer userSearch = new UserSearch(renderRequest, "yams", portletURL);
+SearchContainer userSearch = new UserSearch(renderRequest, "users", portletURL);
 userSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 
 <liferay-ui:search-container searchContainer="<%= userSearch %>" >
 	<liferay-ui:search-form 
-		page="/html/portlet/search/user_search.jsp" 
+		page="/html/portlet/search/users/search_form.jsp" 
 		servletContext="<%=this.getServletContext() %>" 
 	/>
 	
