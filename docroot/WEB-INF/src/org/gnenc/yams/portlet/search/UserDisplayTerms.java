@@ -38,9 +38,11 @@ public class UserDisplayTerms extends DisplayTerms {
 
 	public static final String FIRST_NAME = "firstName";
 	
-	public static final String GROUP = "group";
+	public static final String ORGANIZATION = "organization";
 	
 	public static final String POSITION = "position";
+	
+	public static final String PROVIDER = "provider";
 
 	public static final String LAST_NAME = "lastName";
 
@@ -57,8 +59,9 @@ public class UserDisplayTerms extends DisplayTerms {
 
 		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
-		group = ParamUtil.getString(portletRequest, GROUP);
+		organization = ParamUtil.getString(portletRequest, ORGANIZATION);
 		position = ParamUtil.getString(portletRequest, POSITION);
+		provider = ParamUtil.getString(portletRequest, PROVIDER);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 	}
 	
@@ -72,13 +75,18 @@ public class UserDisplayTerms extends DisplayTerms {
 		
 	}
 	
-	public String getGroup() {
-		return group;
+	public String getOrganization() {
+		return organization;
 		
 	}
 	
 	public String getPosition() {
 		return position;
+		
+	}
+	
+	public String getProvider() {
+		return provider;
 		
 	}
 
@@ -111,8 +119,9 @@ public class UserDisplayTerms extends DisplayTerms {
 	
 	protected String emailAddress;
 	protected String firstName;
-	protected String group;
+	protected String organization;
 	protected String position;
+	protected String provider;
 	protected String lastName;
 	protected int status;
 
