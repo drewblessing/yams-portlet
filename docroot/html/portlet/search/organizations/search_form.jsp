@@ -20,9 +20,9 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
+OrganizationSearch searchContainer = (OrganizationSearch)request.getAttribute("liferay-ui:search:searchContainer");
 
-UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
+OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
 %>
 
 <liferay-ui:search-toggle
@@ -31,14 +31,9 @@ UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerm
 	id="toggle_id_search_organizations"
 >
 	<aui:fieldset>
-		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" value="" />
+		<aui:input name="<%=OrganizationDisplayTerms.NAME%>" size="20" value="" />
 
-		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" value="" />
-		
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.POSITION%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.GROUP%>" size="20" value="" />
+		<aui:select name="<%=OrganizationDisplayTerms.LOCATION%>" value="" >
+		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>

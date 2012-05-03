@@ -27,11 +27,11 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("jspPage", "/html/portlet/search/tabs/organizations.jsp");
 
-SearchContainer userSearch = new UserSearch(renderRequest, "orgs", portletURL);
-userSearch.setRowChecker(new RowChecker(renderResponse));
+SearchContainer organizationSearch = new OrganizationSearch(renderRequest, "orgs", portletURL);
+organizationSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 
-<liferay-ui:search-container searchContainer="<%= userSearch %>" >
+<liferay-ui:search-container searchContainer="<%= organizationSearch %>" >
 	<liferay-ui:search-form 
 		page="/html/portlet/search/organizations/search_form.jsp" 
 		servletContext="<%=this.getServletContext() %>" 

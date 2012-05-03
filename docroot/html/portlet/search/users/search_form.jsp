@@ -39,6 +39,10 @@ UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerm
 
 		<aui:input name="<%=UserDisplayTerms.POSITION%>" size="20" value="" />
 
-		<aui:input name="<%=UserDisplayTerms.GROUP%>" size="20" value="" />
+		<aui:select name="<%=OrganizationDisplayTerms.LOCATION%>" value="" >
+		</aui:select>
+		
+		<aui:select name="<%=UserDisplayTerms.PROVIDER%>" value="" >
+		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>
