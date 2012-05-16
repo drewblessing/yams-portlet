@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util">
+	
+	<context:annotation-config />
+	<context:component-scan base-package="org.gnenc.yams" />
+	
+<!-- 	<aop:aspectj-autoproxy /> -->
+	
+	
+	<!-- LDAP Specific -->
+	
+	<util:properties id="ldapProperties" location="/WEB-INF/classes/ldap.properties" />
+	<context:property-placeholder properties-ref="ldapProperties" />
+	
+	<bean id="contextSource" class="org.springframework.ldap.pool.factory.PoolingContextSource">
+		<property name="contextSource" ref="contextSourceTarget" />
+		<property name="dirContextValidator" ref="dircontextValidator" />
+		<property name="maxIdle" value="${ldap.pool.maxIdle}"/>
+		<property name="minIdle" value="${ldap.pool.minIdle}"/>
+		<property name="whenExhaustedAction" value="${ldap.pool.whenExhaustedAction}"/>
+		<property name="testOnBorrow" value="${ldap.pool.testOnBorrow}"/>
+		<property name="testOnReturn" value="${ldap.pool.testOnReturn}"/>
+		<property name="testWhileIdle" value="${ldap.pool.testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${ldap.pool.timeBetweenEvictionRunsMillis}"/>
+	</bean>
+	
+	<bean id="contextSourceTarget" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${ldap.providerUrl}" />
+		<property name="userDn" value="${ldap.managerDn}" />
+		<property name="password" value="${ldap.managerPassword}" />
+		<property name="pooled" value="${ldap.pooledConnections}" />
+		<property name="base" value="${ldap.baseDn}" />
+	</bean>
+	
+	<bean id="dircontextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator"/>
+	
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+        <constructor-arg ref="contextSourceTarget" />
+    </bean>
+    
+    <bean id="fromStringConverter"
+	class="org.springframework.ldap.odm.typeconversion.impl.converters.FromStringConverter" />
+	<bean id="toStringConverter"
+		class="org.springframework.ldap.odm.typeconversion.impl.converters.ToStringConverter" />
+	<bean id="converterManager"
+		class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean">
+		<property name="converterConfig">
+			<set>
+				<bean
+					class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+					<property name="fromClasses">
+						<set>
+							<value>java.lang.String</value>
+						</set>
+					</property>
+					<property name="toClasses">
+						<set>
+							<value>java.lang.Byte</value>
+							<value>java.lang.Short</value>
+							<value>java.lang.Integer</value>
+							<value>java.lang.Long</value>
+							<value>java.lang.Float</value>
+							<value>java.lang.Double</value>
+							<value>java.lang.Boolean</value>
+						</set>
+					</property>
+					<property name="converter" ref="fromStringConverter" />
+				</bean>
+				<bean
+					class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+					<property name="fromClasses">
+						<set>
+							<value>java.lang.Byte</value>
+							<value>java.lang.Short</value>
+							<value>java.lang.Integer</value>
+							<value>java.lang.Long</value>
+							<value>java.lang.Float</value>
+							<value>java.lang.Double</value>
+							<value>java.lang.Boolean</value>
+						</set>
+					</property>
+					<property name="toClasses">
+						<set>
+							<value>java.lang.String</value>
+						</set>
+					</property>
+					<property name="converter" ref="toStringConverter" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<bean id="odmManager"
+		class="org.springframework.ldap.odm.core.impl.OdmManagerImplFactoryBean">
+		<property name="converterManager" ref="converterManager" />
+		<property name="contextSource" ref="contextSource" />
+		<property name="managedClasses">
+			<set>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
+			</set>
+		</property>
+	</bean>
+	
+    
+
+</beans>

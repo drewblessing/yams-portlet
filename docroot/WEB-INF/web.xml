@@ -17,4 +17,11 @@
   		</taglib-location>
   	</taglib>
   </jsp-config>
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/classes/META-INF/spring-ldap.xml</param-value>
+  </context-param>
 </web-app>
