@@ -57,8 +57,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			final List<SearchFilter> filters, final Operand operand, final List<SubSystem> subsystems) {
 		final Map<String, Account> accounts =  
 				Collections.synchronizedMap(new HashMap<String, Account>());
-		final String searchFilter = filters == null || filters.isEmpty() ?
-				SearchFilter.ALL_ACCOUNTS_FILTER : SearchFilter.buildStringFilter(filters, operand);
+		final String searchFilter = SearchFilter.buildStringFilter(filters, operand);
 		
 		try {
 			executor.execute(
