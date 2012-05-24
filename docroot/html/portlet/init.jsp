@@ -18,6 +18,8 @@
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
 %>
+ 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
@@ -33,6 +35,7 @@
 <%@ page import="org.gnenc.yams.portlet.search.OrganizationSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
+<%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
 
 <%@ page import="javax.portlet.PortletMode" %>
@@ -41,11 +44,16 @@
 
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.RowChecker" %>
-<%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %> 
+<%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
+<%@ page import="com.liferay.portal.kernel.util.Constants" %>
+<%@ page import="com.liferay.portal.kernel.util.ListUtil" %> 
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 
 <%@ page import="com.liferay.portlet.PortletURLUtil" %>
+
+<%@ page import="java.util.Collections" %>
+<%@ page import="java.util.List" %>
 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />

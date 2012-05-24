@@ -20,8 +20,6 @@ public class UserSearchTerms extends UserDisplayTerms {
 		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = DAOParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = DAOParamUtil.getString(portletRequest, ORGANIZATION);
-		position = DAOParamUtil.getString(portletRequest, POSITION);
-		provider = DAOParamUtil.getString(portletRequest, PROVIDER);
 		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
 		status = ParamUtil.getInteger(
 			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);

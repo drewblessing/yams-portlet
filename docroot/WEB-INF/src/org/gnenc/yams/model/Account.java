@@ -114,6 +114,10 @@ public class Account {
 		return cn;
 	}
 	
+	public void setCn(List<String> cn) {
+		this.cn = cn;
+	}
+	
 	public String getDescription() {
 		return description;
 	}

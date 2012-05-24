@@ -19,7 +19,7 @@
 	
 	<util:properties id="ldapProperties" location="/WEB-INF/classes/ldap.properties" />
 	<context:property-placeholder properties-ref="ldapProperties" />
-	
+
 	<bean id="contextSource" class="org.springframework.ldap.pool.factory.PoolingContextSource">
 		<property name="contextSource" ref="contextSourceTarget" />
 		<property name="dirContextValidator" ref="dircontextValidator" />
@@ -109,6 +109,4 @@
 		</property>
 	</bean>
 	
-    
-
 </beans>

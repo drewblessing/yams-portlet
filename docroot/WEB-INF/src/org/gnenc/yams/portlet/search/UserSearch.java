@@ -57,16 +57,10 @@ public class UserSearch extends SearchContainer<Account> {
 		headerNames.add("first-name");
 		headerNames.add("last-name");
 		headerNames.add("email-address");
-		headerNames.add("position");
-		headerNames.add("organization");
-		headerNames.add("provider");
 		
 		orderableHeaders.put("first-name", "first-name");
 		orderableHeaders.put("last-name", "last-name");
 		orderableHeaders.put("email-address", "email-address");
-		orderableHeaders.put("position", "position");
-		orderableHeaders.put("organization", "organization");
-		orderableHeaders.put("provider", "provider");
 	}
 	
 	public static final String EMPTY_RESULTS_MESSAGE = "no-users-were-found";
@@ -107,10 +101,6 @@ public class UserSearch extends SearchContainer<Account> {
 			UserDisplayTerms.FIRST_NAME, displayTerms.getFirstName());
 		iteratorURL.setParameter(
 				UserDisplayTerms.ORGANIZATION, displayTerms.getOrganization());
-		iteratorURL.setParameter(
-				UserDisplayTerms.POSITION, displayTerms.getPosition());
-		iteratorURL.setParameter(
-				UserDisplayTerms.PROVIDER, displayTerms.getProvider());
 		iteratorURL.setParameter(
 			UserDisplayTerms.LAST_NAME, displayTerms.getLastName());
 

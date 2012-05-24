@@ -17,7 +17,7 @@ import org.springframework.ldap.odm.annotations.Id;
  * @author Drew A. Blessing
  *
  */
-@Entry(objectClasses={"inetorgperson"})
+@Entry(objectClasses={"inetorgperson","top"})
 public class LdapAccount {
 
 	@Id
