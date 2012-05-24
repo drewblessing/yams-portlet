@@ -19,11 +19,12 @@
 package org.gnenc.yams.portlet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.SearchFilter;
-import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
@@ -48,7 +49,8 @@ public class Search extends MVCPortlet {
 	 * 					  the values from the search form
 	 * @return a list of accounts matching the search terms
 	 */
-	public static List<Account> getAccounts(UserSearchTerms searchTerms) {
+	public static List<Account> getAccounts(
+			UserSearchTerms searchTerms, String orderByType, String orderByCol) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
 		List<Account> accounts = new ArrayList<Account>();
@@ -59,6 +61,7 @@ public class Search extends MVCPortlet {
 		Operand operand = SearchUtil.getOperand(searchTerms);
 		
 		accounts = ams.getAccounts(filters, operand, subsystems);
+		SearchUtil.sortAccounts(accounts, orderByType, orderByCol);
 		
 		return accounts;
 	}

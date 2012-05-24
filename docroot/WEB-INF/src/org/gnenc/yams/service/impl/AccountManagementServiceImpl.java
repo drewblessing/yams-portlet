@@ -17,7 +17,6 @@ import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 /**
@@ -54,7 +53,8 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	
 	@Override 
 	public List<Account> getAccounts(
-			final List<SearchFilter> filters, final Operand operand, final List<SubSystem> subsystems) {
+			final List<SearchFilter> filters, final Operand operand, 
+			final List<SubSystem> subsystems) {
 		final Map<String, Account> accounts =  
 				Collections.synchronizedMap(new HashMap<String, Account>());
 		final String searchFilter = SearchFilter.buildStringFilter(filters, operand);
@@ -73,7 +73,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		}
 		
 		final List<Account> results = new ArrayList<Account>(accounts.values());
-		Collections.sort(results, Account.ACCOUNT_COMPARATOR_ASC);
+//		Collections.sort(results, Account.ACCOUNT_COMPARATOR_ASC);
 		
 		return results;
 	}

@@ -1,8 +1,11 @@
 package org.gnenc.yams.portlet.search.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter.Operand;
@@ -101,5 +104,19 @@ public class SearchUtil {
 		}
 		
 		return operand;
+	}
+
+	public static void sortAccounts(
+			List<Account> accounts, String orderByType, String orderByCol) {
+
+		if (orderByCol.equals("givenName") && orderByType.equals("asc")) {
+			Collections.sort(accounts, Account.FIRST_NAME_COMPARATOR_ASC);
+		} else if (orderByCol.equals("givenName") && orderByType.equals("desc")) {
+			Collections.sort(accounts, Account.FIRST_NAME_COMPARATOR_DESC);
+		} else if (orderByCol.equals("sn") && orderByType.equals("asc")) {
+			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_ASC);
+		} else if (orderByCol.equals("sn") && orderByType.equals("desc")) {
+			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_DESC);
+		}
 	}
 }
