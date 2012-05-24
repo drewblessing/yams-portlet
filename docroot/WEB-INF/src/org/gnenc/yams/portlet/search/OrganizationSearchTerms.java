@@ -5,7 +5,7 @@ import javax.portlet.PortletRequest;
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountSearchTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountSearchTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

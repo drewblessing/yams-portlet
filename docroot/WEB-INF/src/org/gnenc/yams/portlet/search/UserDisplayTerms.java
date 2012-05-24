@@ -27,7 +27,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountDisplayTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountDisplayTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

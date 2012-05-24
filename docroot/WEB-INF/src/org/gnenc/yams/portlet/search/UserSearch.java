@@ -43,7 +43,7 @@ import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.UserSearch
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.UserSearch}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

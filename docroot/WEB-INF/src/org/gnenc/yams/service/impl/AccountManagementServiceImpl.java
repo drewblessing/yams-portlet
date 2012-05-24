@@ -20,6 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+/**
+ * Based on the original AccuontManagementService created by Jeshurun Daniel. 
+ * 
+ * @author Drew A. Blessing
+ *
+ */
 @Service("accountManagementService")
 public class AccountManagementServiceImpl implements AccountManagementService {
 	private static final String UID_DISALLOWED_CHARS_REGEX = "[^a-zA-Z0-9-]";
@@ -28,6 +34,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	private ExecutionManager executor;
 		
 	private static AccountManagementService instance;
+	
 //	@Autowired
 //	private PasswordManager passwordManager;
 	

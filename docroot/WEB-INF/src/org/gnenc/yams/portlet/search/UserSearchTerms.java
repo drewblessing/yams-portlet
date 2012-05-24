@@ -7,7 +7,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountSearchTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountSearchTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

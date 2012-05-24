@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.dao.search.DisplayTerms;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountDisplayTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountDisplayTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

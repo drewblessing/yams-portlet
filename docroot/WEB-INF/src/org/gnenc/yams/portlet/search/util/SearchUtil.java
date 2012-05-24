@@ -11,7 +11,22 @@ import org.gnenc.yams.portlet.search.UserSearchTerms;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
 
+/**
+ * Common methods used in preparation for searches.
+ * 
+ * @author Drew A. Blessing
+ *
+ */
 public class SearchUtil {
+	
+	/**
+	 * Returns a list of the organization search filters based on the 
+	 * search terms object
+	 * 
+	 * @param searchTerms OrganizationSearchTerms object containing
+	 * 					  the values from the search form
+	 * @return a list of the organization search filters
+	 */
 	public static List<SearchFilter> getOrganizationFilterList(
 			OrganizationSearchTerms searchTerms) {
 		// TODO: Implement org filter list
@@ -19,6 +34,14 @@ public class SearchUtil {
 		return null;
 	}
 	
+	/**
+	 * Returns a list of the user search filters based on the search
+	 * terms object
+	 * 
+	 * @param searchTerms UserSearchTerms object containing the values
+	 * 					  from the search form
+	 * @return a list of the user search filters
+	 */
 	public static List<SearchFilter> getUserFilterList(
 			UserSearchTerms searchTerms) {
 		final List<SearchFilter> filters = new ArrayList<SearchFilter>();
@@ -27,6 +50,7 @@ public class SearchUtil {
 		  * search should check for false isAdvancedSearch() and then provide
 		  * a fall back to getKeywords() in the filter
 		  */
+		
 		if(searchTerms.getFirstName() != null || !searchTerms.isAdvancedSearch()) {
 			SearchFilter filter = new SearchFilter(
 					Filter.givenName,
@@ -57,6 +81,16 @@ public class SearchUtil {
 		return filters;
 	}
 	
+	/**
+	 * Returns the operand for the search.  The DisplayTerms object should
+	 * be a child class specific to the search being conducted - i.e.
+	 * UserSearchTerms or OrganizationSearchTerms.  It is generic in
+	 * this signature so it can be used for multiple types of searches.
+	 * 
+	 * @param displayTerms DisplayTerms object that contains the search 
+	 *    				   toggle's "and operator" boolean value
+	 * @return the operand for the search
+	 */
 	public static Operand getOperand(DisplayTerms displayTerms) {
 		Operand operand = null;
 		
