@@ -27,7 +27,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountDisplayTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountDisplayTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing
@@ -39,10 +39,6 @@ public class UserDisplayTerms extends DisplayTerms {
 	public static final String FIRST_NAME = "firstName";
 	
 	public static final String ORGANIZATION = "organization";
-	
-	public static final String POSITION = "position";
-	
-	public static final String PROVIDER = "provider";
 
 	public static final String LAST_NAME = "lastName";
 
@@ -60,8 +56,6 @@ public class UserDisplayTerms extends DisplayTerms {
 		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = ParamUtil.getString(portletRequest, ORGANIZATION);
-		position = ParamUtil.getString(portletRequest, POSITION);
-		provider = ParamUtil.getString(portletRequest, PROVIDER);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 	}
 	

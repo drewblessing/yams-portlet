@@ -114,6 +114,10 @@ public class Account {
 		return cn;
 	}
 	
+	public void setCn(List<String> cn) {
+		this.cn = cn;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -199,7 +203,7 @@ public class Account {
 	private List<String> cn;
 	private String description = "";
 	private String displayName = "";
-	private Integer employeeNumber = 0;
+	private Integer employeeNumber = 0; //????
 	private String givenName = "";
 	private List<String> mail;
 	private String password = "";

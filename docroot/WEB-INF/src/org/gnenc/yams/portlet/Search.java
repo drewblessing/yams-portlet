@@ -18,8 +18,49 @@
  **/
 package org.gnenc.yams.portlet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
+import org.gnenc.yams.model.SearchFilter.Operand;
+import org.gnenc.yams.model.SubSystem;
+import org.gnenc.yams.portlet.search.UserSearchTerms;
+import org.gnenc.yams.portlet.search.util.SearchUtil;
+import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
+
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+/**
+ * Class for the search portlet
+ * 
+ * @author Drew A. Blessing
+ *
+ */
 public class Search extends MVCPortlet {
+	
+	/**
+	 * Returns a list of accounts matching the search terms
+	 * 
+	 * @param searchTerms UserSearchTerms object containing
+	 * 					  the values from the search form
+	 * @return a list of accounts matching the search terms
+	 */
+	public static List<Account> getAccounts(UserSearchTerms searchTerms) {
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		List<SubSystem> subsystems = new ArrayList<SubSystem>();
+		List<Account> accounts = new ArrayList<Account>();
+		
+		subsystems.add(SubSystem.LDAP);
 
+		List<SearchFilter> filters = SearchUtil.getUserFilterList(searchTerms);
+		Operand operand = SearchUtil.getOperand(searchTerms);
+		
+		accounts = ams.getAccounts(filters, operand, subsystems);
+		
+		return accounts;
+	}
+	
 }

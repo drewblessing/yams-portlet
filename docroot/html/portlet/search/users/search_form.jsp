@@ -20,9 +20,19 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
+PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+%>
+
+<liferay-ui:search-container 
+	searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" 
+	emptyResultsMessage="no-users-found" 
+	delta="5" >
+<%
+// UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
 
 UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
+UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
+
 %>
 
 <liferay-ui:search-toggle
@@ -31,18 +41,55 @@ UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerm
 	id="toggle_id_search_users"
 >
 	<aui:fieldset>
-		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" value="" />
+		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" 
+				value="<%=searchTerms.getFirstName()%>" />
 
-		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" value="" />
+		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" 
+				value="<%=searchTerms.getLastName()%>" />
 		
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" value="" />
-
-		<aui:input name="<%=UserDisplayTerms.POSITION%>" size="20" value="" />
-
-		<aui:select name="<%=OrganizationDisplayTerms.LOCATION%>" value="" >
-		</aui:select>
+		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" 
+				value="<%=searchTerms.getLastName()%>" />
 		
-		<aui:select name="<%=UserDisplayTerms.PROVIDER%>" value="" >
-		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>
+
+<div class="separator" ><!--  Separator --></div>
+
+    	<liferay-ui:search-container-results>
+    	<% 
+    		// TODO: Fix so results don't show up unless a search was initiated 
+    		List<Account> tempResults = Search.getAccounts(searchTerms);
+    
+		    results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
+		    total = tempResults.size();
+
+		    pageContext.setAttribute("results", results);
+		    pageContext.setAttribute("total", total);
+	    %>
+    	</liferay-ui:search-container-results>
+
+    	<liferay-ui:search-container-row
+    		className="org.gnenc.yams.model.Account"
+    		keyProperty="uid"
+    		modelVar="yamsAccount">
+
+		    <liferay-ui:search-container-column-text
+		        name="firstName"
+		        property="givenName"
+		        />
+
+		    <liferay-ui:search-container-column-text
+		        name="lastName"
+		        property="sn"
+		        />
+
+		    <liferay-ui:search-container-column-text
+		        name="emailAddress"
+		        property="mail[0]"
+		        />
+
+	      </liferay-ui:search-container-row>
+
+	      <liferay-ui:search-iterator />
+
+	</liferay-ui:search-container>

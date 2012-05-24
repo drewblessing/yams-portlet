@@ -39,7 +39,7 @@ import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 /**
- * Modeled after com.liferay.portlet.Organizationsadmin.search.OrganizationSearch
+ * Modeled after {@link com.liferay.portlet.Organizationsadmin.search.OrganizationSearch}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing

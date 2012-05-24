@@ -7,7 +7,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
- * Modeled after com.liferay.portlet.usersadmin.search.AccountSearchTerms
+ * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountSearchTerms}
  * written by Brian Wing Shun Chan
  * 
  * @author Drew A. Blessing
@@ -20,8 +20,6 @@ public class UserSearchTerms extends UserDisplayTerms {
 		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = DAOParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = DAOParamUtil.getString(portletRequest, ORGANIZATION);
-		position = DAOParamUtil.getString(portletRequest, POSITION);
-		provider = DAOParamUtil.getString(portletRequest, PROVIDER);
 		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
 		status = ParamUtil.getInteger(
 			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);
