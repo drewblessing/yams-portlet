@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.liferay.portal.util.comparator.UserFirstNameComparator;
+
 /**
  * YAMS Account model based on the original Account model
  * created by Jeshurun Daniel. Class represents common attributes
@@ -32,31 +34,52 @@ import java.util.Set;
  * 
  * @author Drew A. Blessing
  *
- */
+ */  
 public class Account {
-	
-	public static final Comparator<Account> ACCOUNT_COMPARATOR_ASC = new Comparator<Account>() {
-		
+	public static final Comparator<Account> FIRST_NAME_COMPARATOR_ASC = 
+			new Comparator<Account>() {
 		@Override
 		public int compare(Account a1, Account a2) {
-			if(a1 == a2) {
-				return 0;
-			}
-			if(a1 == null && a2 == null) {
-				return 0;
-			}
-			if(a1 == null) {
-				return -1;
-			}
-			if(a2 == null) {
-				return 1;
-			}
+			int value = a1.getGivenName().toLowerCase().compareTo(
+					a2.getGivenName().toLowerCase());
 			
-			// Compare against first cn value only
-			return a1.getCn().get(0).compareTo(a2.getCn().get(0));
+				return value;
 		}
 	};
 	
+	public static final Comparator<Account> FIRST_NAME_COMPARATOR_DESC = 
+			new Comparator<Account>() {
+		@Override
+		public int compare(Account a1, Account a2) {
+			int value = a1.getGivenName().toLowerCase().compareTo(
+					a2.getGivenName().toLowerCase());
+			
+				return -value;
+		}
+	};
+	
+	public static final Comparator<Account> LAST_NAME_COMPARATOR_ASC = 
+			new Comparator<Account>() {
+		@Override
+		public int compare(Account a1, Account a2) {
+			int value = a1.getSn().toLowerCase().compareTo(
+					a2.getSn().toLowerCase());
+			
+				return value;
+		}
+	};
+	
+	public static final Comparator<Account> LAST_NAME_COMPARATOR_DESC = 
+			new Comparator<Account>() {
+		@Override
+		public int compare(Account a1, Account a2) {
+			int value = a1.getSn().toLowerCase().compareTo(
+					a2.getSn().toLowerCase());
+			
+				return -value;
+		}
+	};
+		
 	@Override
 	public boolean equals(Object obj) {
 		if ( this == obj ) return true;
@@ -211,6 +234,5 @@ public class Account {
 	private List<String> securityQuestion;
 	private String sn = "";
 	private Set<SubSystem> subsystems;
-	private String uid = "";
-	
+	private String uid = "";	
 }

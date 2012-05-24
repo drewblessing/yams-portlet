@@ -21,11 +21,25 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+
+PortalPreferences portalPrefs = PortletPreferencesFactoryUtil.getPortalPreferences(request); 
+String orderByCol = ParamUtil.getString(request, "orderByCol");
+String orderByType = ParamUtil.getString(request, "orderByType"); 
+
+if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) { 
+	portalPrefs.setValue("search_WAR_yamsportlet", "search-order-by-col", orderByCol); 
+	portalPrefs.setValue("search_WAR_yamsportlet", "search-order-by-type", orderByType); 
+} else { 
+	orderByCol = portalPrefs.getValue("search_WAR_yamsportlet", "search-order-by-col", "sn");
+	orderByType = portalPrefs.getValue("search_WAR_yamsportlet", "search-order-by-type", "asc"); 
+}
 %>
 
 <liferay-ui:search-container 
 	searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" 
 	emptyResultsMessage="no-users-found" 
+	orderByCol="<%=orderByCol %>"
+	orderByType="<%=orderByType %>"
 	delta="5" >
 <%
 // UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
@@ -57,8 +71,8 @@ UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
 
     	<liferay-ui:search-container-results>
     	<% 
-    		// TODO: Fix so results don't show up unless a search was initiated 
-    		List<Account> tempResults = Search.getAccounts(searchTerms);
+    		List<Account> tempResults = Search.getAccounts( 
+				searchTerms, orderByType, orderByCol);
     
 		    results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
 		    total = tempResults.size();
@@ -72,15 +86,19 @@ UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
     		className="org.gnenc.yams.model.Account"
     		keyProperty="uid"
     		modelVar="yamsAccount">
+    		
+    		<liferay-ui:search-container-column-text
+		        name="lastName"
+		        property="sn"
+		        orderable="true"
+		        orderableProperty="sn"
+		        />
 
 		    <liferay-ui:search-container-column-text
 		        name="firstName"
 		        property="givenName"
-		        />
-
-		    <liferay-ui:search-container-column-text
-		        name="lastName"
-		        property="sn"
+		        orderable="true"
+		        orderableProperty="givenName"
 		        />
 
 		    <liferay-ui:search-container-column-text

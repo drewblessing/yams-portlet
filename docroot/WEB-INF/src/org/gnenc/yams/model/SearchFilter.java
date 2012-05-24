@@ -16,8 +16,6 @@ public class SearchFilter implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(SearchFilter.class);
 	
-	public static final String ALL_ACCOUNTS_FILTER = "(uid=*)";
-	
 	public static enum Operand {AND, OR};
 
 	public static enum Filter {
@@ -30,13 +28,6 @@ public class SearchFilter implements Serializable {
 	private final boolean negated;
 	
 	private final String value;
-	
-	@SuppressWarnings("unused") // for JAXB
-	private SearchFilter() {
-		filter = null;
-		negated = false;
-		value = null;
-	}
 	
 	public SearchFilter(Filter filter, String value, boolean negated) {
 		this.filter = filter;

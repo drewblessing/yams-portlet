@@ -19,28 +19,24 @@
 package org.gnenc.yams.portlet.search;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.portlet.search.util.SearchUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortalPreferences;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 /**
  * Modeled after {@link com.liferay.portlet.usersadmin.search.UserSearch}
@@ -78,23 +74,10 @@ public class UserSearch extends SearchContainer<Account> {
 			new UserSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
 			iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
-		PortletConfig portletConfig =
-			(PortletConfig)portletRequest.getAttribute(
-				JavaConstants.JAVAX_PORTLET_CONFIG);
-
 		UserDisplayTerms displayTerms = (UserDisplayTerms)getDisplayTerms();
-		UserSearchTerms searchTerms = (UserSearchTerms)getSearchTerms();
-
-		String portletName = portletConfig.getPortletName();
-
-		if (!portletName.equals(PortletKeys.USERS_ADMIN)) {
-			displayTerms.setStatus(WorkflowConstants.STATUS_APPROVED);
-			searchTerms.setStatus(WorkflowConstants.STATUS_APPROVED);
-		}
 
 		iteratorURL.setParameter(
 			UserDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
-
 		iteratorURL.setParameter(
 			UserDisplayTerms.EMAIL_ADDRESS, displayTerms.getEmailAddress());
 		iteratorURL.setParameter(
@@ -125,19 +108,14 @@ public class UserSearch extends SearchContainer<Account> {
 			}
 			else {
 				orderByCol = preferences.getValue(
-					"users", "users-order-by-col", "last-name");
+					"users", "users-order-by-col", "lastName");
 				orderByType = preferences.getValue(
 					"users", "users-order-by-type", "asc");
 			}
 
-			OrderByComparator orderByComparator =
-				UsersAdminUtil.getUserOrderByComparator(
-					orderByCol, orderByType);
-
 			setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);
 			setOrderByType(orderByType);
-			setOrderByComparator(orderByComparator);
 		}
 		catch (Exception e) {
 			_log.error(e);

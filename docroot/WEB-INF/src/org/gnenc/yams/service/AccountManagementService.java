@@ -22,6 +22,7 @@ public interface AccountManagementService {
 	 * @return a list of accounts matching the search filter
 	 */
 	public List<Account> getAccounts(
-			List<SearchFilter> filters,Operand operand,List<SubSystem> subsystems);
+			List<SearchFilter> filters,Operand operand,
+			List<SubSystem> subsystems);
 	
 }
