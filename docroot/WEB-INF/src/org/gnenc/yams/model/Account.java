@@ -179,13 +179,25 @@ public class Account {
 		return mail;
 	}
 	
-	public String getMailStringWithDelimiter(char delimiter) {
+	/**
+	 * Transforms mail array into a delimited string.
+	 * 
+	 * @param delimiter	a char delimiter to separate the mail addresses.
+	 * 					Account.DELIMITER_COMMA, Account.DELIMITER_TAB,
+	 * 					Account.DELIMITER_SEMICOLON are some available options
+	 * @param readable	indicates whether a space should be added after the 
+	 * 					delimiter to improve readability
+	 * @return a string containing the mail addresses
+	 */
+	public String getMailStringWithDelimiter(char delimiter, boolean readable) {
 		List<String> mailArray = getMail();
 		StringBuilder mailString = new StringBuilder();
 		
 		for (int i=0;i<mailArray.size();i++) {
 			if (i == 0) {
 				mailString.append(mailArray.get(i));
+			} else if (readable) {
+				mailString.append(delimiter).append(" ").append(mailArray.get(i));
 			} else {
 				mailString.append(delimiter).append(mailArray.get(i));
 			}
