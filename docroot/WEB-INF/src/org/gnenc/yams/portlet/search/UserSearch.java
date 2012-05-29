@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
+
 package org.gnenc.yams.portlet.search;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.portlet.search.util.SearchUtil;
+import org.gnenc.yams.portlet.util.PortletKeys;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
@@ -56,7 +56,6 @@ public class UserSearch extends SearchContainer<Account> {
 		
 		orderableHeaders.put("first-name", "first-name");
 		orderableHeaders.put("last-name", "last-name");
-		orderableHeaders.put("email-address", "email-address");
 	}
 	
 	public static final String EMPTY_RESULTS_MESSAGE = "no-users-were-found";
@@ -96,21 +95,18 @@ public class UserSearch extends SearchContainer<Account> {
 				portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(
 				portletRequest, "orderByType");
-
-			if (Validator.isNotNull(orderByCol) &&
-				Validator.isNotNull(orderByType)) {
-
-				preferences.setValue(
-					"users", "users-order-by-col", orderByCol);
-				preferences.setValue(
-					"users", "users-order-by-type",
-					orderByType);
-			}
-			else {
-				orderByCol = preferences.getValue(
-					"users", "users-order-by-col", "lastName");
-				orderByType = preferences.getValue(
-					"users", "users-order-by-type", "asc");
+			
+			if (Validator.isNotNull(orderByCol) && 
+					Validator.isNotNull(orderByType)) { 
+				preferences.setValue(PortletKeys.SEARCH, 
+						"search-user-order-by-col", orderByCol); 
+				preferences.setValue(PortletKeys.SEARCH, 
+						"search-user-order-by-type", orderByType); 
+			} else { 
+				orderByCol = preferences.getValue(PortletKeys.SEARCH, 
+						"search-user-order-by-col", "sn");
+				orderByType = preferences.getValue(PortletKeys.SEARCH, 
+						"search-user-order-by-type", "asc"); 
 			}
 
 			setOrderableHeaders(orderableHeaders);

@@ -179,6 +179,21 @@ public class Account {
 		return mail;
 	}
 	
+	public String getMailStringWithDelimiter(char delimiter) {
+		List<String> mailArray = getMail();
+		StringBuilder mailString = new StringBuilder();
+		
+		for (int i=0;i<mailArray.size();i++) {
+			if (i == 0) {
+				mailString.append(mailArray.get(i));
+			} else {
+				mailString.append(delimiter).append(mailArray.get(i));
+			}
+		}
+		
+		return mailString.toString();
+	}
+	
 	public String getPassword() {
 		return password;
 	}
@@ -235,4 +250,8 @@ public class Account {
 	private String sn = "";
 	private Set<SubSystem> subsystems;
 	private String uid = "";	
+	
+	public static char DELIMITER_COMMA = ',';
+	public static char DELIMITER_TAB = '\t';
+	public static char DELIMITER_SEMICOLON = ';';
 }
