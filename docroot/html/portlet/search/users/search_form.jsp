@@ -49,24 +49,9 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<div class="separator" ><!--  Separator --></div>
 	
 	<liferay-ui:search-container-results>
-	<% 
-		List<Account> tempResults = new ArrayList<Account>();
-	   	Account account1 = new Account();
-	   	account1.setUid("1234");
-	   	account1.setGivenName("Drew");
-	   	account1.setSn("Blessing");
-	   	account1.getMail().add(0, "drew.blessing@esu10.org");
-	   	account1.getMail().add(1, "drew.blessing@esu10.org");
-	   	tempResults.add(account1);
-		Account account2 = new Account();
-	   	account2.setUid("12345");
-	   	account2.setGivenName("Drew2");
-	   	account2.setSn("Blessing2");
-	   	account2.getMail().add(0, "drew.blessing@esu10.org1");
-	   	account2.getMail().add(1, "drew.blessing@esu10.org2");
-	   	tempResults.add(account2);
-	//  List<Account> tempResults = Search.getAccounts( 
-	// 			searchTerms, orderByType, orderByCol);
+		<% 
+	 	List<Account> tempResults = Search.getAccounts(
+	 			searchTerms, searchContainer.getOrderByType(), searchContainer.getOrderByCol());
 	   
 		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
 		total = tempResults.size();
