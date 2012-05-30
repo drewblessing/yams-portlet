@@ -19,19 +19,21 @@
 package org.gnenc.yams.portlet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+
+import javax.portlet.RenderRequest;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
+import org.gnenc.yams.portlet.search.UserSearch;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 import org.gnenc.yams.portlet.search.util.SearchUtil;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -40,8 +42,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author Drew A. Blessing
  *
  */
-public class Search extends MVCPortlet {
-	
+public class Search extends MVCPortlet {	
 	/**
 	 * Returns a list of accounts matching the search terms
 	 * 
@@ -50,17 +51,20 @@ public class Search extends MVCPortlet {
 	 * @return a list of accounts matching the search terms
 	 */
 	public static List<Account> getAccounts(
-			UserSearchTerms searchTerms, String orderByType, String orderByCol) {
+			RenderRequest request, UserSearchTerms searchTerms, 
+			String orderByType, String orderByCol) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
 		List<Account> accounts = new ArrayList<Account>();
 		
-		subsystems.add(SubSystem.LDAP);
-
 		List<SearchFilter> filters = SearchUtil.getUserFilterList(searchTerms);
 		Operand operand = SearchUtil.getOperand(searchTerms);
-		
-		accounts = ams.getAccounts(filters, operand, subsystems);
+		subsystems.add(SubSystem.LDAP);
+		try {
+			accounts = ams.getAccounts(filters, operand, subsystems);
+		} catch (IllegalArgumentException e) {
+			// That's Ok
+		}
 		SearchUtil.sortAccounts(accounts, orderByType, orderByCol);
 		
 		return accounts;

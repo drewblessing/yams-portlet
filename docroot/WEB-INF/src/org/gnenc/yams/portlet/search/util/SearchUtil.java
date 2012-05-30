@@ -54,7 +54,8 @@ public class SearchUtil {
 		  * a fall back to getKeywords() in the filter
 		  */
 		
-		if(searchTerms.getFirstName() != null || !searchTerms.isAdvancedSearch()) {
+		if(searchTerms.getFirstName() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
 			SearchFilter filter = new SearchFilter(
 					Filter.givenName,
 					searchTerms.getFirstName() != null ? 
@@ -63,7 +64,8 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getLastName() != null || !searchTerms.isAdvancedSearch()) {
+		if(searchTerms.getLastName() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
 			SearchFilter filter = new SearchFilter(
 					Filter.sn,
 					searchTerms.getLastName() != null ? 
@@ -72,7 +74,8 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getEmailAddress() != null || !searchTerms.isAdvancedSearch()) {
+		if(searchTerms.getEmailAddress() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
 			SearchFilter filter = new SearchFilter(
 					Filter.mail,
 					searchTerms.getEmailAddress() != null ? 

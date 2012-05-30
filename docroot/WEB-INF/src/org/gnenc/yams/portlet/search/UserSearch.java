@@ -58,7 +58,7 @@ public class UserSearch extends SearchContainer<Account> {
 		orderableHeaders.put("last-name", "last-name");
 	}
 	
-	public static final String EMPTY_RESULTS_MESSAGE = "no-users-were-found";
+	public static String empty_results_message = "no-users-were-found";
 	
 	public UserSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 		this(portletRequest, DEFAULT_CUR_PARAM, iteratorURL);
@@ -71,7 +71,7 @@ public class UserSearch extends SearchContainer<Account> {
 		super(
 			portletRequest, new UserDisplayTerms(portletRequest),
 			new UserSearchTerms(portletRequest), curParam, DEFAULT_DELTA,
-			iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
+			iteratorURL, headerNames, empty_results_message);
 
 		UserDisplayTerms displayTerms = (UserDisplayTerms)getDisplayTerms();
 

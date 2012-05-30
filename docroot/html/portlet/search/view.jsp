@@ -21,11 +21,6 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%-- <jsp:include page="<%=PropsValues.YAMS_PORTLET_SEARCH_DEFAULT_VIEW %>" /> --%>
-
-<%-- <portlet:renderURL var="portletURLString" /> --%>
-
-
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 request.setAttribute("view.jsp-portletURL", portletURL);
@@ -39,7 +34,7 @@ pageContext.setAttribute("portletURL",portletURL);
 String portletURLString = portletURL.toString();
 %>
 
-<aui:form action="<%= portletURLString %>" method="get" name="fm">
+<aui:form method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />

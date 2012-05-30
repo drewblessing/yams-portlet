@@ -36,7 +36,7 @@ public class SearchFilter implements Serializable {
 	}
 	
 	public static String buildStringFilter(Collection<SearchFilter> searchFilters, Operand operand) {
-		if(searchFilters == null) {
+		if(searchFilters.isEmpty()) {
 			throw new IllegalArgumentException("At Least one SearchFilter is required.");
 		}
 		final boolean singleFilter = searchFilters.size() == 1;
@@ -74,6 +74,7 @@ public class SearchFilter implements Serializable {
 		}
 		
 		final String r = result.toString();
+		System.out.println(r);
 		logger.debug("Search Filter: " + r);
 		
 		return r;

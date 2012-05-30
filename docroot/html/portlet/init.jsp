@@ -56,6 +56,7 @@
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
 <%@ page import="com.liferay.portlet.PortletURLUtil" %>
 
+<%@ page import="java.lang.IllegalArgumentException" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
