@@ -27,6 +27,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.portlet.util.PortletKeys;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
@@ -88,31 +89,23 @@ public class OrganizationSearch extends SearchContainer<Account> {
 				portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(
 				portletRequest, "orderByType");
-
-			if (Validator.isNotNull(orderByCol) &&
-				Validator.isNotNull(orderByType)) {
-
-				preferences.setValue(
-					"organizations", "organizations-order-by-col", orderByCol);
-				preferences.setValue(
-					"organizations", "organizations-order-by-type",
-					orderByType);
+			
+			if (Validator.isNotNull(orderByCol) && 
+					Validator.isNotNull(orderByType)) { 
+				preferences.setValue(PortletKeys.SEARCH, 
+						"search-org-order-by-col", orderByCol); 
+				preferences.setValue(PortletKeys.SEARCH, 
+						"search-org-order-by-type", orderByType); 
+			} else { 
+				orderByCol = preferences.getValue(PortletKeys.SEARCH, 
+						"search-org-order-by-col", "name");
+				orderByType = preferences.getValue(PortletKeys.SEARCH, 
+						"search-org-order-by-type", "asc"); 
 			}
-			else {
-				orderByCol = preferences.getValue(
-					"organizations", "organizations-order-by-col", "last-name");
-				orderByType = preferences.getValue(
-					"organizations", "organizations-order-by-type", "asc");
-			}
-
-			OrderByComparator orderByComparator =
-				UsersAdminUtil.getOrganizationOrderByComparator(
-					orderByCol, orderByType);
 
 			setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);
 			setOrderByType(orderByType);
-			setOrderByComparator(orderByComparator);
 		}
 		catch (Exception e) {
 			_log.error(e);

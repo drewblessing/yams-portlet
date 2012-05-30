@@ -30,9 +30,12 @@
 <%@ taglib uri="http://liferay.com/tld/util" prefix="util" %>
 
 <%@ page import="org.gnenc.yams.model.Account" %>
+<%@ page import="org.gnenc.yams.model.Group" %>
+<%@ page import="org.gnenc.yams.model.GroupMap" %>
 <%@ page import="org.gnenc.yams.portlet.Search" %>
 <%@ page import="org.gnenc.yams.portlet.search.OrganizationDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.OrganizationSearch" %>
+<%@ page import="org.gnenc.yams.portlet.search.OrganizationSearchTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>

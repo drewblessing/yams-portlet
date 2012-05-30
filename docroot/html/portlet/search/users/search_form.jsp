@@ -51,7 +51,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<liferay-ui:search-container-results>
 		<% 
 	 	List<Account> tempResults = Search.getAccounts(
-	 			renderRequest, searchTerms, 
+	 			searchTerms,
 	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
 	   
 		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());

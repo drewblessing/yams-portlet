@@ -73,7 +73,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		}
 		
 		final List<Account> results = new ArrayList<Account>(accounts.values());
-//		Collections.sort(results, Account.ACCOUNT_COMPARATOR_ASC);
 		
 		return results;
 	}

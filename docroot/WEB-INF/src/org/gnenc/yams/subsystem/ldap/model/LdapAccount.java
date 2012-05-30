@@ -19,7 +19,7 @@ import org.springframework.ldap.odm.annotations.Id;
  *
  */
 @Entry(objectClasses={"posixaccount","inetorgperson","top"})
-public class LdapAccount {
+final public class LdapAccount {
 
 	@Id
 	private Name dn;

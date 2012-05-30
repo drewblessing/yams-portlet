@@ -20,10 +20,14 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-OrganizationSearch searchContainer = (OrganizationSearch)request.getAttribute("liferay-ui:search:searchContainer");
-
-OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
+PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 %>
+
+<liferay-ui:search-container searchContainer="<%=new OrganizationSearch(renderRequest, portletURL) %>" >
+	<%
+	OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
+	OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
+	%>
 
 <liferay-ui:search-toggle
 	buttonLabel="search"
@@ -32,8 +36,59 @@ OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContaine
 >
 	<aui:fieldset>
 		<aui:input name="<%=OrganizationDisplayTerms.NAME%>" size="20" value="" />
-
-		<aui:select name="<%=OrganizationDisplayTerms.LOCATION%>" value="" >
-		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>
+
+<div class="separator" ><!--  Separator --></div>
+	
+	<liferay-ui:search-container-results>
+		<% 
+	 	List<GroupMap> tempResults = Search.getGroups(
+	 			searchTerms,
+	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
+ 
+		List<Group> groups = new ArrayList<Group>();
+		
+		for (GroupMap map : tempResults) {
+			for (Group group : map.getGroups()) {
+			groups.add(group);
+			}
+		}
+	   
+		results = ListUtil.subList(groups, searchContainer.getStart(), searchContainer.getEnd());
+		total = groups.size();
+	
+		pageContext.setAttribute("results", results);
+		pageContext.setAttribute("total", total);
+	    %>
+	</liferay-ui:search-container-results>
+	
+	<liferay-ui:search-container-row
+			className="org.gnenc.yams.model.Group"
+			keyProperty="cn"
+			modelVar="yamsGroup">
+			
+		<liferay-ui:search-container-column-text
+	    		name="name"
+	    		property="displayName"
+	      		orderable="true"
+	      		orderableProperty="displayName"
+	    />
+	    
+	    <liferay-ui:search-container-column-text
+	    		name="description"
+	    		property="description"
+	      		orderable="false"
+	    />
+	    
+	    <liferay-ui:search-container-column-text
+	    		name="number-of-users"
+	    		value="<%=Integer.toString(yamsGroup.getMembers().size()) %>"
+	    />
+	    
+	
+	</liferay-ui:search-container-row>
+	
+	<liferay-ui:search-iterator />
+
+</liferay-ui:search-container>

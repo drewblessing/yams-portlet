@@ -122,4 +122,26 @@ public class SearchUtil {
 			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_DESC);
 		}
 	}
+
+	public static List<SearchFilter> getOrgFilterList(
+			OrganizationSearchTerms searchTerms) {
+final List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		
+		/** Each search term that wishes to be a part of the basic keyword
+		  * search should check for false isAdvancedSearch() and then provide
+		  * a fall back to getKeywords() in the filter
+		  */
+		
+		if(searchTerms.getName() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+			SearchFilter filter = new SearchFilter(
+					Filter.name,
+					searchTerms.getName() != null ? 
+							searchTerms.getName() : searchTerms.getKeywords(),
+					false);
+			filters.add(filter);
+		}
+		
+		return filters;
+	}
 }

@@ -15,7 +15,7 @@ import java.util.Map;
  *
  */
 public class Group {
-	public static final Comparator<Group> GROUP_COMPARATOR_ASC = new Comparator<Group>() {
+	public static final Comparator<Group> NAME_COMPARATOR_ASC = new Comparator<Group>() {
 		@Override
 		public int compare(Group g1, Group g2) {
 			if(g1 == g2) {
@@ -46,9 +46,6 @@ public class Group {
 	private String description;
 
 	private List<Account> members;
-
-	/* A list of aliases for this group, if any. */
-	private List<String> aliases;
 	
 	private Map<String, String> additionalAttributes;
 	
@@ -58,7 +55,6 @@ public class Group {
 	public Group(String cn) {
 		this.cn = cn;
 	}
-
 	
 	public String getCn() {
 		return cn;
@@ -88,12 +84,6 @@ public class Group {
 		if(members == null)
 			members = new ArrayList<Account>();
 		return members;
-	}
-
-	public List<String> getAliases() {
-		if(aliases == null)
-			aliases = new ArrayList<String>();
-		return aliases;
 	}
 	
 	public String getAttribute(String key) {

@@ -17,8 +17,8 @@ import org.springframework.ldap.odm.annotations.Id;
  * @author Drew A. Blessing
  *
  */
-@Entry(objectClasses={"posixgroup","groupofnames","top"})
-public class LdapGroup {
+@Entry(objectClasses={"groupofnames","top"})
+final public class LdapGroup {
 	
 	@Id
 	private Name dn;

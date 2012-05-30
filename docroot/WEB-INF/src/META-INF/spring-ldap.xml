@@ -105,6 +105,7 @@
 		<property name="managedClasses">
 			<set>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
 			</set>
 		</property>
 	</bean>

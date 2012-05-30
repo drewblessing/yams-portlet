@@ -21,19 +21,20 @@ package org.gnenc.yams.portlet;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.portlet.RenderRequest;
-
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
-import org.gnenc.yams.portlet.search.UserSearch;
+import org.gnenc.yams.portlet.search.OrganizationSearchTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 import org.gnenc.yams.portlet.search.util.SearchUtil;
 import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.GroupManagementService;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
+import org.gnenc.yams.service.impl.GroupManagementServiceImpl;
 
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -51,7 +52,7 @@ public class Search extends MVCPortlet {
 	 * @return a list of accounts matching the search terms
 	 */
 	public static List<Account> getAccounts(
-			RenderRequest request, UserSearchTerms searchTerms, 
+			UserSearchTerms searchTerms, 
 			String orderByType, String orderByCol) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
@@ -68,6 +69,27 @@ public class Search extends MVCPortlet {
 		SearchUtil.sortAccounts(accounts, orderByType, orderByCol);
 		
 		return accounts;
+	}
+	
+	public static List<GroupMap> getGroups(
+			OrganizationSearchTerms searchTerms,
+			String orderByType, String orderByCol) {
+		GroupManagementService gms = GroupManagementServiceImpl.getInstance();
+		List<SubSystem> subsystems = new ArrayList<SubSystem>();
+		List<GroupMap> groups = new ArrayList<GroupMap>();
+		
+		List<SearchFilter> filters = SearchUtil.getOrgFilterList(searchTerms);
+		Operand operand = SearchUtil.getOperand(searchTerms);
+		subsystems.add(SubSystem.LDAP);
+		try {
+			groups = gms.getAllGroups(filters, operand, subsystems);
+		} catch (IllegalArgumentException e) {
+			// That's Ok
+		}
+		//SearchUtil.sortGroups(accounts, orderByType, orderByCol);
+		
+		return groups;
+		
 	}
 	
 }
