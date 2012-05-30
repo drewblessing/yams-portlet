@@ -17,7 +17,7 @@ import org.springframework.ldap.odm.annotations.Id;
  * @author Drew A. Blessing
  *
  */
-@Entry(objectClasses={"inetorgperson","top"})
+@Entry(objectClasses={"posixaccount","inetorgperson","top"})
 public class LdapAccount {
 
 	@Id
@@ -42,7 +42,16 @@ public class LdapAccount {
 	private String employeeType; 
 	
 	@Attribute(type=Type.STRING)
+	private String gecos;
+	
+	@Attribute(type=Type.STRING)
+	private String gidNumber;
+	
+	@Attribute(type=Type.STRING)
 	private String givenName;
+	
+	@Attribute(type=Type.STRING)
+	private String homeDirectory;
 	
 	@Attribute(type=Type.STRING)
 	private List<String> homePhone;
@@ -58,6 +67,9 @@ public class LdapAccount {
 	
 	@Attribute(type=Type.STRING, name="l")
 	private List<String> localityName;
+	
+	@Attribute(type=Type.STRING)
+	private String loginShell;
 	
 	@Attribute(type=Type.STRING)
 	private List<String> mail;
@@ -116,8 +128,11 @@ public class LdapAccount {
 	@Attribute(type=Type.STRING)
 	private String title;
 	
-	@Attribute(type=Type.STRING, name="uid")
+	@Attribute(type=Type.STRING)
 	private String uid;
+	
+	@Attribute(type=Type.STRING)
+	private String uidNumber;
 	
 	@Attribute(type=Type.BINARY)
 	private byte[] userPassword;	
@@ -178,12 +193,36 @@ public class LdapAccount {
 		this.employeeType = employeeType;
 	}
 
+	public String getGecos() {
+		return gecos;
+	}
+
+	public void setGecos(String gecos) {
+		this.gecos = gecos;
+	}
+
+	public String getGidNumber() {
+		return gidNumber;
+	}
+
+	public void setGidNumber(String gidNumber) {
+		this.gidNumber = gidNumber;
+	}
+
 	public String getGivenName() {
 		return givenName;
 	}
 
 	public void setGivenName(String givenName) {
 		this.givenName = givenName;
+	}
+
+	public String getHomeDirectory() {
+		return homeDirectory;
+	}
+
+	public void setHomeDirectory(String homeDirectory) {
+		this.homeDirectory = homeDirectory;
 	}
 
 	public List<String> getHomePhone() {
@@ -226,6 +265,14 @@ public class LdapAccount {
 		this.localityName = localityName;
 	}
 	
+	public String getLoginShell() {
+		return loginShell;
+	}
+
+	public void setLoginShell(String loginShell) {
+		this.loginShell = loginShell;
+	}
+
 	public List<String> getMail() {
 		return mail;
 	}
@@ -380,6 +427,14 @@ public class LdapAccount {
 
 	public void setUid(String uid) {
 		this.uid = uid;
+	}
+
+	public String getUidNumber() {
+		return uidNumber;
+	}
+
+	public void setUidNumber(String uidNumber) {
+		this.uidNumber = uidNumber;
 	}
 
 	public String getUserPassword() {

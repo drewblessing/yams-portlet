@@ -36,6 +36,7 @@
 <%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>
+<%@ page import="org.gnenc.yams.portlet.util.PortletKeys" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
 
 <%@ page import="javax.portlet.PortletMode" %>
@@ -56,6 +57,7 @@
 <%@ page import="com.liferay.portlet.PortletURLUtil" %>
 
 <%@ page import="java.util.Collections" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
 <liferay-theme:defineObjects />

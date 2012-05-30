@@ -21,93 +21,73 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
-
-PortalPreferences portalPrefs = PortletPreferencesFactoryUtil.getPortalPreferences(request); 
-String orderByCol = ParamUtil.getString(request, "orderByCol");
-String orderByType = ParamUtil.getString(request, "orderByType"); 
-
-if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) { 
-	portalPrefs.setValue("search_WAR_yamsportlet", "search-order-by-col", orderByCol); 
-	portalPrefs.setValue("search_WAR_yamsportlet", "search-order-by-type", orderByType); 
-} else { 
-	orderByCol = portalPrefs.getValue("search_WAR_yamsportlet", "search-order-by-col", "sn");
-	orderByType = portalPrefs.getValue("search_WAR_yamsportlet", "search-order-by-type", "asc"); 
-}
 %>
 
-<liferay-ui:search-container 
-	searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" 
-	emptyResultsMessage="no-users-found" 
-	orderByCol="<%=orderByCol %>"
-	orderByType="<%=orderByType %>"
-	delta="5" >
-<%
-// UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
-
-UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
-UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
-
-%>
-
-<liferay-ui:search-toggle
-	buttonLabel="search"
-	displayTerms="<%=displayTerms%>"
-	id="toggle_id_search_users"
->
-	<aui:fieldset>
-		<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" 
-				value="<%=searchTerms.getFirstName()%>" />
-
-		<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" 
-				value="<%=searchTerms.getLastName()%>" />
-		
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" 
-				value="<%=searchTerms.getLastName()%>" />
-		
-	</aui:fieldset>
-</liferay-ui:search-toggle>
-
-<div class="separator" ><!--  Separator --></div>
-
-    	<liferay-ui:search-container-results>
-    	<% 
-    		List<Account> tempResults = Search.getAccounts( 
-				searchTerms, orderByType, orderByCol);
-    
-		    results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
-		    total = tempResults.size();
-
-		    pageContext.setAttribute("results", results);
-		    pageContext.setAttribute("total", total);
+<liferay-ui:search-container searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" >
+	<%
+	UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
+	UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
+	%>
+	
+	<liferay-ui:search-toggle
+		buttonLabel="search"
+		displayTerms="<%=displayTerms%>"
+		id="toggle_id_search_users"
+	>
+		<aui:fieldset>
+			<aui:input name="<%=UserDisplayTerms.FIRST_NAME%>" size="20" 
+					value="<%=searchTerms.getFirstName()%>" />
+	
+			<aui:input name="<%=UserDisplayTerms.LAST_NAME%>" size="20" 
+					value="<%=searchTerms.getLastName()%>" />
+			
+			<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" 
+					value="<%=searchTerms.getLastName()%>" />
+		</aui:fieldset>
+	</liferay-ui:search-toggle>
+	
+	<div class="separator" ><!--  Separator --></div>
+	
+	<liferay-ui:search-container-results>
+		<% 
+	 	List<Account> tempResults = Search.getAccounts(
+	 			searchTerms, searchContainer.getOrderByType(), searchContainer.getOrderByCol());
+	   
+		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
+		total = tempResults.size();
+	
+		pageContext.setAttribute("results", results);
+		pageContext.setAttribute("total", total);
 	    %>
-    	</liferay-ui:search-container-results>
+	</liferay-ui:search-container-results>
+	
+	<liferay-ui:search-container-row
+			className="org.gnenc.yams.model.Account"
+			keyProperty="uid"
+			modelVar="yamsAccount">
+			
+		<liferay-ui:search-container-column-text
+	    		name="lastName"
+	    		property="sn"
+	      		orderable="true"
+	      		orderableProperty="sn"
+	    />
+	
+	  	<liferay-ui:search-container-column-text
+	      		name="firstName"
+	      		property="givenName"
+	      		orderable="true"
+				orderableProperty="givenName"
+	    />
+	
+		<liferay-ui:search-container-column-text
+	    		name="emailAddress"
+	      		value="<%=yamsAccount.getMailStringWithDelimiter(
+	      				Account.DELIMITER_COMMA, true) %>"
+	    />
+	
+	</liferay-ui:search-container-row>
+	
+	<liferay-ui:search-iterator />
 
-    	<liferay-ui:search-container-row
-    		className="org.gnenc.yams.model.Account"
-    		keyProperty="uid"
-    		modelVar="yamsAccount">
-    		
-    		<liferay-ui:search-container-column-text
-		        name="lastName"
-		        property="sn"
-		        orderable="true"
-		        orderableProperty="sn"
-		        />
-
-		    <liferay-ui:search-container-column-text
-		        name="firstName"
-		        property="givenName"
-		        orderable="true"
-		        orderableProperty="givenName"
-		        />
-
-		    <liferay-ui:search-container-column-text
-		        name="emailAddress"
-		        property="mail[0]"
-		        />
-
-	      </liferay-ui:search-container-row>
-
-	      <liferay-ui:search-iterator />
-
-	</liferay-ui:search-container>
+</liferay-ui:search-container>
