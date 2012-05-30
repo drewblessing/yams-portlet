@@ -21,31 +21,12 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
-
-PortalPreferences portalPrefs = PortletPreferencesFactoryUtil.getPortalPreferences(request); 
-String orderByCol = ParamUtil.getString(request, "orderByCol");
-String orderByType = ParamUtil.getString(request, "orderByType"); 
-
-if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) { 
-	portalPrefs.setValue(PortletKeys.SEARCH, "search-user-order-by-col", orderByCol); 
-	portalPrefs.setValue(PortletKeys.SEARCH, "search-user-order-by-type", orderByType); 
-} else { 
-	orderByCol = portalPrefs.getValue(PortletKeys.SEARCH, "search-user-order-by-col", "sn");
-	orderByType = portalPrefs.getValue(PortletKeys.SEARCH, "search-user-order-by-type", "asc"); 
-}
 %>
 
-<liferay-ui:search-container 
-	searchContainer="<%=new UserSearch(renderRequest, portletURL) %>"
-	emptyResultsMessage="no-users-found" 
-	orderByCol="<%=orderByCol %>"
-	orderByType="<%=orderByType %>"
-	delta="5" >
+<liferay-ui:search-container searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" >
 	<%
-	
 	UserDisplayTerms displayTerms = (UserDisplayTerms)searchContainer.getDisplayTerms();
 	UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
-	
 	%>
 	
 	<liferay-ui:search-toggle
@@ -62,7 +43,6 @@ if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) {
 			
 			<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20" 
 					value="<%=searchTerms.getLastName()%>" />
-			
 		</aui:fieldset>
 	</liferay-ui:search-toggle>
 	
@@ -76,7 +56,15 @@ if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) {
 	   	account1.setGivenName("Drew");
 	   	account1.setSn("Blessing");
 	   	account1.getMail().add(0, "drew.blessing@esu10.org");
+	   	account1.getMail().add(1, "drew.blessing@esu10.org");
 	   	tempResults.add(account1);
+		Account account2 = new Account();
+	   	account2.setUid("12345");
+	   	account2.setGivenName("Drew2");
+	   	account2.setSn("Blessing2");
+	   	account2.getMail().add(0, "drew.blessing@esu10.org1");
+	   	account2.getMail().add(1, "drew.blessing@esu10.org2");
+	   	tempResults.add(account2);
 	//  List<Account> tempResults = Search.getAccounts( 
 	// 			searchTerms, orderByType, orderByCol);
 	   
@@ -110,7 +98,7 @@ if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) {
 		<liferay-ui:search-container-column-text
 	    		name="emailAddress"
 	      		value="<%=yamsAccount.getMailStringWithDelimiter(
-	      				Account.DELIMITER_COMMA) %>"
+	      				Account.DELIMITER_COMMA, true) %>"
 	    />
 	
 	</liferay-ui:search-container-row>
