@@ -15,29 +15,27 @@ import java.util.Map;
  *
  */
 public class Group {
-	public static final Comparator<Group> NAME_COMPARATOR_ASC = new Comparator<Group>() {
+	public static final Comparator<Group> NAME_COMPARATOR_ASC = 
+			new Comparator<Group>() {
 		@Override
 		public int compare(Group g1, Group g2) {
-			if(g1 == g2) {
-				return 0;
-			}
-			if(g1 == null && g2 == null) {
-				return 0;
-			}
-			if(g1 == null) {
-				return -1;
-			}
-			if(g2 == null) {
-				return 1;
-			}
+			int value = g1.getCn().toLowerCase().compareTo(
+					g2.getCn().toLowerCase());
 			
-			if(g1.getCn().equals(g2.getCn())) {
-				return 0;
-			}
-			
-			return g1.getCn().compareTo(g2.getCn());
+				return value;
 		}
 	};
+	
+	public static final Comparator<Group> NAME_COMPARATOR_DESC = 
+			new Comparator<Group>() {
+		@Override
+		public int compare(Group g1, Group g2) {
+			int value = Group.NAME_COMPARATOR_ASC.compare(g1, g2);
+			
+				return -value;
+		}
+	};
+	
 
 	private String cn;
 	

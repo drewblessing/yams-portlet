@@ -71,22 +71,29 @@ public class Search extends MVCPortlet {
 		return accounts;
 	}
 	
-	public static List<GroupMap> getGroups(
+	public static List<Group> getGroups(
 			OrganizationSearchTerms searchTerms,
 			String orderByType, String orderByCol) {
 		GroupManagementService gms = GroupManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
-		List<GroupMap> groups = new ArrayList<GroupMap>();
+		List<GroupMap> groupMap = new ArrayList<GroupMap>();
 		
-		List<SearchFilter> filters = SearchUtil.getOrgFilterList(searchTerms);
+		List<SearchFilter> filters = SearchUtil.getOrganizationFilterList(searchTerms);
 		Operand operand = SearchUtil.getOperand(searchTerms);
 		subsystems.add(SubSystem.LDAP);
 		try {
-			groups = gms.getAllGroups(filters, operand, subsystems);
+			groupMap = gms.getAllGroups(filters, operand, subsystems);
 		} catch (IllegalArgumentException e) {
 			// That's Ok
 		}
-		//SearchUtil.sortGroups(accounts, orderByType, orderByCol);
+		
+		List<Group> groups = new ArrayList<Group>();
+		for (GroupMap map : groupMap) {
+			for (Group group : map.getGroups()) {
+			groups.add(group);
+			}
+		}
+		SearchUtil.sortGroups(groups, orderByType, orderByCol);
 		
 		return groups;
 		

@@ -162,7 +162,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 			final List<SubSystem> subsystems) {
 		final Map<String, List<Group>> results = 
 				Collections.synchronizedMap(new HashMap<String, List<Group>>());
-		final String searchFilter = SearchFilter.buildOrgStringFilter(filters, operand);
+		final String searchFilter = SearchFilter.buildFilterString(filters, operand);
 		
 		try {
 			executor.execute(GetAllGroups.class, 

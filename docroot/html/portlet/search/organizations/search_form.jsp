@@ -43,20 +43,12 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	
 	<liferay-ui:search-container-results>
 		<% 
-	 	List<GroupMap> tempResults = Search.getGroups(
+	 	List<Group> tempResults = Search.getGroups(
 	 			searchTerms,
 	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
- 
-		List<Group> groups = new ArrayList<Group>();
-		
-		for (GroupMap map : tempResults) {
-			for (Group group : map.getGroups()) {
-			groups.add(group);
-			}
-		}
 	   
-		results = ListUtil.subList(groups, searchContainer.getStart(), searchContainer.getEnd());
-		total = groups.size();
+		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
+		total = tempResults.size();
 	
 		pageContext.setAttribute("results", results);
 		pageContext.setAttribute("total", total);
@@ -72,18 +64,13 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	    		name="name"
 	    		property="displayName"
 	      		orderable="true"
-	      		orderableProperty="displayName"
+	      		orderableProperty="cn"
 	    />
 	    
 	    <liferay-ui:search-container-column-text
 	    		name="description"
 	    		property="description"
 	      		orderable="false"
-	    />
-	    
-	    <liferay-ui:search-container-column-text
-	    		name="number-of-users"
-	    		value="<%=Integer.toString(yamsGroup.getMembers().size()) %>"
 	    />
 	    
 	

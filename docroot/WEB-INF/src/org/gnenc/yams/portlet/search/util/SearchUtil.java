@@ -2,10 +2,11 @@ package org.gnenc.yams.portlet.search.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter.Operand;
@@ -32,9 +33,24 @@ public class SearchUtil {
 	 */
 	public static List<SearchFilter> getOrganizationFilterList(
 			OrganizationSearchTerms searchTerms) {
-		// TODO: Implement org filter list
+		final List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		
-		return null;
+		/** Each search term that wishes to be a part of the basic keyword
+		  * search should check for false isAdvancedSearch() and then provide
+		  * a fall back to getKeywords() in the filter
+		  */
+		
+		if(searchTerms.getName() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+			SearchFilter filter = new SearchFilter(
+					Filter.name,
+					searchTerms.getName() != null ? 
+							searchTerms.getName() : searchTerms.getKeywords(),
+					false);
+			filters.add(filter);
+		}
+		
+		return filters;
 	}
 	
 	/**
@@ -123,25 +139,14 @@ public class SearchUtil {
 		}
 	}
 
-	public static List<SearchFilter> getOrgFilterList(
-			OrganizationSearchTerms searchTerms) {
-final List<SearchFilter> filters = new ArrayList<SearchFilter>();
+	public static void sortGroups(List<Group> groups, String orderByType,
+			String orderByCol) {
 		
-		/** Each search term that wishes to be a part of the basic keyword
-		  * search should check for false isAdvancedSearch() and then provide
-		  * a fall back to getKeywords() in the filter
-		  */
-		
-		if(searchTerms.getName() != null || 
-				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
-			SearchFilter filter = new SearchFilter(
-					Filter.name,
-					searchTerms.getName() != null ? 
-							searchTerms.getName() : searchTerms.getKeywords(),
-					false);
-			filters.add(filter);
+		if (orderByCol.equals("cn") && orderByType.equals("asc")) {
+			Collections.sort(groups, Group.NAME_COMPARATOR_ASC);
+		} else if (orderByCol.equals("cn") && orderByType.equals("desc")) {
+			Collections.sort(groups, Group.NAME_COMPARATOR_DESC);
 		}
 		
-		return filters;
 	}
 }

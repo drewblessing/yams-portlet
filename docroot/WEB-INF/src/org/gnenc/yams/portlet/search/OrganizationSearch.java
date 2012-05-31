@@ -98,7 +98,7 @@ public class OrganizationSearch extends SearchContainer<Account> {
 						"search-org-order-by-type", orderByType); 
 			} else { 
 				orderByCol = preferences.getValue(PortletKeys.SEARCH, 
-						"search-org-order-by-col", "name");
+						"search-org-order-by-col", "cn");
 				orderByType = preferences.getValue(PortletKeys.SEARCH, 
 						"search-org-order-by-type", "asc"); 
 			}
