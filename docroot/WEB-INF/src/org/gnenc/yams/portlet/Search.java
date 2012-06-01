@@ -43,7 +43,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author Drew A. Blessing
  *
  */
-public class Search extends MVCPortlet {	
+public class Search extends MVCPortlet {
 	/**
 	 * Returns a list of accounts matching the search terms
 	 * 

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.Group;
-import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter.Operand;
@@ -14,6 +14,7 @@ import org.gnenc.yams.portlet.search.OrganizationSearchTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * Common methods used in preparation for searches.
@@ -65,13 +66,17 @@ public class SearchUtil {
 			UserSearchTerms searchTerms) {
 		final List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		
+		if (!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()) &&
+				!StringUtils.isNotBlank(searchTerms.getUid())) {
+			return filters;
+		}
 		/** Each search term that wishes to be a part of the basic keyword
 		  * search should check for false isAdvancedSearch() and then provide
 		  * a fall back to getKeywords() in the filter
 		  */
 		
-		if(searchTerms.getFirstName() != null || 
-				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+		if (Validator.isNotNull(searchTerms.getFirstName()) || 
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.givenName,
 					searchTerms.getFirstName() != null ? 
@@ -80,8 +85,8 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getLastName() != null || 
-				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+		if (Validator.isNotNull(searchTerms.getLastName()) ||
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.sn,
 					searchTerms.getLastName() != null ? 
@@ -90,12 +95,20 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getEmailAddress() != null || 
-				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+		if (Validator.isNotNull(searchTerms.getEmailAddress()) ||  
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.mail,
 					searchTerms.getEmailAddress() != null ? 
 							searchTerms.getEmailAddress() : searchTerms.getKeywords(),
+					false);
+			filters.add(filter);
+		}
+		
+		if(Validator.isNotNull(searchTerms.getUid())) {
+			SearchFilter filter = new SearchFilter(
+					Filter.uid,
+					searchTerms.getUid(),
 					false);
 			filters.add(filter);
 		}

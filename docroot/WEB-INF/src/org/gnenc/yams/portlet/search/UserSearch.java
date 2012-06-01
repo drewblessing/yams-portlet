@@ -85,6 +85,8 @@ public class UserSearch extends SearchContainer<Account> {
 				UserDisplayTerms.ORGANIZATION, displayTerms.getOrganization());
 		iteratorURL.setParameter(
 			UserDisplayTerms.LAST_NAME, displayTerms.getLastName());
+		iteratorURL.setParameter(
+				UserDisplayTerms.UID, displayTerms.getUid());
 
 		try {
 			PortalPreferences preferences =

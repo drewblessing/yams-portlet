@@ -21,6 +21,7 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+String tabs1 = ParamUtil.getString(request, "tabs1", "users");
 %>
 
 <liferay-ui:search-container searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" >
@@ -65,9 +66,17 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<liferay-ui:search-container-row
 			className="org.gnenc.yams.model.Account"
 			keyProperty="uid"
-			modelVar="yamsAccount">
+			modelVar="yamsAccount"
+	>
+	<liferay-portlet:renderURL varImpl="rowURL">
+<%-- 			<portlet:param name="tabs1" value="<%= HtmlUtil.escape(tabs1) %>" /> --%>
+			<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
+			<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
+			<portlet:param name="jspPage" value="/html/portlet/search/view_user.jsp" />
+		</liferay-portlet:renderURL>
 			
 		<liferay-ui:search-container-column-text
+				href="<%=rowURL %>"
 	    		name="lastName"
 	    		property="sn"
 	      		orderable="true"
@@ -75,6 +84,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	    />
 	
 	  	<liferay-ui:search-container-column-text
+				href="<%=rowURL %>"
 	      		name="firstName"
 	      		property="givenName"
 	      		orderable="true"

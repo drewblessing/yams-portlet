@@ -20,13 +20,24 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
-<%@ include file="/html/portlet/search/tabs1.jsp" %>
 
-<aui:form method="get" name="fm">
-	<liferay-portlet:renderURLParams varImpl="portletURL" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" />
-	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
-	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
-		
-	<jsp:include page="<%=tabsURL %>" />
-</aui:form>
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+request.setAttribute("view.jsp-portletURL", portletURL);
+
+String tabs1 = ParamUtil.getString(request, "tabs1", "users");
+String tabsURL = "/html/portlet/search/tabs/" + tabs1.trim() + ".jsp";
+String tabNames = "users,organizations";
+
+portletURL.setParameter("tabs1", tabs1);
+pageContext.setAttribute("portletURL",portletURL);
+String portletURLString = portletURL.toString();
+
+String backURL = ParamUtil.getString(request, "backURL");
+%>
+
+<liferay-ui:tabs 
+		backURL="<%=backURL %>"
+		names="<%=tabNames %>"
+		value="<%=tabs1 %>"
+		url="<%=portletURLString %>" />

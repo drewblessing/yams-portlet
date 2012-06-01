@@ -40,24 +40,28 @@
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>
 <%@ page import="org.gnenc.yams.portlet.util.PortletKeys" %>
+<%@ page import="org.gnenc.yams.portlet.util.PortletUtil" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
 
 <%@ page import="javax.portlet.PortletMode" %>
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="javax.portlet.WindowState" %>
 
-<%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.RowChecker" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
+<%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ListUtil" %> 
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@ page import="com.liferay.portal.kernel.util.Validator" %>
+<%@ page import="com.liferay.portal.util.PortalUtil" %>
 
 <%@ page import="com.liferay.portlet.PortalPreferences" %>
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
 <%@ page import="com.liferay.portlet.PortletURLUtil" %>
+
+<%@ page import="org.apache.commons.lang.StringUtils" %>
 
 <%@ page import="java.lang.IllegalArgumentException" %>
 <%@ page import="java.util.Collections" %>

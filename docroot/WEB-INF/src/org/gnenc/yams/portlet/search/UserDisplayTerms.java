@@ -43,6 +43,8 @@ public class UserDisplayTerms extends DisplayTerms {
 	public static final String LAST_NAME = "lastName";
 
 	public static final String STATUS = "status";
+	
+	public static final String UID = "uid";
 
 	public UserDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);
@@ -57,6 +59,7 @@ public class UserDisplayTerms extends DisplayTerms {
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = ParamUtil.getString(portletRequest, ORGANIZATION);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
+		uid = ParamUtil.getString(portletRequest, UID);
 	}
 	
 	public String getEmailAddress() {
@@ -89,6 +92,10 @@ public class UserDisplayTerms extends DisplayTerms {
 		
 	}
 	
+	public String getUid() {
+		return uid;
+	}
+	
 	public boolean isActive() {
 		if (status == WorkflowConstants.STATUS_APPROVED) {
 			return true;
@@ -118,5 +125,6 @@ public class UserDisplayTerms extends DisplayTerms {
 	protected String provider;
 	protected String lastName;
 	protected int status;
+	protected String uid;
 
 }

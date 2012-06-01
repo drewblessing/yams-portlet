@@ -23,8 +23,9 @@ public class SearchFilter implements Serializable {
 	public static enum Filter {
 		givenName,
 		name,
+		mail,
 		sn,
-		mail};
+		uid};
 	
 	private final Filter filter;
 	
