@@ -69,7 +69,6 @@ String tabs1 = ParamUtil.getString(request, "tabs1", "users");
 			modelVar="yamsAccount"
 	>
 	<liferay-portlet:renderURL varImpl="rowURL">
-<%-- 			<portlet:param name="tabs1" value="<%= HtmlUtil.escape(tabs1) %>" /> --%>
 			<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
 			<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
 			<portlet:param name="jspPage" value="/html/portlet/search/view_user.jsp" />
@@ -96,6 +95,13 @@ String tabs1 = ParamUtil.getString(request, "tabs1", "users");
 	      		value="<%=yamsAccount.getMailStringWithDelimiter(
 	      				Account.DELIMITER_COMMA, true) %>"
 	    />
+	    
+	    <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
+	    	<liferay-ui:search-container-column-jsp
+        		path="/html/portlet/account-management/account/admin_actions.jsp"
+        		align="right"
+	        />
+	    </c:if>
 	
 	</liferay-ui:search-container-row>
 	

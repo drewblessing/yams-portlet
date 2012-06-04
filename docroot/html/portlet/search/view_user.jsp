@@ -20,6 +20,9 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
+<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
+	<%@ include file="/html/portlet/account-management/toolbar.jsp" %>
+</c:if>
 <%@ include file="/html/portlet/search/tabs1.jsp" %>
 
 <%

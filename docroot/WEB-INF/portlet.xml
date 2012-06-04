@@ -32,4 +32,35 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	<portlet>
+		<portlet-name>account-management</portlet-name>
+		<display-name>Account Management</display-name>
+		<portlet-class>org.gnenc.yams.portlet.Search</portlet-class>
+		<init-param>
+			<name>view-jsp</name>
+			<value>/html/portlet/search/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+        <resource-bundle>content.Language</resource-bundle>
+		<portlet-info>
+			<title>Account Management</title>
+			<short-title>Account Management</short-title>
+			<keywords>Account Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 </portlet-app>

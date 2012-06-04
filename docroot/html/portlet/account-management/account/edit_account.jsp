@@ -21,17 +21,21 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%
+String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL", redirect);
+Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
+%>
+
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-	<%@ include file="/html/portlet/account-management/toolbar.jsp" %>
+	<liferay-util:include 
+			page="/html/portlet/account-management/toolbar.jsp" 
+			servletContext="<%=this.getServletContext()%>" >
+		<liferay-util:param name="toolbarItem" value='<%= (selectedAccount == null) ? "add" : "view" %>' />
+	</liferay-util:include>
 </c:if>
 
-<%@ include file="/html/portlet/search/tabs1.jsp" %>
-
-<aui:form method="get" name="fm">
-	<liferay-portlet:renderURLParams varImpl="portletURL" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" />
-	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
-	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
-		
-	<jsp:include page="<%=tabsURL %>" />
-</aui:form>
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
+/>

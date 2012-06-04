@@ -20,18 +20,20 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
+<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match"/>
 
-<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-	<%@ include file="/html/portlet/account-management/toolbar.jsp" %>
-</c:if>
-
-<%@ include file="/html/portlet/search/tabs1.jsp" %>
-
-<aui:form method="get" name="fm">
-	<liferay-portlet:renderURLParams varImpl="portletURL" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" />
-	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
-	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
-		
-	<jsp:include page="<%=tabsURL %>" />
+<aui:form method="POST" name="changePasswordFm" id="changePasswordFm">
+	<aui:input type="hidden" name="uid" value='<%=ParamUtil.getString(renderRequest, "uid") %>' />
+	<aui:input type="password" name="password" size="25" >
+		<aui:validator name="required" />
+		<aui:validator name="rangeLength">
+			[8,50]
+		</aui:validator>
+	</aui:input>
+	<aui:input type="password" name="verify" size="25" >
+		<aui:validator name="required" />
+		<aui:validator name="rangeLength">
+			[8,50]
+		</aui:validator>
+	</aui:input>
 </aui:form>

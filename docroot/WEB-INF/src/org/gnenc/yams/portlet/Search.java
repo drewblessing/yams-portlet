@@ -21,6 +21,9 @@ package org.gnenc.yams.portlet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.Group;
 import org.gnenc.yams.model.GroupMap;
@@ -30,6 +33,7 @@ import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.search.OrganizationSearchTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 import org.gnenc.yams.portlet.search.util.SearchUtil;
+import org.gnenc.yams.portlet.util.PortletUtil;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.GroupManagementService;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
@@ -44,6 +48,12 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  *
  */
 public class Search extends MVCPortlet {
+	
+	public static void changePassword(
+			ActionRequest actionRequest, ActionResponse actionResponse) {
+		PortletUtil.changePassword(actionRequest, actionResponse);
+	}
+	
 	/**
 	 * Returns a list of accounts matching the search terms
 	 * 
