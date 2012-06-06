@@ -24,6 +24,7 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL", redirect);
+
 Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 %>
 

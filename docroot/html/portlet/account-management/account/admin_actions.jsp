@@ -21,10 +21,11 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-
-
-
 <%
+UserSearch searchContainer = (UserSearch)request.getAttribute("liferay-ui:search:searchContainer");
+
+String redirect = searchContainer.getIteratorURL().toString();
+
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 Account selAccount = (Account)row.getObject();
 //long groupId = themeDisplay.getLayout().getGroupId();
@@ -36,68 +37,15 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 <liferay-ui:icon-menu>
 
 <c:if test="<%= permissionChecker.isOmniadmin() %>" >
-	<portlet:renderURL var="editAccountRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+	<portlet:renderURL var="editAccountRenderURL" >
 		<portlet:param name="jspPage" value="/html/portlet/account-management/account/edit_account.jsp" />
+		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
 	
 	<span id="edit-account-<%=uidStripped %>">
-		<liferay-ui:icon image="edit" message="edit" url="javascript:void(0)" />
-	</span>
-	<portlet:actionURL 
-		var="editAccountActionURL" 
-		name="editAccount" 
-		windowState="<%= LiferayWindowState.POP_UP.toString()%>" 
-	/>
-	
-	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
-	A.one('#edit-account-<%=uidStripped %>').on(
-		'click',
-		function() {
-			var editAccountDialog = new A.Dialog({
-				buttons: [ 
-				{ 
-					label: '<liferay-ui:message key="submit" />', 
-					handler: function() {
-						editAccountDialog.unplug(A.Plugin.IO);
-						editAccountDialog.plug(
-							A.Plugin.IO, {
-								method: 'POST',
-								uri: '<%=editAccountActionURL %>',
-								form: {
-									id: '<portlet:namespace />changePasswordFm'
-								},
-								after: {
-									success: function(event, id, xhr) {
-										alert("Password may have been changed! We're not really sure yet :)");
-									}
-								}
-							}
-						);
-					} 
-				}, 
-				{ 
-					label: '<liferay-ui:message key="cancel" />', 
-					handler: function() { 
-						this.close(); 
-					} 
-				}],
-				title: '<liferay-ui:message key="edit" />',
-				width: 960,
-				align: Liferay.Util.Window.ALIGN_CENTER,
-				constrain2view: true,
-				group: 'default',
-				stack: true,
-				modal: true,
-				destroyOnClose: true
-			}).plug(
-				A.Plugin.IO, {
-					uri: '<%=editAccountRenderURL %>'
-				}
-			).render();
-		}
-	);
-	</aui:script>
+		<liferay-ui:icon image="edit" message="edit" url="<%=editAccountRenderURL %>" />
+	</span>	
 </c:if>
 
 <c:if test="<%=mail.contains(user.getEmailAddress()) || permissionChecker.isOmniadmin() %>" >
@@ -107,7 +55,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 	</portlet:renderURL>
 	
 	<span id="change-password-<%=uidStripped %>">
-		<liferay-ui:icon image="key" message="change-password" url="javascript:void(0)" />
+		<liferay-ui:icon image="key" message="change-password" url="javascript:;" />
 	</span>
 	<portlet:actionURL 
 		var="changePasswordActionURL" 
