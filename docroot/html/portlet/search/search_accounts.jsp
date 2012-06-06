@@ -29,7 +29,7 @@ String jspPage = "";
 		<% jspPage = "/html/portlet/account-management/account/edit_account.jsp"; %>
 	</c:when>
 	<c:otherwise>
-		<% jspPage = "/html/portlet/account-management/search/view_account.jsp"; %>
+		<% jspPage = "/html/portlet/search/view_account.jsp"; %>
 	</c:otherwise>
 </c:choose>
 
