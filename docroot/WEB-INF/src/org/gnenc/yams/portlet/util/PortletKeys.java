@@ -27,6 +27,8 @@ package org.gnenc.yams.portlet.util;
  */
 public class PortletKeys extends com.liferay.portal.util.PortletKeys {
 
-	public static final String SEARCH = "search_WAR_yamsportlet";
+	public static final String SEARCH = "search";
+	
+	public static final String ACCOUNT_MANAGEMENT = "accountmanagement";
 
 }

@@ -21,8 +21,6 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<liferay-ui:header title="search-organizations" />
-
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("jspPage", "/html/portlet/search/tabs/organizations.jsp");
@@ -33,7 +31,7 @@ organizationSearch.setRowChecker(new RowChecker(renderResponse));
 
 <liferay-ui:search-container searchContainer="<%= organizationSearch %>" >
 	<liferay-ui:search-form 
-		page="/html/portlet/search/organizations/search_form.jsp" 
+		page="/html/portlet/search/search_groups.jsp" 
 		servletContext="<%=this.getServletContext() %>" 
 	/>
 	

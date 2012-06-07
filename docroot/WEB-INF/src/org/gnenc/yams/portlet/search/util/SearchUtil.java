@@ -2,10 +2,11 @@ package org.gnenc.yams.portlet.search.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter.Operand;
@@ -13,6 +14,7 @@ import org.gnenc.yams.portlet.search.OrganizationSearchTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * Common methods used in preparation for searches.
@@ -32,9 +34,24 @@ public class SearchUtil {
 	 */
 	public static List<SearchFilter> getOrganizationFilterList(
 			OrganizationSearchTerms searchTerms) {
-		// TODO: Implement org filter list
+		final List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		
-		return null;
+		/** Each search term that wishes to be a part of the basic keyword
+		  * search should check for false isAdvancedSearch() and then provide
+		  * a fall back to getKeywords() in the filter
+		  */
+		
+		if(searchTerms.getName() != null || 
+				(!searchTerms.isAdvancedSearch() && searchTerms.getKeywords() != null)) {
+			SearchFilter filter = new SearchFilter(
+					Filter.name,
+					searchTerms.getName() != null ? 
+							searchTerms.getName() : searchTerms.getKeywords(),
+					false);
+			filters.add(filter);
+		}
+		
+		return filters;
 	}
 	
 	/**
@@ -49,12 +66,17 @@ public class SearchUtil {
 			UserSearchTerms searchTerms) {
 		final List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		
+		if (!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()) &&
+				!StringUtils.isNotBlank(searchTerms.getUid())) {
+			return filters;
+		}
 		/** Each search term that wishes to be a part of the basic keyword
 		  * search should check for false isAdvancedSearch() and then provide
 		  * a fall back to getKeywords() in the filter
 		  */
 		
-		if(searchTerms.getFirstName() != null || !searchTerms.isAdvancedSearch()) {
+		if (Validator.isNotNull(searchTerms.getFirstName()) || 
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.givenName,
 					searchTerms.getFirstName() != null ? 
@@ -63,7 +85,8 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getLastName() != null || !searchTerms.isAdvancedSearch()) {
+		if (Validator.isNotNull(searchTerms.getLastName()) ||
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.sn,
 					searchTerms.getLastName() != null ? 
@@ -72,11 +95,20 @@ public class SearchUtil {
 			filters.add(filter);
 		}
 		
-		if(searchTerms.getEmailAddress() != null || !searchTerms.isAdvancedSearch()) {
+		if (Validator.isNotNull(searchTerms.getEmailAddress()) ||  
+				(!searchTerms.isAdvancedSearch() && StringUtils.isNotBlank(searchTerms.getKeywords()))) {
 			SearchFilter filter = new SearchFilter(
 					Filter.mail,
 					searchTerms.getEmailAddress() != null ? 
 							searchTerms.getEmailAddress() : searchTerms.getKeywords(),
+					false);
+			filters.add(filter);
+		}
+		
+		if(Validator.isNotNull(searchTerms.getUid())) {
+			SearchFilter filter = new SearchFilter(
+					Filter.uid,
+					searchTerms.getUid(),
 					false);
 			filters.add(filter);
 		}
@@ -118,5 +150,16 @@ public class SearchUtil {
 		} else if (orderByCol.equals("sn") && orderByType.equals("desc")) {
 			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_DESC);
 		}
+	}
+
+	public static void sortGroups(List<Group> groups, String orderByType,
+			String orderByCol) {
+		
+		if (orderByCol.equals("cn") && orderByType.equals("asc")) {
+			Collections.sort(groups, Group.NAME_COMPARATOR_ASC);
+		} else if (orderByCol.equals("cn") && orderByType.equals("desc")) {
+			Collections.sort(groups, Group.NAME_COMPARATOR_DESC);
+		}
+		
 	}
 }

@@ -12,13 +12,14 @@ import org.springframework.ldap.odm.annotations.Id;
 /**
  * LDAP Account model based on the original LDAP Account model
  * created by Jeshurun Daniel. Class represents commonly used
- * attributes that can be found in the inetorgperson schema.
+ * attributes that can be found in the inetorgperson and 
+ * posixaccount schema.
  * 
  * @author Drew A. Blessing
  *
  */
 @Entry(objectClasses={"posixaccount","inetorgperson","top"})
-public class LdapAccount {
+final public class LdapAccount {
 
 	@Id
 	private Name dn;

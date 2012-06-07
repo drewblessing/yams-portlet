@@ -2,8 +2,10 @@ package org.gnenc.yams.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.gnenc.yams.model.SearchFilter.Operand;
 
 /**
  * 
@@ -20,8 +22,10 @@ public class SearchFilter implements Serializable {
 
 	public static enum Filter {
 		givenName,
+		name,
+		mail,
 		sn,
-		mail};
+		uid};
 	
 	private final Filter filter;
 	
@@ -35,8 +39,8 @@ public class SearchFilter implements Serializable {
 		this.negated = negated;
 	}
 	
-	public static String buildStringFilter(Collection<SearchFilter> searchFilters, Operand operand) {
-		if(searchFilters == null) {
+	public static String buildFilterString(Collection<SearchFilter> searchFilters, Operand operand) {
+		if(searchFilters.isEmpty()) {
 			throw new IllegalArgumentException("At Least one SearchFilter is required.");
 		}
 		final boolean singleFilter = searchFilters.size() == 1;

@@ -38,5 +38,5 @@ public class PropsValues {
 	
 	public static final String YAMS_PORTLET_SEARCH_DEFAULT_VIEW = 
 			"/html/portlet/search/" + PropsUtil.get(PropsKeys.YAMS_PORTLET_SEARCH_DEFAULT_VIEW) + ".jsp";
-	
+
 }

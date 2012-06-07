@@ -23,6 +23,7 @@ public class UserSearchTerms extends UserDisplayTerms {
 		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
 		status = ParamUtil.getInteger(
 			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);
+		uid = DAOParamUtil.getString(portletRequest, UID);
 	}
 
 }

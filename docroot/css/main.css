@@ -1,12 +1,26 @@
-.yams-portlet .lfr-portlet-toolbar .lfr-toolbar-button.search-button a {
-	background-image: url(/html/themes/classic/images/common/search.png); 
-}
+@import "compass";
 
-.yams-portlet .taglib-search-toggle {
-	box-shadow: 0 0 8px #cecece inset;
-	border-radius: 4px;
-	padding: 5px 5px 2px;
-	background: #E8EAEB;
-	border: 1px solid #979798;
-	border-color: #979798 #FAFAFB #FAFAFB #BDBDBE;
+.yams-portlet {	
+	.taglib-search-toggle {
+		box-shadow: 0 0 8px #cecece inset;
+		border-radius: 4px;
+		padding: 5px 5px 2px;
+		background: #E8EAEB;
+		border: 1px solid #979798;
+		border-color: #979798 #FAFAFB #FAFAFB #BDBDBE;
+	}
+	
+	dt {font-weight:bold;}
+	
+	.details {
+		img {float:left;}
+		dl {
+			position: relative;
+			left: 20px;
+		}
+		dd {
+			position: relative;
+			left: 5px;
+		}
+	}
 }

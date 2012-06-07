@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.liferay.portal.util.comparator.UserFirstNameComparator;
-
 /**
  * YAMS Account model based on the original Account model
  * created by Jeshurun Daniel. Class represents common attributes

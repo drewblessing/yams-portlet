@@ -1,4 +1,5 @@
-<%/**
+<%
+/**
  *  Copyright (c) 2012-2013 Educational Service Unit 10. 
  *
  *  This file is part of the YAMS portlet.
@@ -15,25 +16,24 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
- **/%>
-
-<%@ include file="/html/portlet/init.jsp" %>
-
-<%
-OrganizationSearch searchContainer = (OrganizationSearch)request.getAttribute("liferay-ui:search:searchContainer");
-
-OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
+ **/
 %>
 
-<liferay-ui:search-toggle
-	buttonLabel="search"
-	displayTerms="<%=displayTerms%>"
-	id="toggle_id_search_organizations"
->
-	<aui:fieldset>
-		<aui:input name="<%=OrganizationDisplayTerms.NAME%>" size="20" value="" />
+<%@ include file="/html/portlet/init.jsp" %>
+<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match"/>
 
-		<aui:select name="<%=OrganizationDisplayTerms.LOCATION%>" value="" >
-		</aui:select>
-	</aui:fieldset>
-</liferay-ui:search-toggle>
+<aui:form method="POST" name="changePasswordFm" id="changePasswordFm">
+	<aui:input type="hidden" name="uid" value='<%=ParamUtil.getString(renderRequest, "uid") %>' />
+	<aui:input type="password" name="password" size="25" >
+		<aui:validator name="required" />
+		<aui:validator name="rangeLength">
+			[8,50]
+		</aui:validator>
+	</aui:input>
+	<aui:input type="password" name="verify" size="25" >
+		<aui:validator name="required" />
+		<aui:validator name="rangeLength">
+			[8,50]
+		</aui:validator>
+	</aui:input>
+</aui:form>

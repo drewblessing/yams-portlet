@@ -21,7 +21,17 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+String tabs1 = ParamUtil.getString(request, "tabs1", "users");
+String jspPage = "";
 %>
+<c:choose>
+	<c:when test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
+		<% jspPage = "/html/portlet/account-management/account/edit_account.jsp"; %>
+	</c:when>
+	<c:otherwise>
+		<% jspPage = "/html/portlet/search/view_account.jsp"; %>
+	</c:otherwise>
+</c:choose>
 
 <liferay-ui:search-container searchContainer="<%=new UserSearch(renderRequest, portletURL) %>" >
 	<%
@@ -51,7 +61,8 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<liferay-ui:search-container-results>
 		<% 
 	 	List<Account> tempResults = Search.getAccounts(
-	 			searchTerms, searchContainer.getOrderByType(), searchContainer.getOrderByCol());
+	 			searchTerms,
+	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
 	   
 		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
 		total = tempResults.size();
@@ -64,9 +75,16 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<liferay-ui:search-container-row
 			className="org.gnenc.yams.model.Account"
 			keyProperty="uid"
-			modelVar="yamsAccount">
+			modelVar="yamsAccount"
+	>
+	<liferay-portlet:renderURL varImpl="rowURL">
+			<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
+			<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
+			<portlet:param name="jspPage" value="<%=jspPage %>" />
+		</liferay-portlet:renderURL>
 			
 		<liferay-ui:search-container-column-text
+				href="<%=rowURL %>"
 	    		name="lastName"
 	    		property="sn"
 	      		orderable="true"
@@ -74,6 +92,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	    />
 	
 	  	<liferay-ui:search-container-column-text
+				href="<%=rowURL %>"
 	      		name="firstName"
 	      		property="givenName"
 	      		orderable="true"
@@ -85,6 +104,13 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	      		value="<%=yamsAccount.getMailStringWithDelimiter(
 	      				Account.DELIMITER_COMMA, true) %>"
 	    />
+	    
+	    <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
+	    	<liferay-ui:search-container-column-jsp
+        		path="/html/portlet/account-management/account/admin_actions.jsp"
+        		align="right"
+	        />
+	    </c:if>
 	
 	</liferay-ui:search-container-row>
 	
