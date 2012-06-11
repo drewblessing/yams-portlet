@@ -25,11 +25,8 @@ import com.liferay.portal.kernel.util.Validator;
 @Service("passwordManager")
 public class PasswordManager {
 	
-	@Value("#{ ldapProperties['ldap.minPasswordLength'] }")
+	@Value("${ldap.minPasswordLength}")
 	private int minPasswordLength;
-	
-	@Value("#{ ldapProperties['ldap.blowfish.secretkey'] }")
-	private String secretKey;
 	
 //	@Autowired
 //	private MessageService messages;
