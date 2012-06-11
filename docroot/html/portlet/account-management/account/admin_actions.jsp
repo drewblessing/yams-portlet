@@ -57,11 +57,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 	<span id="change-password-<%=uidStripped %>">
 		<liferay-ui:icon image="key" message="change-password" url="javascript:;" />
 	</span>
-	<portlet:actionURL 
-		var="changePasswordActionURL" 
-		name="changePassword" 
-		windowState="<%= LiferayWindowState.POP_UP.toString()%>" 
-	/>
+	<portlet:resourceURL var="changePasswordResourceURL" />
 	
 	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
 	A.one('#change-password-<%=uidStripped %>').on(
@@ -76,14 +72,24 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 						changePasswordDialog.plug(
 							A.Plugin.IO, {
 								method: 'POST',
-								uri: '<%=changePasswordActionURL %>',
+								uri: '<%=changePasswordResourceURL %>',
+								dataType: 'json',
 								form: {
 									id: '<portlet:namespace />changePasswordFm'
 								},
-								after: {
-									success: function(event, id, xhr) {
-										alert("Password may have been changed! We're not really sure yet :)");
-									}
+								on: {
+									success: function() {
+										var message = this.get('responseData');
+										
+										if (message.response.toLowerCase() == 'success') {
+											changePasswordDialog.close();
+										} else {
+											alert(message.response);
+										}
+									},
+									failure: function() {
+										alert("failure");
+									}	
 								}
 							}
 						);

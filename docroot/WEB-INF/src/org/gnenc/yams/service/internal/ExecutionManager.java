@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.operation.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 

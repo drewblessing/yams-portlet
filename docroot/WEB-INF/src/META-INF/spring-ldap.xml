@@ -106,6 +106,7 @@
 			<set>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapPasswordPolicy</value>
 			</set>
 		</property>
 	</bean>

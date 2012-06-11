@@ -1,11 +1,30 @@
+/**
+ *  Copyright (c) 2012-2013 Educational Service Unit 10. 
+ *
+ *  This file is part of the YAMS portlet.
+ *  
+ *  YAMS portlet is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  YAMS portlet is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 package org.gnenc.yams.portlet.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.portlet.Search;
@@ -17,21 +36,23 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 public class PortletUtil {
-	public static void changePassword(
-			ActionRequest actionRequest, ActionResponse actionResponse) {
-		String password = DAOParamUtil.getString(actionRequest, "password");
-		String verify = DAOParamUtil.getString(actionRequest, "verify");
-		String uid = DAOParamUtil.getString(actionRequest, "uid");
+	public static String editAccount(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static String editPassword(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+		String result = "Error";
+		String password = DAOParamUtil.getString(resourceRequest, "password");
+		String verify = DAOParamUtil.getString(resourceRequest, "verify");
+		String uid = DAOParamUtil.getString(resourceRequest, "uid");
 		
-		boolean valid = validatePasswordFields(
-				actionRequest, password, verify, uid);
+//		boolean valid = validatePasswordFields(
+//				actionRequest, password, verify, uid);
 		
-		if (valid) {
-			// TODO: Change password
-		} else {
-			actionResponse.setRenderParameter("jspPage", CHANGE_PASSWORD_JSP);
-		} 
-		
+		return result;
 	}
 
 	public static Account getAccountFromRequest(RenderRequest request) {
