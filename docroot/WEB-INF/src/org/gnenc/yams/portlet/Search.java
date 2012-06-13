@@ -49,11 +49,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class Search extends MVCPortlet {
 	
-	public static void changePassword(
-			ActionRequest actionRequest, ActionResponse actionResponse) {
-		PortletUtil.changePassword(actionRequest, actionResponse);
-	}
-	
 	/**
 	 * Returns a list of accounts matching the search terms
 	 * 

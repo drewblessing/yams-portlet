@@ -25,9 +25,19 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 request.setAttribute("view.jsp-portletURL", portletURL);
 
-String tabs1 = ParamUtil.getString(request, "tabs1", "users");
-String tabsURL = "/html/portlet/search/tabs/" + tabs1.trim() + ".jsp";
-String tabNames = "users,organizations";
+String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.ACCOUNTS);
+String tabsURL = "";
+%>
+<c:choose>
+	<c:when test="<%=tabs1.equals(PortletUtil.ACCOUNTS) %>" >
+		<% tabsURL = PortletUtil.SEARCH_TABS_ACCOUNTS_JSP; %>
+	</c:when>
+	<c:when test="<%=tabs1.equals(PortletUtil.ORGANIZATIONS) %>">
+		<% tabsURL = PortletUtil.SEARCH_TABS_ORGANIZATIONS_JSP; %>
+	</c:when>
+</c:choose>
+<%
+String tabNames = PortletUtil.SEARCH_TABS_NAMES;
 
 portletURL.setParameter("tabs1", tabs1);
 pageContext.setAttribute("portletURL",portletURL);
@@ -41,3 +51,12 @@ String backURL = ParamUtil.getString(request, "backURL");
 		names="<%=tabNames %>"
 		value="<%=tabs1 %>"
 		url="<%=portletURLString %>" />
+		
+<aui:form method="get" name="fm">
+	<liferay-portlet:renderURLParams varImpl="portletURL" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" />
+	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
+	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
+		
+	<jsp:include page="<%=tabsURL %>" />
+</aui:form>

@@ -17,8 +17,17 @@
 	
 	<!-- LDAP Specific -->
 	
-	<util:properties id="ldapProperties" location="/WEB-INF/classes/ldap.properties" />
-	<context:property-placeholder properties-ref="ldapProperties" />
+	<bean id="ldapProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/classes/portlet.properties</value>
+				<value>file:///${liferay.home}/yams-portlet-ext.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
 
 	<bean id="contextSource" class="org.springframework.ldap.pool.factory.PoolingContextSource">
 		<property name="contextSource" ref="contextSourceTarget" />
@@ -47,15 +56,14 @@
     </bean>
     
     <bean id="fromStringConverter"
-	class="org.springframework.ldap.odm.typeconversion.impl.converters.FromStringConverter" />
+			class="org.springframework.ldap.odm.typeconversion.impl.converters.FromStringConverter" />
 	<bean id="toStringConverter"
-		class="org.springframework.ldap.odm.typeconversion.impl.converters.ToStringConverter" />
+			class="org.springframework.ldap.odm.typeconversion.impl.converters.ToStringConverter" />
 	<bean id="converterManager"
 		class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean">
 		<property name="converterConfig">
 			<set>
-				<bean
-					class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+				<bean class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
 					<property name="fromClasses">
 						<set>
 							<value>java.lang.String</value>
@@ -75,7 +83,7 @@
 					<property name="converter" ref="fromStringConverter" />
 				</bean>
 				<bean
-					class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
+						class="org.springframework.ldap.odm.typeconversion.impl.ConverterManagerFactoryBean$ConverterConfig">
 					<property name="fromClasses">
 						<set>
 							<value>java.lang.Byte</value>
@@ -99,13 +107,14 @@
 	</bean>
 
 	<bean id="odmManager"
-		class="org.springframework.ldap.odm.core.impl.OdmManagerImplFactoryBean">
+			class="org.springframework.ldap.odm.core.impl.OdmManagerImplFactoryBean">
 		<property name="converterManager" ref="converterManager" />
 		<property name="contextSource" ref="contextSource" />
 		<property name="managedClasses">
 			<set>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapPasswordPolicy</value>
 			</set>
 		</property>
 	</bean>

@@ -38,7 +38,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 
 <c:if test="<%= permissionChecker.isOmniadmin() %>" >
 	<portlet:renderURL var="editAccountRenderURL" >
-		<portlet:param name="jspPage" value="/html/portlet/account-management/account/edit_account.jsp" />
+		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
@@ -50,18 +50,14 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 
 <c:if test="<%=mail.contains(user.getEmailAddress()) || permissionChecker.isOmniadmin() %>" >
 	<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="jspPage" value="/html/portlet/account-management/account/change_password.jsp" />
+		<portlet:param name="jspPage" value="/<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
 	
 	<span id="change-password-<%=uidStripped %>">
 		<liferay-ui:icon image="key" message="change-password" url="javascript:;" />
 	</span>
-	<portlet:actionURL 
-		var="changePasswordActionURL" 
-		name="changePassword" 
-		windowState="<%= LiferayWindowState.POP_UP.toString()%>" 
-	/>
+	<portlet:resourceURL var="changePasswordResourceURL" />
 	
 	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
 	A.one('#change-password-<%=uidStripped %>').on(
@@ -76,14 +72,24 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 						changePasswordDialog.plug(
 							A.Plugin.IO, {
 								method: 'POST',
-								uri: '<%=changePasswordActionURL %>',
+								uri: '<%=changePasswordResourceURL %>',
+								dataType: 'json',
 								form: {
 									id: '<portlet:namespace />changePasswordFm'
 								},
-								after: {
-									success: function(event, id, xhr) {
-										alert("Password may have been changed! We're not really sure yet :)");
-									}
+								on: {
+									success: function() {
+										var message = this.get('responseData');
+										
+										if (message.response.toLowerCase() == 'success') {
+											changePasswordDialog.close();
+										} else {
+											alert(message.response);
+										}
+									},
+									failure: function() {
+										alert("failure");
+									}	
 								}
 							}
 						);

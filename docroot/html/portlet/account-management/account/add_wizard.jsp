@@ -18,23 +18,4 @@
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
 %>
-
-<%@ include file="/html/portlet/init.jsp" %>
-
-<%
-PortletURL portletURL = renderResponse.createRenderURL();
-portletURL.setParameter("jspPage", "/html/portlet/search/tabs/users.jsp");
-
-SearchContainer userSearch = new UserSearch(renderRequest, "users", portletURL);
-userSearch.setRowChecker(new RowChecker(renderResponse));
-%>
-
-<liferay-ui:search-container searchContainer="<%= userSearch %>" >
-	<liferay-ui:search-form 
-		page="/html/portlet/search/search_accounts.jsp" 
-		servletContext="<%=this.getServletContext() %>" 
-	/>
-	
-	<div class="separator" /><!-- Separator --></div>
-	
-</liferay-ui:search-container>
+AddWizard

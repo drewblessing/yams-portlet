@@ -32,6 +32,7 @@
 <%@ page import="org.gnenc.yams.model.Account" %>
 <%@ page import="org.gnenc.yams.model.Group" %>
 <%@ page import="org.gnenc.yams.model.GroupMap" %>
+<%@ page import="org.gnenc.yams.portlet.AccountManagement" %>
 <%@ page import="org.gnenc.yams.portlet.Search" %>
 <%@ page import="org.gnenc.yams.portlet.search.OrganizationDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.OrganizationSearch" %>

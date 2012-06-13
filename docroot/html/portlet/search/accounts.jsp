@@ -21,15 +21,15 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
-String tabs1 = ParamUtil.getString(request, "tabs1", "users");
+String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.ACCOUNTS);
 String jspPage = "";
 %>
 <c:choose>
 	<c:when test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-		<% jspPage = "/html/portlet/account-management/account/edit_account.jsp"; %>
+		<% jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP; %>
 	</c:when>
 	<c:otherwise>
-		<% jspPage = "/html/portlet/search/view_account.jsp"; %>
+		<% jspPage = PortletUtil.SEARCH_VIEW_ACCOUNT_JSP; %>
 	</c:otherwise>
 </c:choose>
 
@@ -107,7 +107,7 @@ String jspPage = "";
 	    
 	    <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
 	    	<liferay-ui:search-container-column-jsp
-        		path="/html/portlet/account-management/account/admin_actions.jsp"
+        		path="<%=PortletUtil.ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP %>"
         		align="right"
 	        />
 	    </c:if>

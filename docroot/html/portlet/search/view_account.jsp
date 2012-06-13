@@ -20,13 +20,18 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
+
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-	<%@ include file="/html/portlet/account-management/toolbar.jsp" %>
+	<liferay-util:include 
+			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>" 
+			servletContext="<%=this.getServletContext()%>" />
 </c:if>
-<%@ include file="/html/portlet/search/tabs1.jsp" %>
+
+<liferay-util:include 
+		page="<%=PortletUtil.TABS_JSP %>" 
+		servletContext="<%=this.getServletContext()%>" />
 
 <%
-
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 request.setAttribute("account.selAccount", selAccount);

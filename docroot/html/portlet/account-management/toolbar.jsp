@@ -27,14 +27,14 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 %>
 
 <div class="lfr-portlet-toolbar">
-	<portlet:renderURL var="searchUsersURL" >
-		<portlet:param name="jspPage" value="/html/portlet/search/view.jsp" />
+	<portlet:renderURL var="searchViewURL" >
+		<portlet:param name="jspPage" value="<%=PortletUtil.SEARCH_VIEW_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="toolbarItem" value="search" />
 	</portlet:renderURL>
 
 	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("search") ? "current" : StringPool.BLANK %>">
-		<a href="<%= searchUsersURL %>"><liferay-ui:message key="search" /></a>
+		<a href="<%= searchViewURL %>"><liferay-ui:message key="search" /></a>
 	</span>
 
 <%-- 	<span class="lfr-toolbar-button add-button <%= toolbarItem.equals("add") ? "current" : StringPool.BLANK %>"> --%>
@@ -51,8 +51,8 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 	>
 <%-- 			<c:if test="<%= hasAddUserPermission %>"> --%>
 				<portlet:renderURL var="addUserURL">
-					<portlet:param name="jspPage" value="/html/portlet/account-management/account/edit_account.jsp" />
-					<portlet:param name="redirect" value="<%= searchUsersURL %>" />
+					<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
+					<portlet:param name="redirect" value="<%= searchViewURL %>" />
 				</portlet:renderURL>
 
 				<liferay-ui:icon
@@ -66,8 +66,8 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 
 
 					<portlet:renderURL var="addOrganizationURL">
-						<portlet:param name="jspPage" value="/html/portlet/account-management/organization/edit_organization.jsp" />
-						<portlet:param name="redirect" value="<%= searchUsersURL %>" />
+						<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ORGANIZATION_EDIT_JSP %>" />
+						<portlet:param name="redirect" value="<%= searchViewURL %>" />
 					</portlet:renderURL>
 
 					<liferay-ui:icon

@@ -20,21 +20,21 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
-<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match"/>
 
-<aui:form method="POST" name="changePasswordFm" id="changePasswordFm">
-	<aui:input type="hidden" name="cmd" value='<%=AccountManagement.EDIT_PASSWORD_CMD %>' />
-	<aui:input type="hidden" name="uid" value='<%=ParamUtil.getString(renderRequest, "uid") %>' />
-	<aui:input type="password" name="password" size="25" >
-		<aui:validator name="required" />
-		<aui:validator name="rangeLength">
-			[8,50]
-		</aui:validator>
-	</aui:input>
-	<aui:input type="password" name="verify" size="25" >
-		<aui:validator name="required" />
-		<aui:validator name="rangeLength">
-			[8,50]
-		</aui:validator>
-	</aui:input>
-</aui:form>
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+portletURL.setParameter("jspPage", PortletUtil.SEARCH_TABS_ACCOUNTS_JSP);
+
+SearchContainer userSearch = new UserSearch(renderRequest, PortletUtil.ACCOUNTS, portletURL);
+userSearch.setRowChecker(new RowChecker(renderResponse));
+%>
+
+<liferay-ui:search-container searchContainer="<%= userSearch %>" >
+	<liferay-ui:search-form 
+		page="<%=PortletUtil.SEARCH_ACCOUNTS_JSP %>" 
+		servletContext="<%=this.getServletContext() %>" 
+	/>
+	
+	<div class="separator" /><!-- Separator --></div>
+	
+</liferay-ui:search-container>

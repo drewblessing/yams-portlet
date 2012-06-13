@@ -35,7 +35,7 @@
 	<portlet>
 		<portlet-name>account-management</portlet-name>
 		<display-name>Account Management</display-name>
-		<portlet-class>org.gnenc.yams.portlet.Search</portlet-class>
+		<portlet-class>org.gnenc.yams.portlet.AccountManagement</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
 			<value>/html/portlet/search/view.jsp</value>

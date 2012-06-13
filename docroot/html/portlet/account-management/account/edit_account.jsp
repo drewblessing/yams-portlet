@@ -19,24 +19,4 @@
  **/
 %>
 
-<%@ include file="/html/portlet/init.jsp" %>
-
-<%
-String redirect = ParamUtil.getString(request, "redirect");
-String backURL = ParamUtil.getString(request, "backURL", redirect);
-
-Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
-%>
-
-<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-	<liferay-util:include 
-			page="/html/portlet/account-management/toolbar.jsp" 
-			servletContext="<%=this.getServletContext()%>" >
-		<liferay-util:param name="toolbarItem" value='<%= (selectedAccount == null) ? "add" : "view" %>' />
-	</liferay-util:include>
-</c:if>
-
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
-/>
+EditAccount

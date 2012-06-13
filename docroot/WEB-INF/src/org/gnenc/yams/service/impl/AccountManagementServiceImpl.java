@@ -12,12 +12,16 @@ import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
+import org.gnenc.yams.operation.account.ChangePassword;
 import org.gnenc.yams.operation.account.GetAllAccounts;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
+import org.gnenc.yams.service.internal.ValidatedExecutionCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * Based on the original AccuontManagementService created by Jeshurun Daniel. 
@@ -49,6 +53,34 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	
 	protected AccountManagementServiceImpl() {
 		instance = this;
+	}
+	
+	@Override
+	public void changePassword(final Account account, final String oldPassword,
+			final String newPassword) throws ValidationException {
+		
+    	if(Validator.isNull(oldPassword) || Validator.isNull(newPassword)) {
+//    		throw new ValidationException(messages.getMessage(18));
+    	}
+
+		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
+		
+		executor.execute(ChangePassword.class, SubSystem.ALL_SUBSYSTEMS,
+				new ValidatedExecutionCallback<ChangePassword>() {
+					@Override
+					public void validateAction(ChangePassword operation)
+							throws ValidationException {
+						operation.validateChangePassword(account, oldPassword, newPassword, validationErrors);
+//						if(!validationErrors.isEmpty()) {
+//							throw new ValidationException(validationErrors.toArray(new String[validationErrors.size()]));
+//						}
+					}
+
+					@Override
+					public void executeAction(ChangePassword operation) {
+						operation.changePassword(account, newPassword);
+					}
+				}, false);
 	}
 	
 	@Override 

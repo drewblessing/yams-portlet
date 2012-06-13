@@ -68,12 +68,11 @@ public class PropsValidator {
 	public static boolean validatedAllSuccessfully;
 	
 	private static String[] requiredPropsKeys = {
-			PropsKeys.YAMS_LDAP_BASE_PROVIDER_URL, PropsKeys.YAMS_LDAP_BASE_DN,
-			PropsKeys.YAMS_LDAP_SECURITY_PRINCIPAL, PropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS
+			PropsKeys.LDAP_PROVIDER_URL, PropsKeys.LDAP_BASE_DN,
 	};
 	
 	private static String[] urlPropsKeys = {
-			PropsKeys.YAMS_LDAP_BASE_PROVIDER_URL
+			PropsKeys.LDAP_PROVIDER_URL
 	};
 	
 }
