@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.gnenc.yams.model.Permissions" />
+	<import class="org.gnenc.yams.model.PermissionsDefined" />
+	<class name="org.gnenc.yams.model.impl.PermissionsImpl" table="yams_Permissions">
+		<cache usage="read-write" />
+		<id name="id" column="id_" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="emailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="fqgn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="permissions" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="permissionsGrantable" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupPermission" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="org.gnenc.yams.model.impl.PermissionsDefinedImpl" table="yams_PermissionsDefined">
+		<cache usage="read-write" />
+		<id name="permissionKey" type="java.lang.String">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="bitLocation" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+</hibernate-mapping>

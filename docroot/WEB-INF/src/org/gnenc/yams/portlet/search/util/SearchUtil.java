@@ -145,10 +145,10 @@ public class SearchUtil {
 			Collections.sort(accounts, Account.FIRST_NAME_COMPARATOR_ASC);
 		} else if (orderByCol.equals("givenName") && orderByType.equals("desc")) {
 			Collections.sort(accounts, Account.FIRST_NAME_COMPARATOR_DESC);
-		} else if (orderByCol.equals("sn") && orderByType.equals("asc")) {
-			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_ASC);
 		} else if (orderByCol.equals("sn") && orderByType.equals("desc")) {
 			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_DESC);
+		} else {
+			Collections.sort(accounts, Account.LAST_NAME_COMPARATOR_ASC);
 		}
 	}
 

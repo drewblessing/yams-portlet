@@ -19,4 +19,19 @@
  **/
 %>
 
-EditAccount
+<%@ include file="/html/portlet/init.jsp" %>
+
+<%
+Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
+
+request.setAttribute("account.selAccount", selAccount);
+%> 
+<%= PermissionsChecker.hasGroupPermission(selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD,"gnenc.esu10.esu10_org") %>
+
+Account Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD) %>
+Account Edit <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>
+Account Remove <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE) %>
+Account Remove Force <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE) %>
+Group Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_ADD) %>
+Group Edit <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_EDIT) %>
+Group Remove <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_REMOVE) %>

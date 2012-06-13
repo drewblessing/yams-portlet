@@ -40,6 +40,7 @@
 <%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>
+<%@ page import="org.gnenc.yams.portlet.util.PermissionsChecker" %>
 <%@ page import="org.gnenc.yams.portlet.util.PortletKeys" %>
 <%@ page import="org.gnenc.yams.portlet.util.PortletUtil" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
@@ -59,6 +60,7 @@
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@ page import="com.liferay.portal.kernel.util.Validator" %>
 <%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
+<%@ page import="com.liferay.portal.service.UserLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 
 <%@ page import="com.liferay.portlet.PortalPreferences" %>
@@ -74,3 +76,12 @@
 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
+
+<%
+Account callingAccount = null;
+if (Validator.isNull(request.getSession().getAttribute("callingAccount"))) {
+	callingAccount = PortletUtil.getAccountFromPortalUser(renderRequest, user);
+} else {
+	callingAccount = (Account)request.getSession().getAttribute("callingAccount");
+}
+%>

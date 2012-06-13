@@ -18,4 +18,23 @@
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
 %>
-AddWizard
+
+<%@ include file="/html/portlet/init.jsp" %>
+
+<%
+String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL", redirect);
+%>
+
+<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
+	<liferay-util:include 
+			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>" 
+			servletContext="<%=this.getServletContext()%>" >
+		<liferay-util:param name="toolbarItem" value='<%= PortletUtil.PERMISSIONS %>' />
+	</liferay-util:include>
+</c:if>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= PortletUtil.DEFINE_PERMISSIONS %>'
+/>

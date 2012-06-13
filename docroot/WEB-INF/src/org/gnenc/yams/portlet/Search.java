@@ -59,12 +59,21 @@ public class Search extends MVCPortlet {
 	public static List<Account> getAccounts(
 			UserSearchTerms searchTerms, 
 			String orderByType, String orderByCol) {
+		
+		List<SearchFilter> filters = SearchUtil.getUserFilterList(searchTerms);
+		Operand operand = SearchUtil.getOperand(searchTerms);
+		
+		List<Account> accounts = getAccounts(filters, operand, orderByType, orderByCol);
+		
+		return accounts;
+	}
+	
+	public static List<Account> getAccounts(List<SearchFilter> filters, Operand operand, 
+			String orderByType, String orderByCol) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
 		List<Account> accounts = new ArrayList<Account>();
 		
-		List<SearchFilter> filters = SearchUtil.getUserFilterList(searchTerms);
-		Operand operand = SearchUtil.getOperand(searchTerms);
 		subsystems.add(SubSystem.LDAP);
 		try {
 			accounts = ams.getAccounts(filters, operand, subsystems);
