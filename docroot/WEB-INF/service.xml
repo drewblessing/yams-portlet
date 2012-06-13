@@ -48,13 +48,14 @@
 		<!-- Other fields -->
 
 		<column name="bitLocation" type="int" />
-		<column name="description" type="String" />
-		<column name="properName" type="String" />
 
 		<!-- Order -->
 
 		<order by="asc">
 			<order-column name="bitLocation" />
 		</order>
+        <finder name="BitLocation" return-type="Collection">
+            <finder-column name="bitLocation" />
+        </finder>
 	</entity>
 </service-builder>

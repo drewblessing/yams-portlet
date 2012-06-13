@@ -21,7 +21,5 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="bitLocation" type="int" />
-		<field name="description" type="String" />
-		<field name="properName" type="String" />
 	</model>
 </model-hints>

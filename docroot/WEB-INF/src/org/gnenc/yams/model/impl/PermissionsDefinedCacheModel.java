@@ -35,7 +35,7 @@ public class PermissionsDefinedCacheModel implements CacheModel<PermissionsDefin
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{permissionKey=");
 		sb.append(permissionKey);
@@ -51,10 +51,6 @@ public class PermissionsDefinedCacheModel implements CacheModel<PermissionsDefin
 		sb.append(modifiedDate);
 		sb.append(", bitLocation=");
 		sb.append(bitLocation);
-		sb.append(", description=");
-		sb.append(description);
-		sb.append(", properName=");
-		sb.append(properName);
 		sb.append("}");
 
 		return sb.toString();
@@ -96,20 +92,6 @@ public class PermissionsDefinedCacheModel implements CacheModel<PermissionsDefin
 
 		permissionsDefinedImpl.setBitLocation(bitLocation);
 
-		if (description == null) {
-			permissionsDefinedImpl.setDescription(StringPool.BLANK);
-		}
-		else {
-			permissionsDefinedImpl.setDescription(description);
-		}
-
-		if (properName == null) {
-			permissionsDefinedImpl.setProperName(StringPool.BLANK);
-		}
-		else {
-			permissionsDefinedImpl.setProperName(properName);
-		}
-
 		permissionsDefinedImpl.resetOriginalValues();
 
 		return permissionsDefinedImpl;
@@ -122,6 +104,4 @@ public class PermissionsDefinedCacheModel implements CacheModel<PermissionsDefin
 	public long createDate;
 	public long modifiedDate;
 	public int bitLocation;
-	public String description;
-	public String properName;
 }

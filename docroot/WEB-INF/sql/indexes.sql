@@ -1,0 +1,1 @@
+create index IX_10D36C96 on yams_PermissionsDefined (bitLocation);

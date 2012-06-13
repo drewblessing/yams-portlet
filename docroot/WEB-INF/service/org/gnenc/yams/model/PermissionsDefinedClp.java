@@ -124,22 +124,6 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 		_bitLocation = bitLocation;
 	}
 
-	public String getDescription() {
-		return _description;
-	}
-
-	public void setDescription(String description) {
-		_description = description;
-	}
-
-	public String getProperName() {
-		return _properName;
-	}
-
-	public void setProperName(String properName) {
-		_properName = properName;
-	}
-
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			PermissionsDefinedLocalServiceUtil.addPermissionsDefined(this);
@@ -167,8 +151,6 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 		clone.setCreateDate(getCreateDate());
 		clone.setModifiedDate(getModifiedDate());
 		clone.setBitLocation(getBitLocation());
-		clone.setDescription(getDescription());
-		clone.setProperName(getProperName());
 
 		return clone;
 	}
@@ -225,7 +207,7 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{permissionKey=");
 		sb.append(getPermissionKey());
@@ -241,17 +223,13 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 		sb.append(getModifiedDate());
 		sb.append(", bitLocation=");
 		sb.append(getBitLocation());
-		sb.append(", description=");
-		sb.append(getDescription());
-		sb.append(", properName=");
-		sb.append(getProperName());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("org.gnenc.yams.model.PermissionsDefined");
@@ -285,14 +263,6 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 			"<column><column-name>bitLocation</column-name><column-value><![CDATA[");
 		sb.append(getBitLocation());
 		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>description</column-name><column-value><![CDATA[");
-		sb.append(getDescription());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>properName</column-name><column-value><![CDATA[");
-		sb.append(getProperName());
-		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -307,6 +277,4 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 	private Date _createDate;
 	private Date _modifiedDate;
 	private int _bitLocation;
-	private String _description;
-	private String _properName;
 }

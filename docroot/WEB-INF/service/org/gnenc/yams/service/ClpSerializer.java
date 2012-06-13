@@ -287,20 +287,6 @@ public class ClpSerializer {
 
 				method6.invoke(newModel, value6);
 
-				Method method7 = newModelClass.getMethod("setDescription",
-						new Class[] { String.class });
-
-				String value7 = oldCplModel.getDescription();
-
-				method7.invoke(newModel, value7);
-
-				Method method8 = newModelClass.getMethod("setProperName",
-						new Class[] { String.class });
-
-				String value8 = oldCplModel.getProperName();
-
-				method8.invoke(newModel, value8);
-
 				return newModel;
 			}
 			catch (Exception e) {
@@ -511,18 +497,6 @@ public class ClpSerializer {
 						(Object[])null);
 
 				newModel.setBitLocation(value6);
-
-				Method method7 = oldModelClass.getMethod("getDescription");
-
-				String value7 = (String)method7.invoke(oldModel, (Object[])null);
-
-				newModel.setDescription(value7);
-
-				Method method8 = oldModelClass.getMethod("getProperName");
-
-				String value8 = (String)method8.invoke(oldModel, (Object[])null);
-
-				newModel.setProperName(value8);
 
 				return newModel;
 			}

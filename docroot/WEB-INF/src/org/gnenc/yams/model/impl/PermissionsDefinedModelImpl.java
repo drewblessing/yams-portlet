@@ -61,11 +61,9 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 			{ "userName", Types.VARCHAR },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
-			{ "bitLocation", Types.INTEGER },
-			{ "description", Types.VARCHAR },
-			{ "properName", Types.VARCHAR }
+			{ "bitLocation", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table yams_PermissionsDefined (permissionKey VARCHAR(75) not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,bitLocation INTEGER,description VARCHAR(75) null,properName VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table yams_PermissionsDefined (permissionKey VARCHAR(75) not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,bitLocation INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table yams_PermissionsDefined";
 	public static final String ORDER_BY_JPQL = " ORDER BY permissionsDefined.bitLocation ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY yams_PermissionsDefined.bitLocation ASC";
@@ -78,7 +76,10 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.gnenc.yams.model.PermissionsDefined"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.gnenc.yams.model.PermissionsDefined"),
+			true);
+	public static long BITLOCATION_COLUMN_BITMASK = 1L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.gnenc.yams.model.PermissionsDefined"));
 
@@ -180,33 +181,23 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 	}
 
 	public void setBitLocation(int bitLocation) {
+		_columnBitmask = -1L;
+
+		if (!_setOriginalBitLocation) {
+			_setOriginalBitLocation = true;
+
+			_originalBitLocation = _bitLocation;
+		}
+
 		_bitLocation = bitLocation;
 	}
 
-	public String getDescription() {
-		if (_description == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _description;
-		}
+	public int getOriginalBitLocation() {
+		return _originalBitLocation;
 	}
 
-	public void setDescription(String description) {
-		_description = description;
-	}
-
-	public String getProperName() {
-		if (_properName == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _properName;
-		}
-	}
-
-	public void setProperName(String properName) {
-		_properName = properName;
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -231,8 +222,6 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 		permissionsDefinedImpl.setCreateDate(getCreateDate());
 		permissionsDefinedImpl.setModifiedDate(getModifiedDate());
 		permissionsDefinedImpl.setBitLocation(getBitLocation());
-		permissionsDefinedImpl.setDescription(getDescription());
-		permissionsDefinedImpl.setProperName(getProperName());
 
 		permissionsDefinedImpl.resetOriginalValues();
 
@@ -291,6 +280,13 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 
 	@Override
 	public void resetOriginalValues() {
+		PermissionsDefinedModelImpl permissionsDefinedModelImpl = this;
+
+		permissionsDefinedModelImpl._originalBitLocation = permissionsDefinedModelImpl._bitLocation;
+
+		permissionsDefinedModelImpl._setOriginalBitLocation = false;
+
+		permissionsDefinedModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -337,28 +333,12 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 
 		permissionsDefinedCacheModel.bitLocation = getBitLocation();
 
-		permissionsDefinedCacheModel.description = getDescription();
-
-		String description = permissionsDefinedCacheModel.description;
-
-		if ((description != null) && (description.length() == 0)) {
-			permissionsDefinedCacheModel.description = null;
-		}
-
-		permissionsDefinedCacheModel.properName = getProperName();
-
-		String properName = permissionsDefinedCacheModel.properName;
-
-		if ((properName != null) && (properName.length() == 0)) {
-			permissionsDefinedCacheModel.properName = null;
-		}
-
 		return permissionsDefinedCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{permissionKey=");
 		sb.append(getPermissionKey());
@@ -374,17 +354,13 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 		sb.append(getModifiedDate());
 		sb.append(", bitLocation=");
 		sb.append(getBitLocation());
-		sb.append(", description=");
-		sb.append(getDescription());
-		sb.append(", properName=");
-		sb.append(getProperName());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("org.gnenc.yams.model.PermissionsDefined");
@@ -418,14 +394,6 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 			"<column><column-name>bitLocation</column-name><column-value><![CDATA[");
 		sb.append(getBitLocation());
 		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>description</column-name><column-value><![CDATA[");
-		sb.append(getDescription());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>properName</column-name><column-value><![CDATA[");
-		sb.append(getProperName());
-		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -444,7 +412,8 @@ public class PermissionsDefinedModelImpl extends BaseModelImpl<PermissionsDefine
 	private Date _createDate;
 	private Date _modifiedDate;
 	private int _bitLocation;
-	private String _description;
-	private String _properName;
+	private int _originalBitLocation;
+	private boolean _setOriginalBitLocation;
+	private long _columnBitmask;
 	private PermissionsDefined _escapedModelProxy;
 }

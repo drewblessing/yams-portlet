@@ -37,8 +37,6 @@ public class PermissionsDefinedSoap implements Serializable {
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setBitLocation(model.getBitLocation());
-		soapModel.setDescription(model.getDescription());
-		soapModel.setProperName(model.getProperName());
 
 		return soapModel;
 	}
@@ -150,22 +148,6 @@ public class PermissionsDefinedSoap implements Serializable {
 		_bitLocation = bitLocation;
 	}
 
-	public String getDescription() {
-		return _description;
-	}
-
-	public void setDescription(String description) {
-		_description = description;
-	}
-
-	public String getProperName() {
-		return _properName;
-	}
-
-	public void setProperName(String properName) {
-		_properName = properName;
-	}
-
 	private String _permissionKey;
 	private long _companyId;
 	private long _userId;
@@ -173,6 +155,4 @@ public class PermissionsDefinedSoap implements Serializable {
 	private Date _createDate;
 	private Date _modifiedDate;
 	private int _bitLocation;
-	private String _description;
-	private String _properName;
 }

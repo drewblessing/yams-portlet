@@ -43,8 +43,6 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="bitLocation" />
-			<basic name="description" />
-			<basic name="properName" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />

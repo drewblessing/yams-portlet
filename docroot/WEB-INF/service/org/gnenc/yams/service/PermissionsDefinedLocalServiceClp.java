@@ -87,6 +87,9 @@ public class PermissionsDefinedLocalServiceClp
 
 		_setBeanIdentifierMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
 				"setBeanIdentifier", java.lang.String.class);
+
+		_addPermissionsDefinedMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
+				"addPermissionsDefined", long.class, java.lang.String.class);
 	}
 
 	public org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
@@ -554,6 +557,34 @@ public class PermissionsDefinedLocalServiceClp
 		}
 	}
 
+	public org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
+		long userId, java.lang.String permissionKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_addPermissionsDefinedMethodKey17,
+				userId, ClpSerializer.translateInput(permissionKey));
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.gnenc.yams.model.PermissionsDefined)ClpSerializer.translateOutput(returnObj);
+	}
+
 	public ClassLoaderProxy getClassLoaderProxy() {
 		return _classLoaderProxy;
 	}
@@ -576,4 +607,5 @@ public class PermissionsDefinedLocalServiceClp
 	private MethodKey _updatePermissionsDefinedMethodKey14;
 	private MethodKey _getBeanIdentifierMethodKey15;
 	private MethodKey _setBeanIdentifierMethodKey16;
+	private MethodKey _addPermissionsDefinedMethodKey17;
 }

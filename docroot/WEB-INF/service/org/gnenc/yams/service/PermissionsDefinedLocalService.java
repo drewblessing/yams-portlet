@@ -236,4 +236,8 @@ public interface PermissionsDefinedLocalService
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
+
+	public org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
+		long userId, java.lang.String permissionKey)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

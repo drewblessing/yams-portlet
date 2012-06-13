@@ -106,7 +106,11 @@ public class PortletUtil {
 	// General
 	public final static String ACCOUNTS = "accounts";
 	
+	public final static String DEFINE_PERMISSIONS = "define-permissions";
+	
 	public final static String ORGANIZATIONS = "organizations";
+	
+	public final static String PERMISSIONS = "permissions";
 	
 	public final static String SEARCH_TABS_NAMES = "accounts,organizations";
 	
@@ -139,6 +143,9 @@ public class PortletUtil {
 	
 	public final static String ACCT_MGMT_ORGANIZATION_EDIT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";
+	
+	public final static String ACCT_MGMT_DEFINE_PERMISSIONS_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/define_permissions.jsp";
 	
 	public final static String SEARCH_ACCOUNT_DETAILS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/account/details.jsp";	

@@ -203,42 +203,6 @@ public class PermissionsDefinedWrapper implements PermissionsDefined,
 		_permissionsDefined.setBitLocation(bitLocation);
 	}
 
-	/**
-	* Returns the description of this permissions defined.
-	*
-	* @return the description of this permissions defined
-	*/
-	public java.lang.String getDescription() {
-		return _permissionsDefined.getDescription();
-	}
-
-	/**
-	* Sets the description of this permissions defined.
-	*
-	* @param description the description of this permissions defined
-	*/
-	public void setDescription(java.lang.String description) {
-		_permissionsDefined.setDescription(description);
-	}
-
-	/**
-	* Returns the proper name of this permissions defined.
-	*
-	* @return the proper name of this permissions defined
-	*/
-	public java.lang.String getProperName() {
-		return _permissionsDefined.getProperName();
-	}
-
-	/**
-	* Sets the proper name of this permissions defined.
-	*
-	* @param properName the proper name of this permissions defined
-	*/
-	public void setProperName(java.lang.String properName) {
-		_permissionsDefined.setProperName(properName);
-	}
-
 	public boolean isNew() {
 		return _permissionsDefined.isNew();
 	}
@@ -281,7 +245,8 @@ public class PermissionsDefinedWrapper implements PermissionsDefined,
 		return new PermissionsDefinedWrapper((PermissionsDefined)_permissionsDefined.clone());
 	}
 
-	public int compareTo(PermissionsDefined permissionsDefined) {
+	public int compareTo(
+		org.gnenc.yams.model.PermissionsDefined permissionsDefined) {
 		return _permissionsDefined.compareTo(permissionsDefined);
 	}
 
@@ -290,11 +255,11 @@ public class PermissionsDefinedWrapper implements PermissionsDefined,
 		return _permissionsDefined.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<PermissionsDefined> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<org.gnenc.yams.model.PermissionsDefined> toCacheModel() {
 		return _permissionsDefined.toCacheModel();
 	}
 
-	public PermissionsDefined toEscapedModel() {
+	public org.gnenc.yams.model.PermissionsDefined toEscapedModel() {
 		return new PermissionsDefinedWrapper(_permissionsDefined.toEscapedModel());
 	}
 

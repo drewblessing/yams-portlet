@@ -177,36 +177,6 @@ public interface PermissionsDefinedModel extends AuditedModel,
 	 */
 	public void setBitLocation(int bitLocation);
 
-	/**
-	 * Returns the description of this permissions defined.
-	 *
-	 * @return the description of this permissions defined
-	 */
-	@AutoEscape
-	public String getDescription();
-
-	/**
-	 * Sets the description of this permissions defined.
-	 *
-	 * @param description the description of this permissions defined
-	 */
-	public void setDescription(String description);
-
-	/**
-	 * Returns the proper name of this permissions defined.
-	 *
-	 * @return the proper name of this permissions defined
-	 */
-	@AutoEscape
-	public String getProperName();
-
-	/**
-	 * Sets the proper name of this permissions defined.
-	 *
-	 * @param properName the proper name of this permissions defined
-	 */
-	public void setProperName(String properName);
-
 	public boolean isNew();
 
 	public void setNew(boolean n);

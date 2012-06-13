@@ -258,6 +258,13 @@ public class PermissionsDefinedLocalServiceWrapper
 		_permissionsDefinedLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
+		long userId, java.lang.String permissionKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsDefinedLocalService.addPermissionsDefined(userId,
+			permissionKey);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

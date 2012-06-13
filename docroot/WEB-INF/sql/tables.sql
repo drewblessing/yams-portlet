@@ -18,7 +18,5 @@ create table yams_PermissionsDefined (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
-	bitLocation INTEGER,
-	description VARCHAR(75) null,
-	properName VARCHAR(75) null
+	bitLocation INTEGER
 );

@@ -262,6 +262,12 @@ public class PermissionsDefinedLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
+		long userId, java.lang.String permissionKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().addPermissionsDefined(userId, permissionKey);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

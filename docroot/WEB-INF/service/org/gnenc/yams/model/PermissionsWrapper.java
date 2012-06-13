@@ -299,7 +299,7 @@ public class PermissionsWrapper implements Permissions,
 		return new PermissionsWrapper((Permissions)_permissions.clone());
 	}
 
-	public int compareTo(Permissions permissions) {
+	public int compareTo(org.gnenc.yams.model.Permissions permissions) {
 		return _permissions.compareTo(permissions);
 	}
 
@@ -308,11 +308,11 @@ public class PermissionsWrapper implements Permissions,
 		return _permissions.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<Permissions> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<org.gnenc.yams.model.Permissions> toCacheModel() {
 		return _permissions.toCacheModel();
 	}
 
-	public Permissions toEscapedModel() {
+	public org.gnenc.yams.model.Permissions toEscapedModel() {
 		return new PermissionsWrapper(_permissions.toEscapedModel());
 	}
 
