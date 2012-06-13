@@ -18,7 +18,8 @@
  **/
 package org.gnenc.yams.portlet.util;
 
-import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.util.portlet.PortletProps;
 
 /**
  * Property value assignment
@@ -28,8 +29,12 @@ import com.liferay.portal.kernel.util.PropsUtil;
  */
 public class PropsValues {
 	
-	public static final String LDAP_PROVIDER_URL = PropsUtil.get(PropsKeys.LDAP_PROVIDER_URL);
+	public static final String LDAP_PROVIDER_URL = PortletProps.get(PropsKeys.LDAP_PROVIDER_URL);
 	
-	public static final String LDAP_BASE_DN = PropsUtil.get(PropsKeys.LDAP_BASE_DN);
+	public static final String LDAP_BASE_DN = PortletProps.get(PropsKeys.LDAP_BASE_DN);
 	
+	public static final String LDAP_DATE_FORMAT = PortletProps.get(PropsKeys.LDAP_DATE_FORMAT);
+	
+	public static final boolean ACCOUNT_CREATE_WITH_WIZARD = GetterUtil.getBoolean(
+			PortletProps.get(PropsKeys.ACCOUNT_CREATE_WITH_WIZARD));
 }

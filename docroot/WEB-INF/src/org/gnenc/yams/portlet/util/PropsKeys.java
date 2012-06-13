@@ -30,4 +30,7 @@ public class PropsKeys {
 	
 	public static final String LDAP_BASE_DN = "ldap.base.dn";
 	
+	public static final String LDAP_DATE_FORMAT = "ldap.date.format";
+	
+	public static final String ACCOUNT_CREATE_WITH_WIZARD = "account.create.with.wizard";
 }

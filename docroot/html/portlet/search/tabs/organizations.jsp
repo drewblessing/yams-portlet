@@ -25,7 +25,8 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("jspPage", PortletUtil.SEARCH_TABS_ORGANIZATIONS_JSP);
 
-SearchContainer organizationSearch = new OrganizationSearch(renderRequest, "orgs", portletURL);
+SearchContainer organizationSearch = new OrganizationSearch(
+		renderRequest, PortletUtil.ORGANIZATIONS, portletURL);
 organizationSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 

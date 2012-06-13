@@ -25,7 +25,7 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("jspPage", PortletUtil.SEARCH_TABS_ACCOUNTS_JSP);
 
-SearchContainer userSearch = new UserSearch(renderRequest, "users", portletURL);
+SearchContainer userSearch = new UserSearch(renderRequest, PortletUtil.ACCOUNTS, portletURL);
 userSearch.setRowChecker(new RowChecker(renderResponse));
 %>
 

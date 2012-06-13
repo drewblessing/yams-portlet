@@ -18,15 +18,4 @@
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
 %>
-
-<%@ include file="/html/portlet/init.jsp" %>
-
-<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
-	<liferay-util:include 
-			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>" 
-			servletContext="<%=this.getServletContext()%>" />
-</c:if>
-
-<liferay-util:include 
-		page="<%=PortletUtil.TABS_JSP %>" 
-		servletContext="<%=this.getServletContext()%>" />
+AddWizard

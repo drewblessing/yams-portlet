@@ -103,10 +103,12 @@ public class PortletUtil {
 		return result;
 	}
 
-	// Terms
+	// General
 	public final static String ACCOUNTS = "accounts";
 	
 	public final static String ORGANIZATIONS = "organizations";
+	
+	public final static String SEARCH_TABS_NAMES = "accounts,organizations";
 	
 	// Directories	
 	public final static String SEARCH_TABS_JSP_DIRECTORY = "/html/portlet/search/tabs";
@@ -123,14 +125,23 @@ public class PortletUtil {
 	public final static String ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions.jsp";
 	
+	public final static String ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard.jsp";
+	
 	public final static String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/change_password.jsp";
 	
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit.jsp";
 	
+	public final static String ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_account.jsp";
+	
 	public final static String ACCT_MGMT_ORGANIZATION_EDIT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";
+	
+	public final static String SEARCH_ACCOUNT_DETAILS_JSP = 
+			PORTLET_SEARCH_DIRECTORY + "/account/details.jsp";	
 	
 	public final static String SEARCH_ACCOUNTS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/accounts.jsp";
@@ -143,13 +154,13 @@ public class PortletUtil {
 	
 	public final static String SEARCH_TABS_ORGANIZATIONS_JSP = 
 			SEARCH_TABS_JSP_DIRECTORY + "/organizations.jsp";
-
-	public final static String SEARCH_TABS_DEFAULT_JSP = SEARCH_TABS_ACCOUNTS_JSP;
 	
 	public final static String SEARCH_VIEW_ACCOUNT_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/view_account.jsp";
 	
 	public final static String SEARCH_VIEW_JSP = PORTLET_SEARCH_DIRECTORY + "/view.jsp";
+	
+	public final static String TABS_JSP = PORTLET_SEARCH_DIRECTORY + "/tabs1.jsp";
 	
 	// Images	
 	public final static String STOCK_AVATAR = "/images/user_male_portrait.png";

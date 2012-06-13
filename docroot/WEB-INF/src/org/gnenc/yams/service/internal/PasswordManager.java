@@ -71,55 +71,6 @@ public class PasswordManager {
             }
 		}
 	};
-	
-	public String encryptBlowfish(String to_encrypt) {
-		try {
-			SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(), "Blowfish");
-			Cipher cipher = Cipher.getInstance("Blowfish");
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-			return byteToBase64(cipher.doFinal(to_encrypt.getBytes()));
-		} catch (Exception e) {
-			logger.error("Error encrypting Blowfish password.", e);
-			return null;
-		}
-	}
-
-	public String decryptBlowfish(String to_decrypt) {
-		try {
-			SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(), "Blowfish");
-			// ECB mode with PKCS5Padding is the default with JCE and need not 
-			// therefore be explicitly specified,
-			// but I'm adding it in for the sake of clarity
-			Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] decrypted = null;
-			try{
-				decrypted = cipher.doFinal(base64ToByte(to_decrypt));
-			} catch (BadPaddingException be) {
-				/**
-				 * @see http://code.activestate.com/recipes/496763-a-simple-pycrypto-blowfish-encryption-script/
-				 * from where Ricky seems to have ripped off his code.
-				 */
-				// You can thank Rick and Python's general lack of standards for this
-				cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
-				cipher.init(Cipher.DECRYPT_MODE, key);
-				decrypted = cipher.doFinal(base64ToByte(to_decrypt));
-				String result = new String(decrypted);
-				// In python's impl, the unicode of the last padded character % 8 
-				// will tell you how many blocks of padding have been added
-				int depaddingSize = ((int) result.charAt(result.length() - 1)) % 8;
-				// in case the input string was 8 bytes, an additional 8 bytes of padding is
-				// added anyway, just so the last character isn't mis-interpreted
-				depaddingSize = depaddingSize == 0 ? depaddingSize = 8 : result.length() - depaddingSize;
-				return result.substring(0, depaddingSize);
-			}		
-			return new String(decrypted);
-		
-		} catch (Exception e) {
-			logger.error("Error decrypting Blowfish password.", e);
-			return "";
-		}
-	}
 
 	public String encryptSSHA1(String password) {
 		return computeAndEncode(4,password.getBytes());

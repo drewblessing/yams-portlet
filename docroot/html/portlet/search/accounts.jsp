@@ -21,7 +21,7 @@
 
 <%
 PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
-String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.SEARCH_TABS_DEFAULT_JSP);
+String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.ACCOUNTS);
 String jspPage = "";
 %>
 <c:choose>

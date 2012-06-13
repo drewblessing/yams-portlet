@@ -28,7 +28,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 
 <div class="lfr-portlet-toolbar">
 	<portlet:renderURL var="searchViewURL" >
-		<portlet:param name="jspPage" value="/<%=PortletUtil.SEARCH_VIEW_JSP %>" />
+		<portlet:param name="jspPage" value="<%=PortletUtil.SEARCH_VIEW_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="toolbarItem" value="search" />
 	</portlet:renderURL>
