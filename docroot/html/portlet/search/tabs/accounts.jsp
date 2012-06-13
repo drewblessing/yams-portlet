@@ -23,7 +23,7 @@
 
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
-portletURL.setParameter("jspPage", "/html/portlet/search/tabs/users.jsp");
+portletURL.setParameter("jspPage", PortletUtil.SEARCH_TABS_ACCOUNTS_JSP);
 
 SearchContainer userSearch = new UserSearch(renderRequest, "users", portletURL);
 userSearch.setRowChecker(new RowChecker(renderResponse));
@@ -31,7 +31,7 @@ userSearch.setRowChecker(new RowChecker(renderResponse));
 
 <liferay-ui:search-container searchContainer="<%= userSearch %>" >
 	<liferay-ui:search-form 
-		page="/html/portlet/search/search_accounts.jsp" 
+		page="<%=PortletUtil.SEARCH_ACCOUNTS_JSP %>" 
 		servletContext="<%=this.getServletContext() %>" 
 	/>
 	

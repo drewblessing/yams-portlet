@@ -38,7 +38,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 
 <c:if test="<%= permissionChecker.isOmniadmin() %>" >
 	<portlet:renderURL var="editAccountRenderURL" >
-		<portlet:param name="jspPage" value="/html/portlet/account-management/account/edit_account.jsp" />
+		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
@@ -50,7 +50,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 
 <c:if test="<%=mail.contains(user.getEmailAddress()) || permissionChecker.isOmniadmin() %>" >
 	<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="jspPage" value="/html/portlet/account-management/account/change_password.jsp" />
+		<portlet:param name="jspPage" value="/<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
 	

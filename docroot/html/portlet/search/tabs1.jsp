@@ -25,9 +25,19 @@
 PortletURL portletURL = renderResponse.createRenderURL();
 request.setAttribute("view.jsp-portletURL", portletURL);
 
-String tabs1 = ParamUtil.getString(request, "tabs1", "users");
-String tabsURL = "/html/portlet/search/tabs/" + tabs1.trim() + ".jsp";
-String tabNames = "users,organizations";
+String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.SEARCH_TABS_DEFAULT_JSP);
+String tabsURL = "";
+%>
+<c:choose>
+	<c:when test="<%=tabs1.equals(PortletUtil.ACCOUNTS) %>" >
+		<% tabsURL = PortletUtil.SEARCH_TABS_ACCOUNTS_JSP; %>
+	</c:when>
+	<c:when test="<%=tabs1.equals(PortletUtil.ORGANIZATIONS) %>">
+		<% tabsURL = PortletUtil.SEARCH_TABS_ORGANIZATIONS_JSP; %>
+	</c:when>>
+</c:choose>
+<%
+String tabNames = "accounts,organizations";
 
 portletURL.setParameter("tabs1", tabs1);
 pageContext.setAttribute("portletURL",portletURL);

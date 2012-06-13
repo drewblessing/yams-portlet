@@ -30,7 +30,7 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
 	<liferay-util:include 
-			page="/html/portlet/account-management/toolbar.jsp" 
+			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>" 
 			servletContext="<%=this.getServletContext()%>" >
 		<liferay-util:param name="toolbarItem" value='<%= (selectedAccount == null) ? "add" : "view" %>' />
 	</liferay-util:include>

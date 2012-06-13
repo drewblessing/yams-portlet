@@ -28,15 +28,8 @@ import com.liferay.portal.kernel.util.PropsUtil;
  */
 public class PropsValues {
 	
-	public static final String YAMS_LDAP_BASE_PROVIDER_URL = PropsUtil.get(PropsKeys.YAMS_LDAP_BASE_PROVIDER_URL);
+	public static final String LDAP_PROVIDER_URL = PropsUtil.get(PropsKeys.LDAP_PROVIDER_URL);
 	
-	public static final String YAMS_LDAP_BASE_DN = PropsUtil.get(PropsKeys.YAMS_LDAP_BASE_DN);
+	public static final String LDAP_BASE_DN = PropsUtil.get(PropsKeys.LDAP_BASE_DN);
 	
-	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = PropsUtil.get(PropsKeys.YAMS_LDAP_SECURITY_PRINCIPAL);
-	
-	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = PropsUtil.get(PropsKeys.YAMS_LDAP_SECURITY_CREDENTIALS);
-	
-	public static final String YAMS_PORTLET_SEARCH_DEFAULT_VIEW = 
-			"/html/portlet/search/" + PropsUtil.get(PropsKeys.YAMS_PORTLET_SEARCH_DEFAULT_VIEW) + ".jsp";
-
 }

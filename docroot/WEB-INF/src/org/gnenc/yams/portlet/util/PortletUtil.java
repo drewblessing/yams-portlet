@@ -102,8 +102,56 @@ public class PortletUtil {
 		
 		return result;
 	}
+
+	// Terms
+	public final static String ACCOUNTS = "accounts";
 	
-	public static String STOCK_AVATAR = "/images/user_male_portrait.png";
-	private static String CHANGE_PASSWORD_JSP = 
-			"/html/portlet/account-management/account/change_password.jsp";
+	public final static String ORGANIZATIONS = "organizations";
+	
+	// Directories	
+	public final static String SEARCH_TABS_JSP_DIRECTORY = "/html/portlet/search/tabs";
+	
+	public final static String PORTLET_SEARCH_DIRECTORY = "/html/portlet/search";
+	
+	public final static String PORTLET_ACCT_MGMT_DIRECTORY = 
+			"/html/portlet/account-management";
+	
+	// JSPs
+	public final static String ACCT_MGMT_TOOLBAR_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/toolbar.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/change_password.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_EDIT_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit.jsp";
+	
+	public final static String ACCT_MGMT_ORGANIZATION_EDIT_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";
+	
+	public final static String SEARCH_ACCOUNTS_JSP = 
+			PORTLET_SEARCH_DIRECTORY + "/accounts.jsp";
+	
+	public final static String SEARCH_ORGANIZATIONS_JSP = 
+			PORTLET_SEARCH_DIRECTORY + "/organizations.jsp";
+	
+	public final static String SEARCH_TABS_ACCOUNTS_JSP = 
+			SEARCH_TABS_JSP_DIRECTORY + "/accounts.jsp";
+	
+	public final static String SEARCH_TABS_ORGANIZATIONS_JSP = 
+			SEARCH_TABS_JSP_DIRECTORY + "/organizations.jsp";
+
+	public final static String SEARCH_TABS_DEFAULT_JSP = SEARCH_TABS_ACCOUNTS_JSP;
+	
+	public final static String SEARCH_VIEW_ACCOUNT_JSP = 
+			PORTLET_SEARCH_DIRECTORY + "/view_account.jsp";
+	
+	public final static String SEARCH_VIEW_JSP = PORTLET_SEARCH_DIRECTORY + "/view.jsp";
+	
+	// Images	
+	public final static String STOCK_AVATAR = "/images/user_male_portrait.png";
+	
 }

@@ -26,13 +26,8 @@ package org.gnenc.yams.portlet.util;
  */
 public class PropsKeys {
 	
-	public static final String YAMS_LDAP_BASE_PROVIDER_URL = "yams.ldap.base.provider.url";
+	public static final String LDAP_PROVIDER_URL = "ldap.provider.url";
 	
-	public static final String YAMS_LDAP_BASE_DN = "yams.ldap.base.dn";
+	public static final String LDAP_BASE_DN = "ldap.base.dn";
 	
-	public static final String YAMS_LDAP_SECURITY_PRINCIPAL = "yams.ldap.security.principal";
-	
-	public static final String YAMS_LDAP_SECURITY_CREDENTIALS = "yams.ldap.security.credentials";
-	
-	public static final String YAMS_PORTLET_SEARCH_DEFAULT_VIEW = "yams.portlet.search.default.view";
 }
