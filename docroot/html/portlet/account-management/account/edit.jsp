@@ -40,7 +40,7 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 	backURL="<%= backURL %>"
 	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
 />
-<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD %>
+
 <c:choose>
 	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
 		<liferay-util:include 
