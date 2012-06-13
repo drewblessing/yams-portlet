@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.gnenc.yams.service.PermissionsLocalService" class="org.gnenc.yams.service.impl.PermissionsLocalServiceImpl" />
+	<bean id="org.gnenc.yams.service.PermissionsLocalServiceUtil" class="org.gnenc.yams.service.PermissionsLocalServiceUtil">
+		<property name="service" ref="org.gnenc.yams.service.PermissionsLocalService" />
+	</bean>
+	<bean id="org.gnenc.yams.service.persistence.PermissionsPersistence" class="org.gnenc.yams.service.persistence.PermissionsPersistenceImpl" parent="basePersistence" />
+	<bean id="org.gnenc.yams.service.PermissionsDefinedLocalService" class="org.gnenc.yams.service.impl.PermissionsDefinedLocalServiceImpl" />
+	<bean id="org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil" class="org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil">
+		<property name="service" ref="org.gnenc.yams.service.PermissionsDefinedLocalService" />
+	</bean>
+	<bean id="org.gnenc.yams.service.persistence.PermissionsDefinedPersistence" class="org.gnenc.yams.service.persistence.PermissionsDefinedPersistenceImpl" parent="basePersistence" />
+</beans>
