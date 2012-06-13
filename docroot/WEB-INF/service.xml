@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+<service-builder package-path="org.gnenc.yams">
+	<author>Drew A. Blessing</author>
+	<namespace>yams</namespace>
+
+	<entity name="Permissions" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="id" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="emailAddress" type="String" />
+		<column name="fqgn" type="String" />
+		<column name="permissions" type="long" />
+		<column name="permissionsGrantable" type="long" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="emailAddress" />
+		</order>
+	</entity>
+	<entity name="PermissionsDefined" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="permissionKey" type="String" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="bitLocation" type="int" />
+		<column name="description" type="String" />
+		<column name="properName" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="bitLocation" />
+		</order>
+	</entity>
+</service-builder>
