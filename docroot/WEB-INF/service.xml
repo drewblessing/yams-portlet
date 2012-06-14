@@ -24,12 +24,22 @@
 		<column name="fqgn" type="String" />
 		<column name="permissions" type="long" />
 		<column name="permissionsGrantable" type="long" />
+		<column name="groupPermission" type="boolean" />
 
 		<!-- Order -->
 
 		<order by="asc">
 			<order-column name="emailAddress" />
 		</order>
+        <finder name="EmailAddressAndFqgnAndGroupPermission" return-type="Collection">
+            <finder-column name="emailAddress" />
+            <finder-column name="fqgn" />
+            <finder-column name="groupPermission" />
+        </finder>
+        <finder name="FqgnAndGroupPermission" return-type="Collection">
+        	<finder-column name="fqgn" />
+        	<finder-column name="groupPermission" />
+        </finder>
 	</entity>
 	<entity name="PermissionsDefined" local-service="true" remote-service="false">
 

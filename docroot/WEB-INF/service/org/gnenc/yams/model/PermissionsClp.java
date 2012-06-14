@@ -148,6 +148,18 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 		_permissionsGrantable = permissionsGrantable;
 	}
 
+	public boolean getGroupPermission() {
+		return _groupPermission;
+	}
+
+	public boolean isGroupPermission() {
+		return _groupPermission;
+	}
+
+	public void setGroupPermission(boolean groupPermission) {
+		_groupPermission = groupPermission;
+	}
+
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			PermissionsLocalServiceUtil.addPermissions(this);
@@ -177,6 +189,7 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 		clone.setFqgn(getFqgn());
 		clone.setPermissions(getPermissions());
 		clone.setPermissionsGrantable(getPermissionsGrantable());
+		clone.setGroupPermission(getGroupPermission());
 
 		return clone;
 	}
@@ -225,7 +238,7 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{id=");
 		sb.append(getId());
@@ -247,13 +260,15 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 		sb.append(getPermissions());
 		sb.append(", permissionsGrantable=");
 		sb.append(getPermissionsGrantable());
+		sb.append(", groupPermission=");
+		sb.append(getGroupPermission());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.gnenc.yams.model.Permissions");
@@ -299,6 +314,10 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 			"<column><column-name>permissionsGrantable</column-name><column-value><![CDATA[");
 		sb.append(getPermissionsGrantable());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>groupPermission</column-name><column-value><![CDATA[");
+		sb.append(getGroupPermission());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -316,4 +335,5 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 	private String _fqgn;
 	private long _permissions;
 	private long _permissionsGrantable;
+	private boolean _groupPermission;
 }

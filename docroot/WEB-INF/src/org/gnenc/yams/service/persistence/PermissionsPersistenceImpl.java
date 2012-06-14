@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -32,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -75,6 +77,63 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByEmailAddressAndFqgnAndGroupPermission",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByEmailAddressAndFqgnAndGroupPermission",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Boolean.class.getName()
+			},
+			PermissionsModelImpl.EMAILADDRESS_COLUMN_BITMASK |
+			PermissionsModelImpl.FQGN_COLUMN_BITMASK |
+			PermissionsModelImpl.GROUPPERMISSION_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByEmailAddressAndFqgnAndGroupPermission",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByFqgnAndGroupPermission",
+			new String[] {
+				String.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByFqgnAndGroupPermission",
+			new String[] { String.class.getName(), Boolean.class.getName() },
+			PermissionsModelImpl.FQGN_COLUMN_BITMASK |
+			PermissionsModelImpl.GROUPPERMISSION_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByFqgnAndGroupPermission",
+			new String[] { String.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
@@ -261,6 +320,10 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		throws SystemException {
 		permissions = toUnwrappedModel(permissions);
 
+		boolean isNew = permissions.isNew();
+
+		PermissionsModelImpl permissionsModelImpl = (PermissionsModelImpl)permissions;
+
 		Session session = null;
 
 		try {
@@ -278,6 +341,62 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		}
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !PermissionsModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((permissionsModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						permissionsModelImpl.getOriginalEmailAddress(),
+						
+						permissionsModelImpl.getOriginalFqgn(),
+						Boolean.valueOf(permissionsModelImpl.getOriginalGroupPermission())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+					args);
+
+				args = new Object[] {
+						permissionsModelImpl.getEmailAddress(),
+						
+						permissionsModelImpl.getFqgn(),
+						Boolean.valueOf(permissionsModelImpl.getGroupPermission())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+					args);
+			}
+
+			if ((permissionsModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						permissionsModelImpl.getOriginalFqgn(),
+						Boolean.valueOf(permissionsModelImpl.getOriginalGroupPermission())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION,
+					args);
+
+				args = new Object[] {
+						permissionsModelImpl.getFqgn(),
+						Boolean.valueOf(permissionsModelImpl.getGroupPermission())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION,
+					args);
+			}
+		}
 
 		EntityCacheUtil.putResult(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsImpl.class, permissions.getPrimaryKey(), permissions);
@@ -305,6 +424,7 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		permissionsImpl.setFqgn(permissions.getFqgn());
 		permissionsImpl.setPermissions(permissions.getPermissions());
 		permissionsImpl.setPermissionsGrantable(permissions.getPermissionsGrantable());
+		permissionsImpl.setGroupPermission(permissions.isGroupPermission());
 
 		return permissionsImpl;
 	}
@@ -405,6 +525,855 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		}
 
 		return permissions;
+	}
+
+	/**
+	 * Returns all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @return the matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddressAndFqgnAndGroupPermission(
+		String emailAddress, String fqgn, boolean groupPermission)
+		throws SystemException {
+		return findByEmailAddressAndFqgnAndGroupPermission(emailAddress, fqgn,
+			groupPermission, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @return the range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddressAndFqgnAndGroupPermission(
+		String emailAddress, String fqgn, boolean groupPermission, int start,
+		int end) throws SystemException {
+		return findByEmailAddressAndFqgnAndGroupPermission(emailAddress, fqgn,
+			groupPermission, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddressAndFqgnAndGroupPermission(
+		String emailAddress, String fqgn, boolean groupPermission, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION;
+			finderArgs = new Object[] { emailAddress, fqgn, groupPermission };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION;
+			finderArgs = new Object[] {
+					emailAddress, fqgn, groupPermission,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+			if (emailAddress == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_1);
+			}
+			else {
+				if (emailAddress.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_2);
+				}
+			}
+
+			if (fqgn == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_1);
+			}
+			else {
+				if (fqgn.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (emailAddress != null) {
+					qPos.add(emailAddress);
+				}
+
+				if (fqgn != null) {
+					qPos.add(fqgn);
+				}
+
+				qPos.add(groupPermission);
+
+				list = (List<Permissions>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByEmailAddressAndFqgnAndGroupPermission_First(
+		String emailAddress, String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		List<Permissions> list = findByEmailAddressAndFqgnAndGroupPermission(emailAddress,
+				fqgn, groupPermission, 0, 1, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(8);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("emailAddress=");
+			msg.append(emailAddress);
+
+			msg.append(", fqgn=");
+			msg.append(fqgn);
+
+			msg.append(", groupPermission=");
+			msg.append(groupPermission);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByEmailAddressAndFqgnAndGroupPermission_Last(
+		String emailAddress, String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		int count = countByEmailAddressAndFqgnAndGroupPermission(emailAddress,
+				fqgn, groupPermission);
+
+		List<Permissions> list = findByEmailAddressAndFqgnAndGroupPermission(emailAddress,
+				fqgn, groupPermission, count - 1, count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(8);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("emailAddress=");
+			msg.append(emailAddress);
+
+			msg.append(", fqgn=");
+			msg.append(fqgn);
+
+			msg.append(", groupPermission=");
+			msg.append(groupPermission);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param id the primary key of the current permissions
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a permissions with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions[] findByEmailAddressAndFqgnAndGroupPermission_PrevAndNext(
+		long id, String emailAddress, String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = findByPrimaryKey(id);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Permissions[] array = new PermissionsImpl[3];
+
+			array[0] = getByEmailAddressAndFqgnAndGroupPermission_PrevAndNext(session,
+					permissions, emailAddress, fqgn, groupPermission,
+					orderByComparator, true);
+
+			array[1] = permissions;
+
+			array[2] = getByEmailAddressAndFqgnAndGroupPermission_PrevAndNext(session,
+					permissions, emailAddress, fqgn, groupPermission,
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Permissions getByEmailAddressAndFqgnAndGroupPermission_PrevAndNext(
+		Session session, Permissions permissions, String emailAddress,
+		String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+		if (emailAddress == null) {
+			query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_1);
+		}
+		else {
+			if (emailAddress.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_2);
+			}
+		}
+
+		if (fqgn == null) {
+			query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_1);
+		}
+		else {
+			if (fqgn.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_2);
+			}
+		}
+
+		query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (emailAddress != null) {
+			qPos.add(emailAddress);
+		}
+
+		if (fqgn != null) {
+			qPos.add(fqgn);
+		}
+
+		qPos.add(groupPermission);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(permissions);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Permissions> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the permissionses where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @return the matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByFqgnAndGroupPermission(String fqgn,
+		boolean groupPermission) throws SystemException {
+		return findByFqgnAndGroupPermission(fqgn, groupPermission,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the permissionses where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @return the range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByFqgnAndGroupPermission(String fqgn,
+		boolean groupPermission, int start, int end) throws SystemException {
+		return findByFqgnAndGroupPermission(fqgn, groupPermission, start, end,
+			null);
+	}
+
+	/**
+	 * Returns an ordered range of all the permissionses where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByFqgnAndGroupPermission(String fqgn,
+		boolean groupPermission, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION;
+			finderArgs = new Object[] { fqgn, groupPermission };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION;
+			finderArgs = new Object[] {
+					fqgn, groupPermission,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+			if (fqgn == null) {
+				query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_1);
+			}
+			else {
+				if (fqgn.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (fqgn != null) {
+					qPos.add(fqgn);
+				}
+
+				qPos.add(groupPermission);
+
+				list = (List<Permissions>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByFqgnAndGroupPermission_First(String fqgn,
+		boolean groupPermission, OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		List<Permissions> list = findByFqgnAndGroupPermission(fqgn,
+				groupPermission, 0, 1, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("fqgn=");
+			msg.append(fqgn);
+
+			msg.append(", groupPermission=");
+			msg.append(groupPermission);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByFqgnAndGroupPermission_Last(String fqgn,
+		boolean groupPermission, OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		int count = countByFqgnAndGroupPermission(fqgn, groupPermission);
+
+		List<Permissions> list = findByFqgnAndGroupPermission(fqgn,
+				groupPermission, count - 1, count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("fqgn=");
+			msg.append(fqgn);
+
+			msg.append(", groupPermission=");
+			msg.append(groupPermission);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the permissionses before and after the current permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param id the primary key of the current permissions
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a permissions with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions[] findByFqgnAndGroupPermission_PrevAndNext(long id,
+		String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = findByPrimaryKey(id);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Permissions[] array = new PermissionsImpl[3];
+
+			array[0] = getByFqgnAndGroupPermission_PrevAndNext(session,
+					permissions, fqgn, groupPermission, orderByComparator, true);
+
+			array[1] = permissions;
+
+			array[2] = getByFqgnAndGroupPermission_PrevAndNext(session,
+					permissions, fqgn, groupPermission, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Permissions getByFqgnAndGroupPermission_PrevAndNext(
+		Session session, Permissions permissions, String fqgn,
+		boolean groupPermission, OrderByComparator orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+		if (fqgn == null) {
+			query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_1);
+		}
+		else {
+			if (fqgn.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_2);
+			}
+		}
+
+		query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (fqgn != null) {
+			qPos.add(fqgn);
+		}
+
+		qPos.add(groupPermission);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(permissions);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Permissions> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
 	}
 
 	/**
@@ -523,6 +1492,38 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	}
 
 	/**
+	 * Removes all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63; from the database.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByEmailAddressAndFqgnAndGroupPermission(
+		String emailAddress, String fqgn, boolean groupPermission)
+		throws SystemException {
+		for (Permissions permissions : findByEmailAddressAndFqgnAndGroupPermission(
+				emailAddress, fqgn, groupPermission)) {
+			remove(permissions);
+		}
+	}
+
+	/**
+	 * Removes all the permissionses where fqgn = &#63; and groupPermission = &#63; from the database.
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByFqgnAndGroupPermission(String fqgn,
+		boolean groupPermission) throws SystemException {
+		for (Permissions permissions : findByFqgnAndGroupPermission(fqgn,
+				groupPermission)) {
+			remove(permissions);
+		}
+	}
+
+	/**
 	 * Removes all the permissionses from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -531,6 +1532,166 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		for (Permissions permissions : findAll()) {
 			remove(permissions);
 		}
+	}
+
+	/**
+	 * Returns the number of permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @return the number of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByEmailAddressAndFqgnAndGroupPermission(
+		String emailAddress, String fqgn, boolean groupPermission)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { emailAddress, fqgn, groupPermission };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_PERMISSIONS_WHERE);
+
+			if (emailAddress == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_1);
+			}
+			else {
+				if (emailAddress.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_2);
+				}
+			}
+
+			if (fqgn == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_1);
+			}
+			else {
+				if (fqgn.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (emailAddress != null) {
+					qPos.add(emailAddress);
+				}
+
+				if (fqgn != null) {
+					qPos.add(fqgn);
+				}
+
+				qPos.add(groupPermission);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_EMAILADDRESSANDFQGNANDGROUPPERMISSION,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of permissionses where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @return the number of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByFqgnAndGroupPermission(String fqgn,
+		boolean groupPermission) throws SystemException {
+		Object[] finderArgs = new Object[] { fqgn, groupPermission };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_PERMISSIONS_WHERE);
+
+			if (fqgn == null) {
+				query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_1);
+			}
+			else {
+				if (fqgn.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_FQGNANDGROUPPERMISSION_GROUPPERMISSION_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (fqgn != null) {
+					qPos.add(fqgn);
+				}
+
+				qPos.add(groupPermission);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
 	}
 
 	/**
@@ -611,9 +1772,31 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_PERMISSIONS = "SELECT permissions FROM Permissions permissions";
+	private static final String _SQL_SELECT_PERMISSIONS_WHERE = "SELECT permissions FROM Permissions permissions WHERE ";
 	private static final String _SQL_COUNT_PERMISSIONS = "SELECT COUNT(permissions) FROM Permissions permissions";
+	private static final String _SQL_COUNT_PERMISSIONS_WHERE = "SELECT COUNT(permissions) FROM Permissions permissions WHERE ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_1 =
+		"permissions.emailAddress IS NULL AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_2 =
+		"permissions.emailAddress = ? AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_EMAILADDRESS_3 =
+		"(permissions.emailAddress IS NULL OR permissions.emailAddress = ?) AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_1 =
+		"permissions.fqgn IS NULL AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_2 =
+		"permissions.fqgn = ? AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_FQGN_3 =
+		"(permissions.fqgn IS NULL OR permissions.fqgn = ?) AND ";
+	private static final String _FINDER_COLUMN_EMAILADDRESSANDFQGNANDGROUPPERMISSION_GROUPPERMISSION_2 =
+		"permissions.groupPermission = ?";
+	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_1 = "permissions.fqgn IS NULL AND ";
+	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_2 = "permissions.fqgn = ? AND ";
+	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_3 = "(permissions.fqgn IS NULL OR permissions.fqgn = ?) AND ";
+	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_GROUPPERMISSION_2 =
+		"permissions.groupPermission = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "permissions.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Permissions exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Permissions exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(PermissionsPersistenceImpl.class);

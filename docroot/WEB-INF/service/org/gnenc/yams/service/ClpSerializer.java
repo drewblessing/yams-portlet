@@ -209,6 +209,13 @@ public class ClpSerializer {
 
 				method9.invoke(newModel, value9);
 
+				Method method10 = newModelClass.getMethod("setGroupPermission",
+						new Class[] { Boolean.TYPE });
+
+				Boolean value10 = new Boolean(oldCplModel.getGroupPermission());
+
+				method10.invoke(newModel, value10);
+
 				return newModel;
 			}
 			catch (Exception e) {
@@ -427,6 +434,13 @@ public class ClpSerializer {
 				Long value9 = (Long)method9.invoke(oldModel, (Object[])null);
 
 				newModel.setPermissionsGrantable(value9);
+
+				Method method10 = oldModelClass.getMethod("getGroupPermission");
+
+				Boolean value10 = (Boolean)method10.invoke(oldModel,
+						(Object[])null);
+
+				newModel.setGroupPermission(value10);
 
 				return newModel;
 			}

@@ -130,7 +130,7 @@ public class LdapAccountHelper {
 			account.getMail().addAll(
 					ldap.getMail() == null ? Collections.<String>emptyList() : ldap.getMail());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
-			
+			account.setAttribute("dn", ldap.getDn().toString());
 //			account.setDepartmentName(ldap.getDepartmentName());
 			
 //			account.setEmployeeType(EmployeeType.valueOf(ldap.getEmployeeType()));

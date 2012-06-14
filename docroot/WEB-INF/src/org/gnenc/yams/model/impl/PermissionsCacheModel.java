@@ -35,7 +35,7 @@ public class PermissionsCacheModel implements CacheModel<Permissions>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{id=");
 		sb.append(id);
@@ -57,6 +57,8 @@ public class PermissionsCacheModel implements CacheModel<Permissions>,
 		sb.append(permissions);
 		sb.append(", permissionsGrantable=");
 		sb.append(permissionsGrantable);
+		sb.append(", groupPermission=");
+		sb.append(groupPermission);
 		sb.append("}");
 
 		return sb.toString();
@@ -106,6 +108,7 @@ public class PermissionsCacheModel implements CacheModel<Permissions>,
 
 		permissionsImpl.setPermissions(permissions);
 		permissionsImpl.setPermissionsGrantable(permissionsGrantable);
+		permissionsImpl.setGroupPermission(groupPermission);
 
 		permissionsImpl.resetOriginalValues();
 
@@ -122,4 +125,5 @@ public class PermissionsCacheModel implements CacheModel<Permissions>,
 	public String fqgn;
 	public long permissions;
 	public long permissionsGrantable;
+	public boolean groupPermission;
 }

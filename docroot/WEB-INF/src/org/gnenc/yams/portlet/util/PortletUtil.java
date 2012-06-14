@@ -19,23 +19,32 @@
 package org.gnenc.yams.portlet.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import javax.naming.Name;
 import javax.portlet.ActionRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Permissions;
 import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
+import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
+import org.gnenc.yams.service.PermissionsLocalServiceUtil;
 
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 
-public class PortletUtil {
+public class PortletUtil {	
 	public static String editAccount(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) {
 		// TODO Auto-generated method stub
@@ -54,7 +63,24 @@ public class PortletUtil {
 		
 		return result;
 	}
-
+	
+	public static Account getAccountFromPortalUser(RenderRequest request, User user) 
+			throws Exception {
+		List<Account> accounts = null;
+		
+		request.setAttribute("emailAddress", user.getEmailAddress());
+		UserSearchTerms searchTerms = new UserSearchTerms(request);
+		
+		accounts = Search.getAccounts(searchTerms, StringPool.BLANK, StringPool.BLANK);
+		
+		if (!(accounts.size() == 1)) {
+			//TODO: Create custom exception
+			throw new Exception();
+		}
+		
+		return accounts.get(0);
+	}
+	
 	public static Account getAccountFromRequest(RenderRequest request) {
 		UserSearchTerms searchTerms = new UserSearchTerms(request);
 		Account account = new Account();
@@ -72,6 +98,147 @@ public class PortletUtil {
 		}
 		
 		return account;
+	}
+	
+	private static String getBinaryPermissions(
+			Account callingAccount, Account account, String fqgn, boolean group) {
+		long decimal = 0;
+		boolean selfCheck = false;
+		if ((Validator.isNull(fqgn)) && (callingAccount.equals(account))) {
+			selfCheck = true;
+		} 
+		if (Validator.isNull(fqgn)) {
+			fqgn = getFqgnFromDn(account.getAttribute("dn"));
+		} 
+		List<String> fqgnLevels = getFqgnLevels(fqgn);
+		List<Permissions> results = new ArrayList<Permissions>();
+		
+		for (String fqgnLevel : fqgnLevels) {
+			try {
+				// Check group's self permissions at lowest level only
+				if (selfCheck) {
+					results = PermissionsLocalServiceUtil.
+							getByFqgnAndGroupPermission(
+									fqgnLevel, true);
+					if (results.size() == 1) {
+						decimal = results.get(0).getPermissions();
+						selfCheck = false;
+					}
+				} 
+				results = PermissionsLocalServiceUtil.
+						getByEmailAddressAndFqgnAndGroupPermission(
+								callingAccount.getMail().get(0), fqgnLevel, false);
+						
+				if (results.size() == 1) {
+					decimal = decimal | results.get(0).getPermissions();
+				}
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println(decimal);
+		String binaryPermissions = new StringBuffer(
+				Long.toBinaryString(decimal)).reverse().toString();
+		System.out.println(binaryPermissions);
+		return binaryPermissions;
+	}
+	
+	private static String getFqgnFromDn(String dn) {
+		String fqgn = "";
+		List<String> dnAttributes = new ArrayList<String>();
+		
+		dnAttributes.add("uid=");
+		dnAttributes.add("ou=");
+		dnAttributes.add("o=");
+		dnAttributes.add("dc=");
+		dnAttributes.add("cn=");
+		
+		// Strip past first comma
+		
+		int index = dn.indexOf(StringPool.COMMA);
+		dn = dn.substring(index+1);
+		
+		// Strip DN attributes
+		
+		for (String attr : dnAttributes) {
+			dn = dn.replace(attr, StringPool.BLANK);
+		}
+		
+		// Change periods to underscores
+		
+		dn = dn.replace(StringPool.PERIOD, StringPool.UNDERLINE);
+		
+		// Reverse order for fqgn
+		
+		List<String> tokens = Arrays.asList(dn.split(StringPool.COMMA));
+		Collections.reverse(tokens);
+		for (int i=0; i<tokens.size(); i++) {
+			if (i == tokens.size()-1) {
+				fqgn += tokens.get(i);
+			} else {
+				fqgn += tokens.get(i) + StringPool.PERIOD;
+			}
+		}
+		
+		return fqgn;
+	}
+	
+	private static List<String> getFqgnLevels(String fqgn) {
+		List<String> fqgnList = new ArrayList<String>();
+		String[] levels = fqgn.split("\\.");
+		
+		
+		for (int i=0; i<levels.length; i++) {
+			if (i == 0) {
+				fqgnList.add(levels[i]);
+			} else {
+				fqgnList.add(fqgnList.get(i-1) + "." + levels[i]);
+			}
+		}
+		Collections.reverse(fqgnList);
+		
+		return fqgnList;
+	}
+	
+	public static boolean hasGroupPermission(Account account, String permission, String fqgn) {
+		return hasPermission(account, null, permission, fqgn);
+	}
+	
+	public static boolean hasPermission(Account callingAccount, Account account, String permission) {
+		return hasPermission(callingAccount, account, permission, null);
+	}
+	
+	private static boolean hasPermission(
+			Account callingAccount, Account account, String permission, String fqgn) {
+		String binaryPermissions;
+		if (permission.contains("self")) {
+			binaryPermissions = getBinaryPermissions(callingAccount, account, null, true);
+		} else {
+			binaryPermissions = getBinaryPermissions(callingAccount, account, fqgn, false);
+		}
+		int permissionBit = 0;
+		
+		try {
+			permissionBit = PermissionsDefinedLocalServiceUtil.
+					getPermissionsDefined(permission).getBitLocation();
+		} catch (PortalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			if (binaryPermissions.charAt(permissionBit) == '1') {
+				System.out.println(permissionBit);
+				return true;
+			} else {
+				return false;
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			return false;
+		}
 	}
 	
 	private static boolean validatePasswordFields(
@@ -102,12 +269,12 @@ public class PortletUtil {
 		
 		return result;
 	}
-
+	
 	// General
 	public final static String ACCOUNTS = "accounts";
 	
 	public final static String DEFINE_PERMISSIONS = "define-permissions";
-	
+
 	public final static String ORGANIZATIONS = "organizations";
 	
 	public final static String PERMISSIONS = "permissions";
@@ -125,7 +292,7 @@ public class PortletUtil {
 	// JSPs
 	public final static String ACCT_MGMT_TOOLBAR_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/toolbar.jsp";
-	
+
 	public final static String ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions.jsp";
 	
@@ -148,7 +315,7 @@ public class PortletUtil {
 			PORTLET_ACCT_MGMT_DIRECTORY + "/define_permissions.jsp";
 	
 	public final static String SEARCH_ACCOUNT_DETAILS_JSP = 
-			PORTLET_SEARCH_DIRECTORY + "/account/details.jsp";	
+			PORTLET_SEARCH_DIRECTORY + "/account/details.jsp";
 	
 	public final static String SEARCH_ACCOUNTS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/accounts.jsp";
@@ -171,5 +338,22 @@ public class PortletUtil {
 	
 	// Images	
 	public final static String STOCK_AVATAR = "/images/user_male_portrait.png";
+	
+	// Permission Keys
+	public final static String PERMISSION_ACCOUNT_ADD = "account_add";	
+	
+	public final static String PERMISSION_ACCOUNT_EDIT = "account_edit";
+	
+	public final static String PERMISSION_ACCOUNT_REMOVE = "account_remove";
+	
+	public final static String PERMISSION_ACCOUNT_REMOVE_FORCE = "account_remove_force";
+	
+	public final static String PERMISSION_GROUP_ADD = "group_add";
+	
+	public final static String PERMISSION_GROUP_EDIT = "group_edit";
+	
+	public final static String PERMISSION_GROUP_REMOVE = "group_remove";
+	
+	public final static String PERMISSION_SELF_EDIT_PASSWORD = "self_edit_password";	
 	
 }

@@ -230,4 +230,14 @@ public interface PermissionsLocalService extends PersistedModelLocalService {
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
+		java.lang.String email, java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.gnenc.yams.model.Permissions> getByFqgnAndGroupPermission(
+		java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

@@ -258,6 +258,20 @@ public class PermissionsLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
+		java.lang.String email, java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getByEmailAddressAndFqgnAndGroupPermission(email, fqgn,
+			group);
+	}
+
+	public static java.util.List<org.gnenc.yams.model.Permissions> getByFqgnAndGroupPermission(
+		java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getByFqgnAndGroupPermission(fqgn, group);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

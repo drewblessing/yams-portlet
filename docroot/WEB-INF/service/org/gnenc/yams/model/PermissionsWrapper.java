@@ -257,6 +257,33 @@ public class PermissionsWrapper implements Permissions,
 		_permissions.setPermissionsGrantable(permissionsGrantable);
 	}
 
+	/**
+	* Returns the group permission of this permissions.
+	*
+	* @return the group permission of this permissions
+	*/
+	public boolean getGroupPermission() {
+		return _permissions.getGroupPermission();
+	}
+
+	/**
+	* Returns <code>true</code> if this permissions is group permission.
+	*
+	* @return <code>true</code> if this permissions is group permission; <code>false</code> otherwise
+	*/
+	public boolean isGroupPermission() {
+		return _permissions.isGroupPermission();
+	}
+
+	/**
+	* Sets whether this permissions is group permission.
+	*
+	* @param groupPermission the group permission of this permissions
+	*/
+	public void setGroupPermission(boolean groupPermission) {
+		_permissions.setGroupPermission(groupPermission);
+	}
+
 	public boolean isNew() {
 		return _permissions.isNew();
 	}

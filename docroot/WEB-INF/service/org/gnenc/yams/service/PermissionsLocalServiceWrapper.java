@@ -250,6 +250,19 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 		_permissionsLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
+		java.lang.String email, java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.getByEmailAddressAndFqgnAndGroupPermission(email,
+			fqgn, group);
+	}
+
+	public java.util.List<org.gnenc.yams.model.Permissions> getByFqgnAndGroupPermission(
+		java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.getByFqgnAndGroupPermission(fqgn, group);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

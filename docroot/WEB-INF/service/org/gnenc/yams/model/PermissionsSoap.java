@@ -40,6 +40,7 @@ public class PermissionsSoap implements Serializable {
 		soapModel.setFqgn(model.getFqgn());
 		soapModel.setPermissions(model.getPermissions());
 		soapModel.setPermissionsGrantable(model.getPermissionsGrantable());
+		soapModel.setGroupPermission(model.getGroupPermission());
 
 		return soapModel;
 	}
@@ -172,6 +173,18 @@ public class PermissionsSoap implements Serializable {
 		_permissionsGrantable = permissionsGrantable;
 	}
 
+	public boolean getGroupPermission() {
+		return _groupPermission;
+	}
+
+	public boolean isGroupPermission() {
+		return _groupPermission;
+	}
+
+	public void setGroupPermission(boolean groupPermission) {
+		_groupPermission = groupPermission;
+	}
+
 	private long _id;
 	private long _companyId;
 	private long _userId;
@@ -182,4 +195,5 @@ public class PermissionsSoap implements Serializable {
 	private String _fqgn;
 	private long _permissions;
 	private long _permissionsGrantable;
+	private boolean _groupPermission;
 }

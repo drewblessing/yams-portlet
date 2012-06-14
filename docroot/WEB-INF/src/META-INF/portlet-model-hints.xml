@@ -12,6 +12,7 @@
 		<field name="fqgn" type="String" />
 		<field name="permissions" type="long" />
 		<field name="permissionsGrantable" type="long" />
+		<field name="groupPermission" type="boolean" />
 	</model>
 	<model name="org.gnenc.yams.model.PermissionsDefined">
 		<field name="permissionKey" type="String" />

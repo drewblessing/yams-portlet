@@ -64,6 +64,7 @@ public class UpgradePermissions extends UpgradeProcess {
 		addPermissionsDefined("group_add", defaultUserId);
 		addPermissionsDefined("group_edit", defaultUserId);
 		addPermissionsDefined("group_remove", defaultUserId);
+		addPermissionsDefined("self_edit_password", defaultUserId);
 		
 	}
 	

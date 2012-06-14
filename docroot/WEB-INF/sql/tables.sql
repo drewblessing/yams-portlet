@@ -8,7 +8,8 @@ create table yams_Permissions (
 	emailAddress VARCHAR(75) null,
 	fqgn VARCHAR(75) null,
 	permissions LONG,
-	permissionsGrantable LONG
+	permissionsGrantable LONG,
+	groupPermission BOOLEAN
 );
 
 create table yams_PermissionsDefined (

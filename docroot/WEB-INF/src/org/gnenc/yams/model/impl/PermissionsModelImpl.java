@@ -68,9 +68,10 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 			{ "emailAddress", Types.VARCHAR },
 			{ "fqgn", Types.VARCHAR },
 			{ "permissions", Types.BIGINT },
-			{ "permissionsGrantable", Types.BIGINT }
+			{ "permissionsGrantable", Types.BIGINT },
+			{ "groupPermission", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table yams_Permissions (id_ LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,emailAddress VARCHAR(75) null,fqgn VARCHAR(75) null,permissions LONG,permissionsGrantable LONG)";
+	public static final String TABLE_SQL_CREATE = "create table yams_Permissions (id_ LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,emailAddress VARCHAR(75) null,fqgn VARCHAR(75) null,permissions LONG,permissionsGrantable LONG,groupPermission BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table yams_Permissions";
 	public static final String ORDER_BY_JPQL = " ORDER BY permissions.emailAddress ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY yams_Permissions.emailAddress ASC";
@@ -83,7 +84,12 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.gnenc.yams.model.Permissions"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.gnenc.yams.model.Permissions"),
+			true);
+	public static long EMAILADDRESS_COLUMN_BITMASK = 1L;
+	public static long FQGN_COLUMN_BITMASK = 2L;
+	public static long GROUPPERMISSION_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.gnenc.yams.model.Permissions"));
 
@@ -185,7 +191,17 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 	}
 
 	public void setEmailAddress(String emailAddress) {
+		_columnBitmask = -1L;
+
+		if (_originalEmailAddress == null) {
+			_originalEmailAddress = _emailAddress;
+		}
+
 		_emailAddress = emailAddress;
+	}
+
+	public String getOriginalEmailAddress() {
+		return GetterUtil.getString(_originalEmailAddress);
 	}
 
 	public String getFqgn() {
@@ -198,7 +214,17 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 	}
 
 	public void setFqgn(String fqgn) {
+		_columnBitmask |= FQGN_COLUMN_BITMASK;
+
+		if (_originalFqgn == null) {
+			_originalFqgn = _fqgn;
+		}
+
 		_fqgn = fqgn;
+	}
+
+	public String getOriginalFqgn() {
+		return GetterUtil.getString(_originalFqgn);
 	}
 
 	public long getPermissions() {
@@ -215,6 +241,34 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 
 	public void setPermissionsGrantable(long permissionsGrantable) {
 		_permissionsGrantable = permissionsGrantable;
+	}
+
+	public boolean getGroupPermission() {
+		return _groupPermission;
+	}
+
+	public boolean isGroupPermission() {
+		return _groupPermission;
+	}
+
+	public void setGroupPermission(boolean groupPermission) {
+		_columnBitmask |= GROUPPERMISSION_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupPermission) {
+			_setOriginalGroupPermission = true;
+
+			_originalGroupPermission = _groupPermission;
+		}
+
+		_groupPermission = groupPermission;
+	}
+
+	public boolean getOriginalGroupPermission() {
+		return _originalGroupPermission;
+	}
+
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -257,6 +311,7 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 		permissionsImpl.setFqgn(getFqgn());
 		permissionsImpl.setPermissions(getPermissions());
 		permissionsImpl.setPermissionsGrantable(getPermissionsGrantable());
+		permissionsImpl.setGroupPermission(getGroupPermission());
 
 		permissionsImpl.resetOriginalValues();
 
@@ -307,6 +362,17 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 
 	@Override
 	public void resetOriginalValues() {
+		PermissionsModelImpl permissionsModelImpl = this;
+
+		permissionsModelImpl._originalEmailAddress = permissionsModelImpl._emailAddress;
+
+		permissionsModelImpl._originalFqgn = permissionsModelImpl._fqgn;
+
+		permissionsModelImpl._originalGroupPermission = permissionsModelImpl._groupPermission;
+
+		permissionsModelImpl._setOriginalGroupPermission = false;
+
+		permissionsModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -365,12 +431,14 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 
 		permissionsCacheModel.permissionsGrantable = getPermissionsGrantable();
 
+		permissionsCacheModel.groupPermission = getGroupPermission();
+
 		return permissionsCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{id=");
 		sb.append(getId());
@@ -392,13 +460,15 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 		sb.append(getPermissions());
 		sb.append(", permissionsGrantable=");
 		sb.append(getPermissionsGrantable());
+		sb.append(", groupPermission=");
+		sb.append(getGroupPermission());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.gnenc.yams.model.Permissions");
@@ -444,6 +514,10 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 			"<column><column-name>permissionsGrantable</column-name><column-value><![CDATA[");
 		sb.append(getPermissionsGrantable());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>groupPermission</column-name><column-value><![CDATA[");
+		sb.append(getGroupPermission());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -462,9 +536,15 @@ public class PermissionsModelImpl extends BaseModelImpl<Permissions>
 	private Date _createDate;
 	private Date _modifiedDate;
 	private String _emailAddress;
+	private String _originalEmailAddress;
 	private String _fqgn;
+	private String _originalFqgn;
 	private long _permissions;
 	private long _permissionsGrantable;
+	private boolean _groupPermission;
+	private boolean _originalGroupPermission;
+	private boolean _setOriginalGroupPermission;
 	private transient ExpandoBridge _expandoBridge;
+	private long _columnBitmask;
 	private Permissions _escapedModelProxy;
 }

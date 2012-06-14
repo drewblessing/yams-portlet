@@ -83,6 +83,14 @@ public class PermissionsLocalServiceClp implements PermissionsLocalService {
 
 		_setBeanIdentifierMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
 				"setBeanIdentifier", java.lang.String.class);
+
+		_getByEmailAddressAndFqgnAndGroupPermissionMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
+				"getByEmailAddressAndFqgnAndGroupPermission",
+				java.lang.String.class, java.lang.String.class, boolean.class);
+
+		_getByFqgnAndGroupPermissionMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
+				"getByFqgnAndGroupPermission", java.lang.String.class,
+				boolean.class);
 	}
 
 	public org.gnenc.yams.model.Permissions addPermissions(
@@ -545,6 +553,63 @@ public class PermissionsLocalServiceClp implements PermissionsLocalService {
 		}
 	}
 
+	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
+		java.lang.String email, java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_getByEmailAddressAndFqgnAndGroupPermissionMethodKey17,
+				ClpSerializer.translateInput(email),
+				ClpSerializer.translateInput(fqgn), group);
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.gnenc.yams.model.Permissions>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public java.util.List<org.gnenc.yams.model.Permissions> getByFqgnAndGroupPermission(
+		java.lang.String fqgn, boolean group)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_getByFqgnAndGroupPermissionMethodKey18,
+				ClpSerializer.translateInput(fqgn), group);
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.gnenc.yams.model.Permissions>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	public ClassLoaderProxy getClassLoaderProxy() {
 		return _classLoaderProxy;
 	}
@@ -567,4 +632,6 @@ public class PermissionsLocalServiceClp implements PermissionsLocalService {
 	private MethodKey _updatePermissionsMethodKey14;
 	private MethodKey _getBeanIdentifierMethodKey15;
 	private MethodKey _setBeanIdentifierMethodKey16;
+	private MethodKey _getByEmailAddressAndFqgnAndGroupPermissionMethodKey17;
+	private MethodKey _getByFqgnAndGroupPermissionMethodKey18;
 }

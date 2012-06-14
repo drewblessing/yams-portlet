@@ -219,6 +219,27 @@ public interface PermissionsModel extends AuditedModel, BaseModel<Permissions> {
 	 */
 	public void setPermissionsGrantable(long permissionsGrantable);
 
+	/**
+	 * Returns the group permission of this permissions.
+	 *
+	 * @return the group permission of this permissions
+	 */
+	public boolean getGroupPermission();
+
+	/**
+	 * Returns <code>true</code> if this permissions is group permission.
+	 *
+	 * @return <code>true</code> if this permissions is group permission; <code>false</code> otherwise
+	 */
+	public boolean isGroupPermission();
+
+	/**
+	 * Sets whether this permissions is group permission.
+	 *
+	 * @param groupPermission the group permission of this permissions
+	 */
+	public void setGroupPermission(boolean groupPermission);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);

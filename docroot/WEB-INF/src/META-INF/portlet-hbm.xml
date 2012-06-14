@@ -18,6 +18,7 @@
 		<property name="fqgn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="permissions" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="permissionsGrantable" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupPermission" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
 	<class name="org.gnenc.yams.model.impl.PermissionsDefinedImpl" table="yams_PermissionsDefined">
 		<cache usage="read-write" />

@@ -25,6 +25,7 @@
 			<basic name="fqgn" />
 			<basic name="permissions" />
 			<basic name="permissionsGrantable" />
+			<basic name="groupPermission" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
