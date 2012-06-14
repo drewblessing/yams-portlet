@@ -136,10 +136,10 @@ public class PortletUtil {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(decimal);
+		
 		String binaryPermissions = new StringBuffer(
 				Long.toBinaryString(decimal)).reverse().toString();
-		System.out.println(binaryPermissions);
+		
 		return binaryPermissions;
 	}
 	
@@ -231,7 +231,6 @@ public class PortletUtil {
 		
 		try {
 			if (binaryPermissions.charAt(permissionBit) == '1') {
-				System.out.println(permissionBit);
 				return true;
 			} else {
 				return false;
