@@ -30,10 +30,20 @@ public class PermissionsChecker extends PermissionsUtil {
 	 * able to perform the specified action at the company.dept.staff 
 	 * level as well.
 	 * <p>
+	 * To see if a user account has a particular permission on any group in the
+	 * system, simply send a null value to fqgn (see below for example).  This is
+	 * especially helpful for determining whether to display a toolbar item, etc. 
+	 * where it is not necessary at this point to check permission on a specific group.
+	 * <p>
 	 * Use: PermissionsChecker.hasGroupPermission(account,
-	 * 				PermissionChecker.PERMISSION_ACCOUNT_ADD, company.dept.staff);
+	 * 				PermissionChecker.PERMISSION_ACCOUNT_ADD, "company.dept.staff");
 	 * Returns true if the calling account can create an account in the
 	 * company.dept.staff group.
+	 * <p>
+	 * Use: PermissionsChecker.hasGroupPermission(account,
+	 * 				PermissionChecker.PERMISSION_ACCOUNT_ADD, null);
+	 * Returns true if the calling account can create an account in one or more
+	 * groups in the system.
 	 * 
 	 * @param account		The currently logged in user's account 
 	 * @param permission	The permissions to check - Must be a constant

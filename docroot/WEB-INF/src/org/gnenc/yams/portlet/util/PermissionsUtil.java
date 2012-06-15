@@ -16,6 +16,40 @@ import com.liferay.portal.kernel.util.Validator;
 public class PermissionsUtil {
 	protected static String getBinaryPermissions(
 			Account callingAccount, Account account, String fqgn) {
+		long decimal = 0;
+		
+		if (Validator.isNull(fqgn) && Validator.isNull(account)) {
+			decimal = getBinaryPermissionsByEmailAddress(callingAccount.getMail().get(0));
+		} else if (Validator.isNull(fqgn)) {
+			fqgn = getFqgnFromDn(account.getAttribute("dn"));
+			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn);
+		} else {
+			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn);
+		}
+		
+		String binaryPermissions = new StringBuffer(
+				Long.toBinaryString(decimal)).reverse().toString();
+		
+		return binaryPermissions;
+	}
+
+	private static long getBinaryPermissionsByEmailAddress(String email) {
+		List<Permissions> results = new ArrayList<Permissions>();
+		long decimal = 0;
+		try {
+			results = PermissionsLocalServiceUtil.getByEmailAddress(email);
+			for (Permissions permission : results) {
+				decimal = decimal | permission.getPermissions();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return decimal;
+	}
+	
+	private static long getBinaryPermissionsByFqgn(
+			Account callingAccount, Account account, String fqgn) {
+		List<String> fqgnLevels = new ArrayList<String>();
 		List<Permissions> results = new ArrayList<Permissions>();
 		long decimal = 0;
 		boolean selfCheck = false;
@@ -23,23 +57,6 @@ public class PermissionsUtil {
 		if ((Validator.isNull(fqgn)) && (callingAccount.equals(account))) {
 			selfCheck = true;
 		} 
-		
-		List<String> fqgnLevels = new ArrayList<String>();
-		if (Validator.isNull(fqgn) && Validator.isNull(account)) {
-			try {
-				results = PermissionsLocalServiceUtil.getByEmailAddress(callingAccount.getMail().get(0));
-				for (Permissions permission : results) {
-					decimal = decimal | permission.getPermissions();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else if (Validator.isNull(fqgn)) {
-			fqgn = getFqgnFromDn(account.getAttribute("dn"));
-			fqgnLevels = getFqgnLevels(fqgn);
-		} else {
-			fqgnLevels = getFqgnLevels(fqgn);
-		}
 		
 		for (String fqgnLevel : fqgnLevels) {
 			try {
@@ -65,10 +82,7 @@ public class PermissionsUtil {
 			}
 		}
 		
-		String binaryPermissions = new StringBuffer(
-				Long.toBinaryString(decimal)).reverse().toString();
-		
-		return binaryPermissions;
+		return decimal;
 	}
 	
 	protected static String getFqgnFromDn(String dn) {
