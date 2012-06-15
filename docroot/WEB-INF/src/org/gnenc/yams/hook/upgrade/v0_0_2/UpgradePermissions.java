@@ -75,6 +75,13 @@ public class UpgradePermissions extends UpgradeProcess {
 		addPermissionsDefined(
 				PermissionsChecker.PERMISSION_GROUP_REMOVE, defaultUserId);
 		
+		addDefaultUserPermissions();
+		
+	}
+
+	private void addDefaultUserPermissions() {
+		// TODO Add full permissions for the default user
+		
 	}
 	
 }
