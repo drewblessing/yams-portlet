@@ -130,72 +130,72 @@ public class PortletUtil {
 	}
 	
 	// General
-	public final static String ACCOUNTS = "accounts";
+	public static final String ACCOUNTS = "accounts";
 	
-	public final static String DEFINE_PERMISSIONS = "define-permissions";
+	public static final String DEFINE_PERMISSIONS = "define-permissions";
 
-	public final static String ORGANIZATIONS = "organizations";
+	public static final String ORGANIZATIONS = "organizations";
 	
-	public final static String PERMISSIONS = "permissions";
+	public static final String PERMISSIONS = "permissions";
 	
-	public final static String SEARCH_TABS_NAMES = "accounts,organizations";
+	public static final String SEARCH_TABS_NAMES = "accounts,organizations";
 	
 	// Directories	
-	public final static String SEARCH_TABS_JSP_DIRECTORY = "/html/portlet/search/tabs";
+	public static final String SEARCH_TABS_JSP_DIRECTORY = "/html/portlet/search/tabs";
 	
-	public final static String PORTLET_SEARCH_DIRECTORY = "/html/portlet/search";
+	public static final String PORTLET_SEARCH_DIRECTORY = "/html/portlet/search";
 	
-	public final static String PORTLET_ACCT_MGMT_DIRECTORY = 
+	public static final String PORTLET_ACCT_MGMT_DIRECTORY = 
 			"/html/portlet/account-management";
 	
 	// JSPs
-	public final static String ACCT_MGMT_TOOLBAR_JSP = 
+	public static final String ACCT_MGMT_TOOLBAR_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/toolbar.jsp";
 
-	public final static String ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP = 
+	public static final String ACCT_MGMT_ACCOUNT_ADMIN_ACTIONS_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions.jsp";
 	
-	public final static String ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP = 
+	public static final String ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard.jsp";
 	
-	public final static String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP = 
+	public static final String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/change_password.jsp";
 	
-	public final static String ACCT_MGMT_ACCOUNT_EDIT_JSP = 
+	public static final String ACCT_MGMT_ACCOUNT_EDIT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit.jsp";
 	
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_account.jsp";
 	
-	public final static String ACCT_MGMT_ORGANIZATION_EDIT_JSP = 
+	public static final String ACCT_MGMT_ORGANIZATION_EDIT_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";
 	
-	public final static String ACCT_MGMT_DEFINE_PERMISSIONS_JSP =
+	public static final String ACCT_MGMT_DEFINE_PERMISSIONS_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/define_permissions.jsp";
 	
-	public final static String SEARCH_ACCOUNT_DETAILS_JSP = 
+	public static final String SEARCH_ACCOUNT_DETAILS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/account/details.jsp";
 	
-	public final static String SEARCH_ACCOUNTS_JSP = 
+	public static final String SEARCH_ACCOUNTS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/accounts.jsp";
 	
-	public final static String SEARCH_ORGANIZATIONS_JSP = 
+	public static final String SEARCH_ORGANIZATIONS_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/organizations.jsp";
 	
-	public final static String SEARCH_TABS_ACCOUNTS_JSP = 
+	public static final String SEARCH_TABS_ACCOUNTS_JSP = 
 			SEARCH_TABS_JSP_DIRECTORY + "/accounts.jsp";
 	
-	public final static String SEARCH_TABS_ORGANIZATIONS_JSP = 
+	public static final String SEARCH_TABS_ORGANIZATIONS_JSP = 
 			SEARCH_TABS_JSP_DIRECTORY + "/organizations.jsp";
 	
-	public final static String SEARCH_VIEW_ACCOUNT_JSP = 
+	public static final String SEARCH_VIEW_ACCOUNT_JSP = 
 			PORTLET_SEARCH_DIRECTORY + "/view_account.jsp";
 	
-	public final static String SEARCH_VIEW_JSP = PORTLET_SEARCH_DIRECTORY + "/view.jsp";
+	public static final String SEARCH_VIEW_JSP = PORTLET_SEARCH_DIRECTORY + "/view.jsp";
 	
-	public final static String TABS_JSP = PORTLET_SEARCH_DIRECTORY + "/tabs1.jsp";
+	public static final String TABS_JSP = PORTLET_SEARCH_DIRECTORY + "/tabs1.jsp";
 	
 	// Images	
-	public final static String STOCK_AVATAR = "/images/user_male_portrait.png";
+	public static final String STOCK_AVATAR = "/images/user_male_portrait.png";
 	
 }

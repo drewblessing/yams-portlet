@@ -1,8 +1,9 @@
-package org.gnenc.yams.hook.upgrade.v1_0_0;
+package org.gnenc.yams.hook.upgrade.v0_0_2;
 
 import java.util.List;
 
 import org.gnenc.yams.model.PermissionsDefined;
+import org.gnenc.yams.portlet.util.PermissionsChecker;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -57,14 +58,22 @@ public class UpgradePermissions extends UpgradeProcess {
 
 	protected void setupPermissionsDefined(long defaultUserId) 
 			throws Exception {
-		addPermissionsDefined("account_add", defaultUserId);
-		addPermissionsDefined("account_edit", defaultUserId);
-		addPermissionsDefined("account_remove", defaultUserId);
-		addPermissionsDefined("account_remove_force", defaultUserId);
-		addPermissionsDefined("group_add", defaultUserId);
-		addPermissionsDefined("group_edit", defaultUserId);
-		addPermissionsDefined("group_remove", defaultUserId);
-		addPermissionsDefined("self_edit_password", defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_ADD, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_EDIT, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_REMOVE, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_GROUP_ADD, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_GROUP_EDIT, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_GROUP_REMOVE, defaultUserId);
 		
 	}
 	

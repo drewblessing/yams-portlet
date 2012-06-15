@@ -2,7 +2,7 @@ package org.gnenc.yams.hook.upgrade;
 
 import java.util.List;
 
-import org.gnenc.yams.hook.upgrade.v1_0_0.UpgradePermissions;
+import org.gnenc.yams.hook.upgrade.v0_0_2.UpgradePermissions;
 import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 
@@ -12,7 +12,7 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 /**
  * @author Drew A. Blessing
  */
-public class UpgradeProcess_1_0_0  extends UpgradeProcess {
+public class UpgradeProcess_0_0_2  extends UpgradeProcess {
 	@Override
 	public int getThreshold() {
 		return 100;

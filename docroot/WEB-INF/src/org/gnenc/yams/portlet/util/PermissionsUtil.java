@@ -115,17 +115,19 @@ public class PermissionsUtil {
 	}
 	
 	// Permission Keys
-	public final static String PERMISSION_ACCOUNT_ADD = "account_add";	
+	public static final String PERMISSION_ACCOUNT_ADD = "account-add";	
 	
-	public final static String PERMISSION_ACCOUNT_EDIT = "account_edit";
+	public static final String PERMISSION_ACCOUNT_EDIT = "account-edit";
 	
-	public final static String PERMISSION_ACCOUNT_REMOVE = "account_remove";
+	public static final String PERMISSION_ACCOUNT_EDIT_PASSWORD = "account-edit-password";
 	
-	public final static String PERMISSION_ACCOUNT_REMOVE_FORCE = "account_remove_force";
+	public static final String PERMISSION_ACCOUNT_REMOVE = "account-remove";
 	
-	public final static String PERMISSION_GROUP_ADD = "group_add";
+	public static final String PERMISSION_ACCOUNT_REMOVE_FORCE = "account-remove-force";
 	
-	public final static String PERMISSION_GROUP_EDIT = "group_edit";
+	public static final String PERMISSION_GROUP_ADD = "group-add";
 	
-	public final static String PERMISSION_GROUP_REMOVE = "group_remove";	
+	public static final String PERMISSION_GROUP_EDIT = "group-edit";
+	
+	public static final String PERMISSION_GROUP_REMOVE = "group-remove";	
 }

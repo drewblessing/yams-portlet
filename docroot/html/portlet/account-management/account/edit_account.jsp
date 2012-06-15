@@ -26,12 +26,12 @@ Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 request.setAttribute("account.selAccount", selAccount);
 %>
-<%= PortletUtil.hasGroupPermission(selAccount,PortletUtil.PERMISSION_ACCOUNT_ADD,"gnenc.esu10.esu10_org") %>
+<%= PermissionsChecker.hasGroupPermission(selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD,"gnenc.esu10.esu10_org") %>
 
-Account Add <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_ACCOUNT_ADD) %>
-Account Edit <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_ACCOUNT_EDIT) %>
-Account Remove <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_ACCOUNT_REMOVE) %>
-Account Remove Force <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_ACCOUNT_REMOVE_FORCE) %>
-Group Add <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_GROUP_ADD) %>
-Group Edit <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_GROUP_EDIT) %>
-Group Remove <%= PortletUtil.hasPermission(selAccount,selAccount,PortletUtil.PERMISSION_GROUP_REMOVE) %>
+Account Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD) %>
+Account Edit <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>
+Account Remove <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE) %>
+Account Remove Force <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE) %>
+Group Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_ADD) %>
+Group Edit <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_EDIT) %>
+Group Remove <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_REMOVE) %>
