@@ -24,35 +24,17 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL", redirect);
-
-Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 %>
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>" >
 	<liferay-util:include 
 			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>" 
 			servletContext="<%=this.getServletContext()%>" >
-		<liferay-util:param name="toolbarItem" value='<%= (selectedAccount == null) ? "add" : "view" %>' />
+		<liferay-util:param name="toolbarItem" value='<%= PortletUtil.PERMISSIONS %>' />
 	</liferay-util:include>
 </c:if>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
+	title='<%= PortletUtil.DEFINE_PERMISSIONS %>'
 />
-
-<c:choose>
-	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
-		<liferay-util:include 
-				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP %>" 
-				servletContext="<%=this.getServletContext()%>" />
-	</c:when>
-	<c:otherwise>
-		<liferay-util:include
-				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP %>" 
-				servletContext="<%=this.getServletContext()%>" >
-			<liferay-util:param name="uid" value="<%=selectedAccount.getUid() %>" />	
-			<liferay-util:param name="backURL" value="<%= backURL %>" />	
-		</liferay-util:include>
-	</c:otherwise>
-</c:choose>

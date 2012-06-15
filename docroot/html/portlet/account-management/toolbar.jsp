@@ -36,10 +36,6 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("search") ? "current" : StringPool.BLANK %>">
 		<a href="<%= searchViewURL %>"><liferay-ui:message key="search" /></a>
 	</span>
-
-<%-- 	<span class="lfr-toolbar-button add-button <%= toolbarItem.equals("add") ? "current" : StringPool.BLANK %>"> --%>
-<%-- 		<a href="<%= viewUsersURL %>"><liferay-ui:message key="add" /></a> --%>
-<!-- 	</span> -->
 	
 	<liferay-ui:icon-menu align="left" 
 			cssClass='<%= "lfr-toolbar-button add-button " + (toolbarItem.equals("add") ? "current" : StringPool.BLANK) %>' 
@@ -49,35 +45,33 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 			message="add" 
 			showWhenSingleIcon="<%= true %>"
 	>
-<%-- 			<c:if test="<%= hasAddUserPermission %>"> --%>
-				<portlet:renderURL var="addUserURL">
-					<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
-					<portlet:param name="redirect" value="<%= searchViewURL %>" />
-				</portlet:renderURL>
+	
+		<c:if test="<%= PermissionsChecker.hasGroupPermission(
+				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, null) %>">
+			<portlet:renderURL var="addUserURL">
+				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
+				<portlet:param name="redirect" value="<%= searchViewURL %>" />
+			</portlet:renderURL>
+				
+			<liferay-ui:icon
+				image="user_icon"
+				message="user"
+				url="<%= addUserURL %>"
+			/>
+		</c:if>
+		<c:if test="<%= PermissionsChecker.hasGroupPermission(
+				callingAccount, PermissionsChecker.PERMISSION_GROUP_ADD, null) %>">
 
-				<liferay-ui:icon
-					image="user_icon"
-					message="user"
-					url="<%= addUserURL %>"
-				/>
-<%-- 			</c:if> --%>
+			<portlet:renderURL var="addOrganizationURL">
+				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ORGANIZATION_EDIT_JSP %>" />
+				<portlet:param name="redirect" value="<%= searchViewURL %>" />
+			</portlet:renderURL>
+			<liferay-ui:icon
+				image="group"
+				message='organization'
+				url="<%= addOrganizationURL %>"
+			/>
 
-<%-- 			<c:if test="<%= hasAddOrganizationPermission %>"> --%>
-
-
-					<portlet:renderURL var="addOrganizationURL">
-						<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ORGANIZATION_EDIT_JSP %>" />
-						<portlet:param name="redirect" value="<%= searchViewURL %>" />
-					</portlet:renderURL>
-
-					<liferay-ui:icon
-						image="group"
-						message='organization'
-						url="<%= addOrganizationURL %>"
-					/>
-
-
-<%-- 			</c:if> --%>
-		</liferay-ui:icon-menu>
-
+		</c:if>
+	</liferay-ui:icon-menu>
 </div>

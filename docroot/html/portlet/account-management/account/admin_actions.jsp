@@ -34,9 +34,9 @@ List<String> mail = selAccount.getMail();
 String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 %>
 
-<liferay-ui:icon-menu>
-
-<c:if test="<%= permissionChecker.isOmniadmin() %>" >
+<liferay-ui:icon-menu showWhenSingleIcon="<%= true %>">
+<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(
+			callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>" >
 	<portlet:renderURL var="editAccountRenderURL" >
 		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
@@ -48,7 +48,8 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 	</span>	
 </c:if>
 
-<c:if test="<%=mail.contains(user.getEmailAddress()) || permissionChecker.isOmniadmin() %>" >
+<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount, 
+			PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>" >
 	<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
