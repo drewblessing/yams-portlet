@@ -40,6 +40,7 @@
 <%@ page import="org.gnenc.yams.portlet.search.UserDisplayTerms" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearch" %>
 <%@ page import="org.gnenc.yams.portlet.search.UserSearchTerms" %>
+<%@ page import="org.gnenc.yams.portlet.util.PermissionsChecker" %>
 <%@ page import="org.gnenc.yams.portlet.util.PortletKeys" %>
 <%@ page import="org.gnenc.yams.portlet.util.PortletUtil" %>
 <%@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
