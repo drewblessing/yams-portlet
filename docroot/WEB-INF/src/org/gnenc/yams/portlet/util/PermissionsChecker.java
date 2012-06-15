@@ -5,6 +5,7 @@ import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Drew A. Blessing
@@ -84,12 +85,13 @@ public class PermissionsChecker extends PermissionsUtil {
 	
 	private static boolean hasPermission(
 			Account callingAccount, Account account, String permission, String fqgn) {
+		
+		if (Validator.isNull(callingAccount) || Validator.isNull(account)) {
+			return false;
+		}
+		
 		String binaryPermissions;
-//		if (permission.contains("self")) {
-//			binaryPermissions = getBinaryPermissions(callingAccount, account, null, true);
-//		} else {
-			binaryPermissions = getBinaryPermissions(callingAccount, account, fqgn);
-//		}
+		binaryPermissions = getBinaryPermissions(callingAccount, account, fqgn);
 		int permissionBit = 0;
 		
 		try {

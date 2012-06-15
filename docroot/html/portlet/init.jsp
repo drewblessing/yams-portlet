@@ -76,3 +76,12 @@
 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
+
+<%
+Account callingAccount = null;
+if (Validator.isNull(request.getSession().getAttribute("callingAccount"))) {
+	callingAccount = PortletUtil.getAccountFromPortalUser(renderRequest, user);
+} else {
+	callingAccount = (Account)request.getSession().getAttribute("callingAccount");
+}
+%>

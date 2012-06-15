@@ -19,26 +19,21 @@
 package org.gnenc.yams.portlet.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import javax.naming.Name;
 import javax.portlet.ActionRequest;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Permissions;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
-import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
-import org.gnenc.yams.service.PermissionsLocalServiceUtil;
 
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -66,17 +61,26 @@ public class PortletUtil {
 	
 	public static Account getAccountFromPortalUser(RenderRequest request, User user) 
 			throws Exception {
+		
 		List<Account> accounts = null;
 		
-		request.setAttribute("emailAddress", user.getEmailAddress());
-		UserSearchTerms searchTerms = new UserSearchTerms(request);
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.mail,user.getEmailAddress(),false));
 		
-		accounts = Search.getAccounts(searchTerms, StringPool.BLANK, StringPool.BLANK);
-		
-		if (!(accounts.size() == 1)) {
+		accounts = Search.getAccounts(filters, null, StringPool.BLANK, StringPool.BLANK);
+
+		if (accounts.size() == 0) {
+			return null;
+		} else if (!(accounts.size() == 1)) {
 			//TODO: Create custom exception
 			throw new Exception();
 		}
+		
+		// Set session attribute to save on calls to LDAP later
+		
+		request.getPortletSession().setAttribute(
+				"callingAccount", accounts.get(0), PortletSession.APPLICATION_SCOPE);
 		
 		return accounts.get(0);
 	}
