@@ -240,4 +240,9 @@ public interface PermissionsLocalService extends PersistedModelLocalService {
 	public java.util.List<org.gnenc.yams.model.Permissions> getByFqgnAndGroupPermission(
 		java.lang.String fqgn, boolean group)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddress(
+		java.lang.String email)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

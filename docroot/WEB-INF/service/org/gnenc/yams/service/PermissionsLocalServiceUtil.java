@@ -272,6 +272,12 @@ public class PermissionsLocalServiceUtil {
 		return getService().getByFqgnAndGroupPermission(fqgn, group);
 	}
 
+	public static java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddress(
+		java.lang.String email)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getByEmailAddress(email);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

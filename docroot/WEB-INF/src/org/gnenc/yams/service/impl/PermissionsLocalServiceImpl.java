@@ -50,4 +50,8 @@ public class PermissionsLocalServiceImpl extends PermissionsLocalServiceBaseImpl
 			String fqgn, boolean group) throws SystemException {
 		return permissionsPersistence.findByFqgnAndGroupPermission(fqgn, group);
 	}
+	
+	public List<Permissions> getByEmailAddress(String email) throws SystemException {
+		return permissionsPersistence.findByEmailAddress(email);
+	}
 }

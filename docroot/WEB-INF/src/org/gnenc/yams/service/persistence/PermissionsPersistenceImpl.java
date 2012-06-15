@@ -134,6 +134,26 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByFqgnAndGroupPermission",
 			new String[] { String.class.getName(), Boolean.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESS =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByEmailAddress",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS =
+		new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByEmailAddress",
+			new String[] { String.class.getName() },
+			PermissionsModelImpl.EMAILADDRESS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_EMAILADDRESS = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
+			PermissionsModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByEmailAddress",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
@@ -394,6 +414,25 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FQGNANDGROUPPERMISSION,
 					args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FQGNANDGROUPPERMISSION,
+					args);
+			}
+
+			if ((permissionsModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						permissionsModelImpl.getOriginalEmailAddress()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EMAILADDRESS,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS,
+					args);
+
+				args = new Object[] { permissionsModelImpl.getEmailAddress() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EMAILADDRESS,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS,
 					args);
 			}
 		}
@@ -1377,6 +1416,381 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	}
 
 	/**
+	 * Returns all the permissionses where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddress(String emailAddress)
+		throws SystemException {
+		return findByEmailAddress(emailAddress, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the permissionses where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @return the range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddress(String emailAddress, int start,
+		int end) throws SystemException {
+		return findByEmailAddress(emailAddress, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the permissionses where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param start the lower bound of the range of permissionses
+	 * @param end the upper bound of the range of permissionses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Permissions> findByEmailAddress(String emailAddress, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS;
+			finderArgs = new Object[] { emailAddress };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESS;
+			finderArgs = new Object[] {
+					emailAddress,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+			if (emailAddress == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1);
+			}
+			else {
+				if (emailAddress.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (emailAddress != null) {
+					qPos.add(emailAddress);
+				}
+
+				list = (List<Permissions>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByEmailAddress_First(String emailAddress,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		List<Permissions> list = findByEmailAddress(emailAddress, 0, 1,
+				orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("emailAddress=");
+			msg.append(emailAddress);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions findByEmailAddress_Last(String emailAddress,
+		OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		int count = countByEmailAddress(emailAddress);
+
+		List<Permissions> list = findByEmailAddress(emailAddress, count - 1,
+				count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("emailAddress=");
+			msg.append(emailAddress);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchPermissionsException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param id the primary key of the current permissions
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next permissions
+	 * @throws org.gnenc.yams.NoSuchPermissionsException if a permissions with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions[] findByEmailAddress_PrevAndNext(long id,
+		String emailAddress, OrderByComparator orderByComparator)
+		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = findByPrimaryKey(id);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Permissions[] array = new PermissionsImpl[3];
+
+			array[0] = getByEmailAddress_PrevAndNext(session, permissions,
+					emailAddress, orderByComparator, true);
+
+			array[1] = permissions;
+
+			array[2] = getByEmailAddress_PrevAndNext(session, permissions,
+					emailAddress, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Permissions getByEmailAddress_PrevAndNext(Session session,
+		Permissions permissions, String emailAddress,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_PERMISSIONS_WHERE);
+
+		if (emailAddress == null) {
+			query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1);
+		}
+		else {
+			if (emailAddress.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2);
+			}
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(PermissionsModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (emailAddress != null) {
+			qPos.add(emailAddress);
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(permissions);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Permissions> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns all the permissionses.
 	 *
 	 * @return the permissionses
@@ -1519,6 +1933,19 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		boolean groupPermission) throws SystemException {
 		for (Permissions permissions : findByFqgnAndGroupPermission(fqgn,
 				groupPermission)) {
+			remove(permissions);
+		}
+	}
+
+	/**
+	 * Removes all the permissionses where emailAddress = &#63; from the database.
+	 *
+	 * @param emailAddress the email address
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByEmailAddress(String emailAddress)
+		throws SystemException {
+		for (Permissions permissions : findByEmailAddress(emailAddress)) {
 			remove(permissions);
 		}
 	}
@@ -1695,6 +2122,72 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	}
 
 	/**
+	 * Returns the number of permissionses where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the number of matching permissionses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByEmailAddress(String emailAddress)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { emailAddress };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_EMAILADDRESS,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_PERMISSIONS_WHERE);
+
+			if (emailAddress == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1);
+			}
+			else {
+				if (emailAddress.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (emailAddress != null) {
+					qPos.add(emailAddress);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_EMAILADDRESS,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
 	 * Returns the number of permissionses.
 	 *
 	 * @return the number of permissionses
@@ -1794,6 +2287,9 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_FQGN_3 = "(permissions.fqgn IS NULL OR permissions.fqgn = ?) AND ";
 	private static final String _FINDER_COLUMN_FQGNANDGROUPPERMISSION_GROUPPERMISSION_2 =
 		"permissions.groupPermission = ?";
+	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1 = "permissions.emailAddress IS NULL";
+	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2 = "permissions.emailAddress = ?";
+	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3 = "(permissions.emailAddress IS NULL OR permissions.emailAddress = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "permissions.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Permissions exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Permissions exists with the key {";

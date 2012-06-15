@@ -25,7 +25,7 @@
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 request.setAttribute("account.selAccount", selAccount);
-%>
+%> 
 <%= PermissionsChecker.hasGroupPermission(selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD,"gnenc.esu10.esu10_org") %>
 
 Account Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD) %>

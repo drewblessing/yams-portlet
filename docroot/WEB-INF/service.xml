@@ -40,6 +40,9 @@
         	<finder-column name="fqgn" />
         	<finder-column name="groupPermission" />
         </finder>
+        <finder name="EmailAddress" return-type="Collection">
+            <finder-column name="emailAddress" />
+        </finder>
 	</entity>
 	<entity name="PermissionsDefined" local-service="true" remote-service="false">
 

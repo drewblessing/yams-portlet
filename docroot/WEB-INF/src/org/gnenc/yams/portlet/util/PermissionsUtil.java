@@ -16,16 +16,30 @@ import com.liferay.portal.kernel.util.Validator;
 public class PermissionsUtil {
 	protected static String getBinaryPermissions(
 			Account callingAccount, Account account, String fqgn) {
+		List<Permissions> results = new ArrayList<Permissions>();
 		long decimal = 0;
 		boolean selfCheck = false;
+		
 		if ((Validator.isNull(fqgn)) && (callingAccount.equals(account))) {
 			selfCheck = true;
 		} 
-		if (Validator.isNull(fqgn)) {
+		
+		List<String> fqgnLevels = new ArrayList<String>();
+		if (Validator.isNull(fqgn) && Validator.isNull(account)) {
+			try {
+				results = PermissionsLocalServiceUtil.getByEmailAddress(callingAccount.getMail().get(0));
+				for (Permissions permission : results) {
+					decimal = decimal | permission.getPermissions();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (Validator.isNull(fqgn)) {
 			fqgn = getFqgnFromDn(account.getAttribute("dn"));
-		} 
-		List<String> fqgnLevels = getFqgnLevels(fqgn);
-		List<Permissions> results = new ArrayList<Permissions>();
+			fqgnLevels = getFqgnLevels(fqgn);
+		} else {
+			fqgnLevels = getFqgnLevels(fqgn);
+		}
 		
 		for (String fqgnLevel : fqgnLevels) {
 			try {

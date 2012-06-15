@@ -333,6 +333,111 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
+	* Returns all the permissionses where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddress(
+		java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the permissionses where emailAddress = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param start the lower bound of the range of permissionses
+	* @param end the upper bound of the range of permissionses (not inclusive)
+	* @return the range of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddress(
+		java.lang.String emailAddress, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the permissionses where emailAddress = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param start the lower bound of the range of permissionses
+	* @param end the upper bound of the range of permissionses (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddress(
+		java.lang.String emailAddress, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first permissions in the ordered set where emailAddress = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions findByEmailAddress_First(
+		java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException;
+
+	/**
+	* Returns the last permissions in the ordered set where emailAddress = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions findByEmailAddress_Last(
+		java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException;
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param id the primary key of the current permissions
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a permissions with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions[] findByEmailAddress_PrevAndNext(
+		long id, java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException;
+
+	/**
 	* Returns all the permissionses.
 	*
 	* @return the permissionses
@@ -399,6 +504,15 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the permissionses where emailAddress = &#63; from the database.
+	*
+	* @param emailAddress the email address
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByEmailAddress(java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Removes all the permissionses from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -430,6 +544,16 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 	*/
 	public int countByFqgnAndGroupPermission(java.lang.String fqgn,
 		boolean groupPermission)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of permissionses where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the number of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByEmailAddress(java.lang.String emailAddress)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

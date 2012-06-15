@@ -1,3 +1,4 @@
+create index IX_5315C845 on yams_Permissions (emailAddress);
 create index IX_67802AEB on yams_Permissions (emailAddress, fqgn);
 create index IX_40D70BD3 on yams_Permissions (emailAddress, fqgn, groupPermission);
 create index IX_2C4C823F on yams_Permissions (fqgn, groupPermission);

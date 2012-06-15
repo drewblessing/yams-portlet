@@ -263,6 +263,12 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 		return _permissionsLocalService.getByFqgnAndGroupPermission(fqgn, group);
 	}
 
+	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddress(
+		java.lang.String email)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.getByEmailAddress(email);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */
