@@ -30,6 +30,7 @@ request.setAttribute("account.selAccount", selAccount);
 
 Account Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD) %>
 Account Edit <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>
+Account Edit Password  <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>
 Account Remove <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE) %>
 Account Remove Force <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE) %>
 Group Add <%= PermissionsChecker.hasPermission(selAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_ADD) %>

@@ -22,7 +22,7 @@ public class PermissionsUtil {
 			decimal = getBinaryPermissionsByEmailAddress(callingAccount.getMail().get(0));
 		} else if (Validator.isNull(fqgn)) {
 			fqgn = getFqgnFromDn(account.getAttribute("dn"));
-			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn);
+			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn); 
 		} else {
 			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn);
 		}
@@ -49,14 +49,15 @@ public class PermissionsUtil {
 	
 	private static long getBinaryPermissionsByFqgn(
 			Account callingAccount, Account account, String fqgn) {
-		List<String> fqgnLevels = new ArrayList<String>();
 		List<Permissions> results = new ArrayList<Permissions>();
 		long decimal = 0;
 		boolean selfCheck = false;
 		
-		if ((Validator.isNull(fqgn)) && (callingAccount.equals(account))) {
+		if (callingAccount.equals(account)) {
 			selfCheck = true;
-		} 
+		}
+		
+		List<String> fqgnLevels = getFqgnLevels(fqgn);
 		
 		for (String fqgnLevel : fqgnLevels) {
 			try {
@@ -66,7 +67,7 @@ public class PermissionsUtil {
 							getByFqgnAndGroupPermission(
 									fqgnLevel, true);
 					if (results.size() == 1) {
-						decimal = results.get(0).getPermissions();
+						decimal = decimal | results.get(0).getPermissions();
 						selfCheck = false;
 					}
 				} 
