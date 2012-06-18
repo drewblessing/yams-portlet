@@ -1,18 +1,18 @@
 package org.gnenc.yams.hook.upgrade;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+
 import java.util.List;
 
 import org.gnenc.yams.hook.upgrade.v0_0_2.UpgradePermissions;
 import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-
 /**
  * @author Drew A. Blessing
  */
-public class UpgradeProcess_0_0_2  extends UpgradeProcess {
+public class UpgradeProcess_0_0_2 extends UpgradeProcess {
 	@Override
 	public int getThreshold() {
 		return 100;
@@ -28,7 +28,7 @@ public class UpgradeProcess_0_0_2  extends UpgradeProcess {
 	}
 
 	protected boolean isFirstRun() throws Exception {
-		List<PermissionsDefined> permissionsDefined = 
+		List<PermissionsDefined> permissionsDefined =
 				PermissionsDefinedLocalServiceUtil.getPermissionsDefineds(
 						QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 

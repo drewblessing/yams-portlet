@@ -3,7 +3,7 @@ package org.gnenc.yams.model;
 /**
  * Based on the AccountStatus enumeration
  * written by Jeshurun Daniel.
- * 
+ *
  * @author Drew A. Blessing
  *
  */

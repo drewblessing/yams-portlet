@@ -4,7 +4,6 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.ControlPanelEntry;
-
 public class YAMSControlPanelEntry implements ControlPanelEntry {
 
 	@Override

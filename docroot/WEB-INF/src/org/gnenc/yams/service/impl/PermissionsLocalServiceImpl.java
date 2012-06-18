@@ -14,12 +14,12 @@
 
 package org.gnenc.yams.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+
 import java.util.List;
 
 import org.gnenc.yams.model.Permissions;
 import org.gnenc.yams.service.base.PermissionsLocalServiceBaseImpl;
-
-import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the permissions local service.
@@ -36,7 +36,7 @@ import com.liferay.portal.kernel.exception.SystemException;
  * @see org.gnenc.yams.service.PermissionsLocalServiceUtil
  */
 public class PermissionsLocalServiceImpl extends PermissionsLocalServiceBaseImpl {
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsLocalServiceUtil} to access the permissions local service.
@@ -45,12 +45,12 @@ public class PermissionsLocalServiceImpl extends PermissionsLocalServiceBaseImpl
 			String email, String fqgn, boolean group) throws SystemException {
 		return permissionsPersistence.findByEmailAddressAndFqgnAndGroupPermission(email, fqgn, group);
 	}
-	
+
 	public List<Permissions> getByFqgnAndGroupPermission(
 			String fqgn, boolean group) throws SystemException {
 		return permissionsPersistence.findByFqgnAndGroupPermission(fqgn, group);
 	}
-	
+
 	public List<Permissions> getByEmailAddress(String email) throws SystemException {
 		return permissionsPersistence.findByEmailAddress(email);
 	}

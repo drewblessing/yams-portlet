@@ -4,70 +4,70 @@ import java.util.List;
 
 import javax.naming.Name;
 
+import org.springframework.ldap.odm.annotations.Attribute.Type;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
-import org.springframework.ldap.odm.annotations.Attribute.Type;
 
 /**
- * 
+ *
  * @author Jeshurun Daniel
  *
  */
 @Entry(objectClasses={"pwdPolicy", "person", "top"})
 public final class LdapPasswordPolicy {
-	
+
 	@Id
 	private Name dn;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> objectClass;
-	
+
 	@Attribute(type=Type.STRING)
 	private Boolean pwdAllowUserChange;
-	
+
 	@Attribute(type=Type.STRING)
 	private String pwdAttribute;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdCheckQuality;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdExpireWarning;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdFailureCountInterval;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdGraceAuthLimit;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdInHistory;
-	
+
 	@Attribute(type=Type.STRING)
 	private Boolean pwdLockout;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdLockDuration;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdMaxAge;
-	
+
 	@Attribute(type=Type.STRING)
-	private Integer pwdMaxFailure; 
-	
+	private Integer pwdMaxFailure;
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdMinAge;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer pwdMinLength;
-	
+
 	@Attribute(type=Type.STRING)
 	private Boolean pwdMustChange;
-	
+
 	@Attribute(type=Type.STRING)
 	private Boolean pwdSafeModify;
-	
+
 	@Attribute(type=Type.STRING, name="sn")
 	private String description;
 
@@ -214,5 +214,5 @@ public final class LdapPasswordPolicy {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 }

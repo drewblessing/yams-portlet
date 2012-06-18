@@ -1,19 +1,19 @@
 <%
 /**
- *  Copyright (c) 2012-2013 Educational Service Unit 10. 
+ *  Copyright (c) 2012-2013 Educational Service Unit 10.
  *
  *  This file is part of the YAMS portlet.
- *  
+ *
  *  YAMS portlet is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  YAMS portlet is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with the YAMS portlet.  If not, see <http://www.gnu.org/licenses/>.
  **/
@@ -36,38 +36,38 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 
 <liferay-ui:icon-menu showWhenSingleIcon="<%= true %>">
 <c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(
-			callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>" >
-	<portlet:renderURL var="editAccountRenderURL" >
+			callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>">
+	<portlet:renderURL var="editAccountRenderURL">
 		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
 		<portlet:param name="redirect" value="<%= redirect %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
-	
+
 	<span id="edit-account-<%=uidStripped %>">
 		<liferay-ui:icon image="edit" message="edit" url="<%=editAccountRenderURL %>" />
-	</span>	
+	</span>
 </c:if>
 
-<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount, 
-			PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>" >
+<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount,
+			PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>">
 	<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
-	
+
 	<span id="change-password-<%=uidStripped %>">
 		<liferay-ui:icon image="key" message="change-password" url="javascript:;" />
 	</span>
 	<portlet:resourceURL var="changePasswordResourceURL" />
-	
+
 	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
 	A.one('#change-password-<%=uidStripped %>').on(
 		'click',
 		function() {
 			var changePasswordDialog = new A.Dialog({
-				buttons: [ 
-				{ 
-					label: '<liferay-ui:message key="submit" />', 
+				buttons: [
+				{
+					label: '<liferay-ui:message key="submit" />',
 					handler: function() {
 						changePasswordDialog.unplug(A.Plugin.IO);
 						changePasswordDialog.plug(
@@ -81,7 +81,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 								on: {
 									success: function() {
 										var message = this.get('responseData');
-										
+
 										if (message.response.toLowerCase() == 'success') {
 											changePasswordDialog.close();
 										} else {
@@ -90,17 +90,17 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 									},
 									failure: function() {
 										alert("failure");
-									}	
+									}
 								}
 							}
 						);
-					} 
-				}, 
-				{ 
-					label: '<liferay-ui:message key="cancel" />', 
-					handler: function() { 
-						this.close(); 
-					} 
+					}
+				},
+				{
+					label: '<liferay-ui:message key="cancel" />',
+					handler: function() {
+						this.close();
+					}
 				}],
 				title: '<liferay-ui:message key="change-password" />',
 				height: 225,
@@ -125,4 +125,3 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 </c:if>
 
 </liferay-ui:icon-menu>
-

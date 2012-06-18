@@ -4,17 +4,17 @@ import java.util.List;
 
 import javax.naming.Name;
 
-import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Attribute.Type;
+import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
 /**
  * LDAP Account model based on the original LDAP Account model
  * created by Jeshurun Daniel. Class represents commonly used
- * attributes that can be found in the inetorgperson and 
+ * attributes that can be found in the inetorgperson and
  * posixaccount schema.
- * 
+ *
  * @author Drew A. Blessing
  *
  */
@@ -23,120 +23,120 @@ final public class LdapAccount {
 
 	@Id
 	private Name dn;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> cn;
-	
+
 	@Attribute(type=Type.STRING)
 	private String departmentNumber;
-	
+
 	@Attribute(type=Type.STRING)
 	private String description;
-	
+
 	@Attribute(type=Type.STRING)
 	private String displayName;
-	
+
 	@Attribute(type=Type.STRING)
 	private Integer employeeNumber;
-	
+
 	@Attribute(type=Type.STRING)
-	private String employeeType; 
-	
+	private String employeeType;
+
 	@Attribute(type=Type.STRING)
 	private String gecos;
-	
+
 	@Attribute(type=Type.STRING)
 	private String gidNumber;
-	
+
 	@Attribute(type=Type.STRING)
 	private String givenName;
-	
+
 	@Attribute(type=Type.STRING)
 	private String homeDirectory;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> homePhone;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> homePostalAddress;
-	
+
 	@Attribute(type=Type.STRING)
 	private String initials;
-	
+
 	@Attribute(type=Type.BINARY)
 	private byte[] jpegPhoto;
-	
+
 	@Attribute(type=Type.STRING, name="l")
 	private List<String> localityName;
-	
+
 	@Attribute(type=Type.STRING)
 	private String loginShell;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> mail;
-	
+
 	@Attribute(type=Type.STRING, name="memberOf")
 	private List<String> memberships;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> mobile;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> objectClass;
-	
+
 	@Attribute(type=Type.STRING, name="o")
 	private String organizationName;
-	
+
 	@Attribute(type=Type.STRING, name="ou")
 	private String organizationalUnitName;
-	
+
 	@Attribute(type=Type.BINARY)
 	private byte[] photo;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> postalAddress;
-	
+
 	@Attribute(type=Type.STRING)
 	private String postalCode;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> preferredLanguage;
-	
+
 	@Attribute(type=Type.STRING)
 	private String roomNumber;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> securityAnswer;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> securityQuestion;
-	
+
 	@Attribute(type=Type.STRING)
 	private String sn;
-	
+
 	@Attribute(type=Type.STRING, name="st")
 	private String state;
-	
+
 	@Attribute(type=Type.STRING)
 	private String status;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> street;
-	
+
 	@Attribute(type=Type.STRING)
 	private List<String> telephoneNumber;
-	
+
 	@Attribute(type=Type.STRING)
 	private String title;
-	
+
 	@Attribute(type=Type.STRING)
 	private String uid;
-	
+
 	@Attribute(type=Type.STRING)
 	private String uidNumber;
-	
+
 	@Attribute(type=Type.BINARY)
-	private byte[] userPassword;	
+	private byte[] userPassword;
 
 	public Name getDn() {
 		return dn;
@@ -265,7 +265,7 @@ final public class LdapAccount {
 	public void setLocalityName(List<String> localityName) {
 		this.localityName = localityName;
 	}
-	
+
 	public String getLoginShell() {
 		return loginShell;
 	}
@@ -281,7 +281,7 @@ final public class LdapAccount {
 	public void setMail(List<String> mail) {
 		this.mail = mail;
 	}
-	
+
 	public List<String> getMemberships() {
 		return memberships;
 	}
@@ -317,19 +317,19 @@ final public class LdapAccount {
 	public void setOrganizationalUnitName(String organizationalUnitName) {
 		this.organizationalUnitName = organizationalUnitName;
 	}
-	
+
 	public byte[] getPhoto() {
 		return photo;
 	}
-	
+
 	public void setPhoto(byte[] photo) {
 		this.photo = photo;
 	}
-	
+
 	public List<String> getPostalAddress() {
 		return postalAddress;
 	}
-	
+
 	public void setPostalAddress(List<String> postalAddress) {
 		this.postalAddress = postalAddress;
 	}
@@ -381,7 +381,7 @@ final public class LdapAccount {
 	public void setSn(String sn) {
 		this.sn = sn;
 	}
-	
+
 	public String getState() {
 		return state;
 	}
@@ -420,7 +420,7 @@ final public class LdapAccount {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}	
+	}
 
 	public String getUid() {
 		return uid;

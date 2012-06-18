@@ -42,11 +42,11 @@
 	</bean>
 	
 	<bean id="contextSourceTarget" class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url" value="${ldap.providerUrl}" />
-		<property name="userDn" value="${ldap.managerDn}" />
-		<property name="password" value="${ldap.managerPassword}" />
+		<property name="url" value="${ldap.provider.url}" />
+		<property name="userDn" value="${ldap.security.principal}" />
+		<property name="password" value="${ldap.security.password}" />
 		<property name="pooled" value="${ldap.pooledConnections}" />
-		<property name="base" value="${ldap.baseDn}" />
+		<property name="base" value="${ldap.base.dn}" />
 	</bean>
 	
 	<bean id="dircontextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator"/>
@@ -114,7 +114,6 @@
 			<set>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
-				<value>org.gnenc.yams.subsystem.ldap.model.LdapPasswordPolicy</value>
 			</set>
 		</property>
 	</bean>

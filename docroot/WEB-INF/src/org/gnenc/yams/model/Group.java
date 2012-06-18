@@ -8,52 +8,50 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Based on original Group model written 
+ * Based on original Group model written
  * by Jeshurun Daniel
- * 
+ *
  * @author Drew A. Blessing
  *
  */
 public class Group {
-	public static final Comparator<Group> NAME_COMPARATOR_ASC = 
+	public static final Comparator<Group> NAME_COMPARATOR_ASC =
 			new Comparator<Group>() {
 		@Override
 		public int compare(Group g1, Group g2) {
 			int value = g1.getCn().toLowerCase().compareTo(
 					g2.getCn().toLowerCase());
-			
+
 				return value;
 		}
 	};
-	
-	public static final Comparator<Group> NAME_COMPARATOR_DESC = 
+
+	public static final Comparator<Group> NAME_COMPARATOR_DESC =
 			new Comparator<Group>() {
 		@Override
 		public int compare(Group g1, Group g2) {
 			int value = Group.NAME_COMPARATOR_ASC.compare(g1, g2);
-			
+
 				return -value;
 		}
 	};
-	
 
 	private String cn;
-	
+
 	private String displayName;
 
 	private String description;
 
 	private List<Account> members;
-	
+
 	private Map<String, String> additionalAttributes;
-	
-	
+
 	public Group() {}
-	
+
 	public Group(String cn) {
 		this.cn = cn;
 	}
-	
+
 	public String getCn() {
 		return cn;
 	}
@@ -69,21 +67,21 @@ public class Group {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getDisplayName() {
 		return displayName;
 	}
-	
+
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
 
 	public List<Account> getMembers() {
-		if(members == null)
+		if (members == null)
 			members = new ArrayList<Account>();
 		return members;
 	}
-	
+
 	public String getAttribute(String key) {
 		if (additionalAttributes == null)
 			return null;

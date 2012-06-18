@@ -7,7 +7,7 @@ public class YAMSNullPropsKeyException extends Exception {
 	public YAMSNullPropsKeyException() {
 		super();
 	}
-	
+
 	public YAMSNullPropsKeyException(String msg) {
 		super(msg);
 	}
