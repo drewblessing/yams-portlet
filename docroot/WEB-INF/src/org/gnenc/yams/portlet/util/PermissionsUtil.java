@@ -19,12 +19,12 @@ public class PermissionsUtil {
 		long decimal = 0;
 		
 		if (Validator.isNull(fqgn) && Validator.isNull(account)) {
-			decimal = getBinaryPermissionsByEmailAddress(callingAccount.getMail().get(0));
+			decimal = getDecimalPermissionsByEmailAddress(callingAccount.getMail().get(0));
 		} else if (Validator.isNull(fqgn)) {
 			fqgn = getFqgnFromDn(account.getAttribute("dn"));
-			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn); 
+			decimal = getDecimalPermissionsByFqgn(callingAccount, account, fqgn); 
 		} else {
-			decimal = getBinaryPermissionsByFqgn(callingAccount, account, fqgn);
+			decimal = getDecimalPermissionsByFqgn(callingAccount, account, fqgn);
 		}
 		
 		String binaryPermissions = new StringBuffer(
@@ -33,7 +33,7 @@ public class PermissionsUtil {
 		return binaryPermissions;
 	}
 
-	private static long getBinaryPermissionsByEmailAddress(String email) {
+	private static long getDecimalPermissionsByEmailAddress(String email) {
 		List<Permissions> results = new ArrayList<Permissions>();
 		long decimal = 0;
 		try {
@@ -47,7 +47,7 @@ public class PermissionsUtil {
 		return decimal;
 	}
 	
-	private static long getBinaryPermissionsByFqgn(
+	private static long getDecimalPermissionsByFqgn(
 			Account callingAccount, Account account, String fqgn) {
 		List<Permissions> results = new ArrayList<Permissions>();
 		long decimal = 0;
