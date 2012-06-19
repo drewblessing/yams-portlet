@@ -25,10 +25,18 @@ package org.gnenc.yams.portlet.util;
  * @author Drew A. Blessing
  *
  */
-public class PortletKeys extends com.liferay.portal.util.PortletKeys {
+public class PortletKeys extends com.liferay.portal.util.PortletKeys {	
+
+	// Portlet short names
+	
+	public static final String ACCOUNT_MANAGEMENT = "accountmanagement";
 
 	public static final String SEARCH = "search";
-
-	public static final String ACCOUNT_MANAGEMENT = "accountmanagement";
+	
+	// Full Portlet IDs
+	
+	public static final String SEARCH_PORTLET_ID = "search_WAR_yamsportlet";
+	
+	public static final String ACCOUNT_MANAGEMENT_PORTLET_ID = "accountmanagement_WAR_yamsportlet";
 
 }

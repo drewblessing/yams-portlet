@@ -35,6 +35,8 @@ public class PropsKeys {
 	public static final String LDAP_USER_CONTAINER_MODE = "ldap.user.container.mode";
 
 	public static final String LDAP_USER_CONTAINER_DN = "ldap.user.container.dn";
+	
+	public static final String PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = "portlets.active.accountmanagement";
 
 	public static final String ACCOUNT_CREATE_WITH_WIZARD = "account.create.with.wizard";
 }

@@ -40,6 +40,9 @@ public class PropsValues {
 
 	public static final String LDAP_USER_CONTAINER_DN =
 			PortletProps.get(PropsKeys.LDAP_USER_CONTAINER_DN);
+	
+	public static final boolean PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = GetterUtil.getBoolean(
+			PortletProps.get(PropsKeys.PORTLETS_ACTIVE_ACCOUNTMANAGEMENT));
 
 	public static final boolean ACCOUNT_CREATE_WITH_WIZARD = GetterUtil.getBoolean(
 			PortletProps.get(PropsKeys.ACCOUNT_CREATE_WITH_WIZARD));
