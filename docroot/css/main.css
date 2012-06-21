@@ -23,4 +23,16 @@
 			left: 5px;
 		}
 	}
+	
+	/* Account Management Styles */
+	.active-step {
+		background-color: #FFC;
+		border: 2px solid #FC0;
+		padding-left: 2px;
+	}
+	.add-account-instructions-text {
+		font-size: 1.2em;
+		max-width: 175px;
+	}
+	
 }

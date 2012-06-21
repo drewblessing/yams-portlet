@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -40,13 +41,13 @@ import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 public class PortletUtil {
-	public static String editAccount(ResourceRequest resourceRequest,
+	public static HashMap<String, String> editAccount(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static String editPassword(
+	public static HashMap<String, String> editPassword(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
 		String result = "Error";
 		String password = DAOParamUtil.getString(resourceRequest, "password");
@@ -56,7 +57,7 @@ public class PortletUtil {
 //		boolean valid = validatePasswordFields(
 //				actionRequest, password, verify, uid);
 
-		return result;
+		return null;
 	}
 
 	public static Account getAccountFromPortalUser(RenderRequest request, User user)
@@ -113,6 +114,16 @@ public class PortletUtil {
 		groups = Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
 
 		return groups;
+	}
+	
+	public static HashMap<String, String> processAccountName(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) {				
+		HashMap<String,String> responses = new HashMap<String,String>();
+		
+		responses.put("emailAddress", "drew.blessing@esu10.org");
+		responses.put("screenName", "drew.blessing");
+		
+		return responses;
 	}
 
 	private static boolean validatePasswordFields(
@@ -172,6 +183,9 @@ public class PortletUtil {
 
 	public static final String ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard.jsp";
+	
+	public static final String ACCT_MGMT_ACCOUNT_ADD_WIZARD_FORM_NAVIGATION_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard/form_navigation.jsp";
 
 	public static final String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/change_password.jsp";
@@ -212,5 +226,6 @@ public class PortletUtil {
 
 	// Images
 	public static final String STOCK_AVATAR = "/images/user_male_portrait.png";
+
 
 }

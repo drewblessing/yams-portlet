@@ -36,6 +36,6 @@ organizationSearch.setRowChecker(new RowChecker(renderResponse));
 		servletContext="<%=this.getServletContext() %>"
 	/>
 
-	<div class="separator" /><!-- Separator --></div>
+	<div class="separator" ><!-- Separator --></div>
 
 </liferay-ui:search-container>

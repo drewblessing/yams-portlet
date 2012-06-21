@@ -18,30 +18,36 @@
  **/
 package org.gnenc.yams.portlet;
 
-import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.util.bridges.mvc.MVCPortlet;
-
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.gnenc.yams.portlet.util.PortletUtil;
+
+import com.liferay.portal.kernel.dao.search.DAOParamUtil;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountManagement extends MVCPortlet {
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException {
-		String response = "";
+		HashMap<String,String> responses = new HashMap<String,String>();
 		switch (DAOParamUtil.getInteger(resourceRequest, "cmd")) {
-			case EDIT_PASSWORD_CMD: response =
+			case EDIT_PASSWORD_CMD: responses =
 					PortletUtil.editPassword(resourceRequest, resourceResponse);
 				break;
-			case EDIT_ACCOUNT_CMD: response =
+			case EDIT_ACCOUNT_CMD: responses =
 					PortletUtil.editAccount(resourceRequest, resourceResponse);
 				break;
+			case PROCESS_ACCOUNT_NAME: responses =
+					PortletUtil.processAccountName(resourceRequest, resourceResponse);
 			default: //nothing
 				break;
 		}
@@ -49,12 +55,18 @@ public class AccountManagement extends MVCPortlet {
 		resourceResponse.setContentType("text/javascript");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-		jsonObject.put("response", response);
-
+		Iterator<Entry<String, String>> it = responses.entrySet().iterator();
+		while(it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String,String> response = (Map.Entry<String,String>)it.next();
+			jsonObject.put(response.getKey(), response.getValue());
+		}
+		
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.write(jsonObject.toString());
 	}
 
 	public static final int EDIT_PASSWORD_CMD = 1;
 	public static final int EDIT_ACCOUNT_CMD = 2;
+	public static final int PROCESS_ACCOUNT_NAME = 3;
 }

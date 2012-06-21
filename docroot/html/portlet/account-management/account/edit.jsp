@@ -41,11 +41,15 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
 />
 
+<aui:form method="POST" name="yamsFm" id="yamsFm">
+	<aui:input type="hidden" name="cmd" value='<%=AccountManagement.EDIT_PASSWORD_CMD %>' />
 <c:choose>
 	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
 		<liferay-util:include
 				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP %>"
-				servletContext="<%=this.getServletContext() %>" />
+				servletContext="<%=this.getServletContext() %>" >
+			<liferay-util:param name="step" value="1" />		
+		</liferay-util:include>
 	</c:when>
 	<c:otherwise>
 		<liferay-util:include
@@ -56,3 +60,4 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 		</liferay-util:include>
 	</c:otherwise>
 </c:choose>
+</aui:form>
