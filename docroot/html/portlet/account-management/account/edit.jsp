@@ -42,7 +42,7 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 />
 
 <aui:form method="POST" name="yamsFm" id="yamsFm">
-	<aui:input type="hidden" name="cmd" value='<%=AccountManagement.EDIT_PASSWORD_CMD %>' />
+	<aui:input type="hidden" name="cmd" value='<%=(selectedAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_PASSWORD_CMD %>' />
 <c:choose>
 	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
 		<liferay-util:include

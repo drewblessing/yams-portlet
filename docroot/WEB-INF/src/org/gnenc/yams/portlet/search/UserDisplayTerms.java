@@ -18,13 +18,12 @@
  **/
 package org.gnenc.yams.portlet.search;
 
-import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import javax.portlet.PortletRequest;
+
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-
-import javax.portlet.PortletRequest;
 
 /**
  * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountDisplayTerms}
@@ -32,7 +31,7 @@ import javax.portlet.PortletRequest;
  *
  * @author Drew A. Blessing
  */
-public class UserDisplayTerms extends DisplayTerms {
+public class UserDisplayTerms extends YAMSDisplayTerms {
 
 	public static final String EMAIL_ADDRESS = "emailAddress";
 
@@ -41,10 +40,18 @@ public class UserDisplayTerms extends DisplayTerms {
 	public static final String ORGANIZATION = "organization";
 
 	public static final String LAST_NAME = "lastName";
+	
+	public static final String PASSWORD = "password";
+	
+	public static final String SCREEN_NAME = "screenName";
 
 	public static final String STATUS = "status";
+	
+	public static final String TITLE = "title";
 
 	public static final String UID = "uid";
+	
+	public static final String VERIFY = "verify";
 
 	public UserDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);

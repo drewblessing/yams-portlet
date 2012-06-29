@@ -49,13 +49,13 @@ System.out.println(requestStep);
 </div>
 <aui:button-row>
 	<c:if test='<%=requestStep != 1 %>' >
-		<aui:button value="previous" id="prevButton"/>
+		<aui:button value="previous" id="prevButton" tabIndex="-1" />
 	</c:if>
 	<c:if test='<%=requestStep != 3 %>' >
-		<aui:button value="next" id="nextButton"/>
+		<aui:button value="next" id="nextButton" tabIndex="-1" />
 	</c:if>
 	<c:if test='<%=requestStep == 3 %>' >
-		<aui:button value="submit" id="submitButton"/>
+		<aui:button type="submit" name="submit" id="submitButton"/>
 	</c:if>
 </aui:button-row>
 
@@ -144,30 +144,28 @@ System.out.println(requestStep);
 		A.one("#step" + step).removeClass('active-step').one('.add-account-instructions').unplug(A.Plugin.IO).html('');
 	}
 	function processStep1() {
-		var title = A.one("#<portlet:namespace />title option:selected").text();
-		var firstName = A.one("#<portlet:namespace />firstName").val();
-		var lastName = A.one("#<portlet:namespace />lastName").val();
+		var firstName = A.one("#<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME%>");
+		var lastName = A.one("#<portlet:namespace /><%=UserDisplayTerms.LAST_NAME%>");
+		var emailAddress = A.one("#<portlet:namespace /><%=UserDisplayTerms.EMAIL_ADDRESS %>");
+		var screenName = A.one("#<portlet:namespace /><%=UserDisplayTerms.SCREEN_NAME %>");
 		
 		var request = A.io.request('<%=submissionURL %>', {
 			method: 'POST',
 			uri: '<%=submissionURL %>',
 			dataType: 'json',
 			data: {
-				cmd: '<%=AccountManagement.PROCESS_ACCOUNT_NAME %>',
-				title: title,
-				firstName: firstName,
-				lastName: lastName
+				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.PROCESS_ACCOUNT_NAME %>',
+				'<%=UserDisplayTerms.FIRST_NAME %>': firstName.val(),
+				'<%=UserDisplayTerms.LAST_NAME %>': lastName.val()
 			},
 			on: {
 				success: function() {
 					var message = this.get('responseData');
-					var emailAddressInput = A.one("#<portlet:namespace />emailAddress");
-					var screenNameInput = A.one("#<portlet:namespace />screenName");
-					if (emailAddressInput.val() == "") {
-						emailAddressInput.val(message.emailAddress);
+					if (emailAddress.val() == "") {
+						emailAddress.val(message.<%=UserDisplayTerms.EMAIL_ADDRESS%>);
 					}
-					if (screenNameInput.val() == "") {
-						screenNameInput.val(message.screenName);
+					if (screenName.val() == "") {
+						screenName.val(message.<%=UserDisplayTerms.SCREEN_NAME%>);
 					}
 				},
 				failure: function() {

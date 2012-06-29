@@ -25,9 +25,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.util.PortletUtil;
 
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
@@ -36,18 +39,29 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountManagement extends MVCPortlet {
 	@Override
-	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws IOException {
+	public void processAction(ActionRequest actionRequest, 
+			ActionResponse actionResponse) {
+		System.out.println("Yeehaw!");
+		actionResponse.setRenderParameter("jspPage", PortletUtil.SEARCH_ACCOUNTS_JSP);
+	}
+	
+	@Override
+	public void serveResource(ResourceRequest resourceRequest, 
+			ResourceResponse resourceResponse) throws IOException {
 		HashMap<String,String> responses = new HashMap<String,String>();
-		switch (DAOParamUtil.getInteger(resourceRequest, "cmd")) {
+		switch (DAOParamUtil.getInteger(resourceRequest, UserDisplayTerms.CMD)) {
 			case EDIT_PASSWORD_CMD: responses =
 					PortletUtil.editPassword(resourceRequest, resourceResponse);
 				break;
 			case EDIT_ACCOUNT_CMD: responses =
 					PortletUtil.editAccount(resourceRequest, resourceResponse);
 				break;
-			case PROCESS_ACCOUNT_NAME: responses =
-					PortletUtil.processAccountName(resourceRequest, resourceResponse);
+			case PROCESS_ACCOUNT_NAME: 
+				String firstName = DAOParamUtil.getString(
+						resourceRequest, UserDisplayTerms.FIRST_NAME);
+				String lastName = DAOParamUtil.getString(
+						resourceRequest, UserDisplayTerms.LAST_NAME);
+				responses = PortletUtil.processAccountName(firstName, lastName);
 			default: //nothing
 				break;
 		}
@@ -57,7 +71,6 @@ public class AccountManagement extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		Iterator<Entry<String, String>> it = responses.entrySet().iterator();
 		while(it.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String,String> response = (Map.Entry<String,String>)it.next();
 			jsonObject.put(response.getKey(), response.getValue());
 		}
@@ -66,7 +79,8 @@ public class AccountManagement extends MVCPortlet {
 		writer.write(jsonObject.toString());
 	}
 
-	public static final int EDIT_PASSWORD_CMD = 1;
-	public static final int EDIT_ACCOUNT_CMD = 2;
-	public static final int PROCESS_ACCOUNT_NAME = 3;
+	public static final int ADD_ACCOUNT_CMD = 1;
+	public static final int EDIT_PASSWORD_CMD = 2;
+	public static final int EDIT_ACCOUNT_CMD = 3;
+	public static final int PROCESS_ACCOUNT_NAME = 4;
 }

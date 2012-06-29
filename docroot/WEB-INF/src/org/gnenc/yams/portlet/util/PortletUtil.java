@@ -18,13 +18,8 @@
  **/
 package org.gnenc.yams.portlet.util;
 
-import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.User;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,14 +28,32 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.Group;
-import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
+import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.Search;
+import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
+import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
+
+import com.liferay.portal.kernel.dao.search.DAOParamUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 public class PortletUtil {
+	private static List<SubSystem> checkAccountExists(String mail) 
+			throws ValidationException {
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		
+		return ams.checkAccountExists(mail);
+	}
+	
 	public static HashMap<String, String> editAccount(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) {
 		// TODO Auto-generated method stub
@@ -116,12 +129,16 @@ public class PortletUtil {
 		return groups;
 	}
 	
-	public static HashMap<String, String> processAccountName(ResourceRequest resourceRequest,
-			ResourceResponse resourceResponse) {				
+	public static HashMap<String, String> processAccountName(String firstName,
+			String lastName) {				
 		HashMap<String,String> responses = new HashMap<String,String>();
+		// Make sure to lower case the names.
+		// TODO: Issue 49 - Learn how to get primary email domain for the group.
 		
-		responses.put("emailAddress", "drew.blessing@esu10.org");
-		responses.put("screenName", "drew.blessing");
+		responses.put(UserDisplayTerms.EMAIL_ADDRESS, 
+				firstName + StringPool.PERIOD + lastName);
+		responses.put(UserDisplayTerms.SCREEN_NAME, 
+				firstName + StringPool.PERIOD + lastName);
 		
 		return responses;
 	}

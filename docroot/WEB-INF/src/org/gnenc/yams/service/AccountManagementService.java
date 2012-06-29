@@ -31,5 +31,8 @@ public interface AccountManagementService {
 			List<SearchFilter> filters, Operand operand,
 			List<SubSystem> subsystems);
 
+	public List<SubSystem> checkAccountExists(String accountUsername) 
+			throws ValidationException;
+
 
 }

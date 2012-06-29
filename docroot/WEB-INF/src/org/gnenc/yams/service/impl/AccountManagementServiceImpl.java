@@ -1,7 +1,5 @@
 package org.gnenc.yams.service.impl;
 
-import com.liferay.portal.kernel.util.Validator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,21 +9,23 @@ import java.util.Map;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.operation.account.ChangePassword;
+import org.gnenc.yams.operation.account.CheckAccountExists;
 import org.gnenc.yams.operation.account.GetAllAccounts;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
 import org.gnenc.yams.service.internal.ValidatedExecutionCallback;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liferay.portal.kernel.util.Validator;
+
 /**
- * Based on the original AccuontManagementService created by Jeshurun Daniel.
+ * Based on the original AccountManagementService created by Jeshurun Daniel.
  *
  * @author Drew A. Blessing
  *
@@ -54,6 +54,23 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 	protected AccountManagementServiceImpl() {
 		instance = this;
+	}
+	
+	@Override
+	public List<SubSystem> checkAccountExists(final String accountUsername) 
+			throws ValidationException {
+		final List<SubSystem> subsystems = new ArrayList<SubSystem>();
+		executor.execute(CheckAccountExists.class, 
+				SubSystem.ALL_SUBSYSTEMS, new ExecutionCallback<CheckAccountExists>() {
+					@Override
+					public  void executeAction(CheckAccountExists operation) {
+						if(operation.checkAccountExists(accountUsername)) {
+							subsystems.add(operation.getSubsystemType());
+						}
+					}
+				}, true);
+		
+		return subsystems;
 	}
 
 	@Override

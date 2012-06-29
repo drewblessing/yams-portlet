@@ -18,10 +18,9 @@
  **/
 package org.gnenc.yams.portlet.search;
 
-import com.liferay.portal.kernel.dao.search.DisplayTerms;
-import com.liferay.portal.kernel.util.ParamUtil;
-
 import javax.portlet.PortletRequest;
+
+import com.liferay.portal.kernel.util.ParamUtil;
 
 /**
  * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountDisplayTerms}
@@ -29,7 +28,7 @@ import javax.portlet.PortletRequest;
  *
  * @author Drew A. Blessing
  */
-public class OrganizationDisplayTerms extends DisplayTerms {
+public class OrganizationDisplayTerms extends YAMSDisplayTerms {
 
 	public static final String NAME = "name";
 
