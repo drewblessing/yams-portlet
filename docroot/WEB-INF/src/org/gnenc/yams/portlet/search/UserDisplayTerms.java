@@ -36,6 +36,8 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	public static final String EMAIL_ADDRESS = "emailAddress";
 
 	public static final String FIRST_NAME = "firstName";
+	
+	public static final String GROUP = "group";
 
 	public static final String ORGANIZATION = "organization";
 

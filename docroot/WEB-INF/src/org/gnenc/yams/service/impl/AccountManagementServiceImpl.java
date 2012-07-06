@@ -9,11 +9,14 @@ import java.util.Map;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.operation.account.ChangePassword;
 import org.gnenc.yams.operation.account.CheckAccountExists;
+import org.gnenc.yams.operation.account.CreateAccount;
 import org.gnenc.yams.operation.account.GetAllAccounts;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
@@ -99,6 +102,43 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 						operation.changePassword(account, newPassword);
 					}
 				}, false);
+	}
+	
+	@Override
+	public Account createAccount(final Account newAccount,
+			final List<GroupMap> groupMaps,
+			final List<SubSystem> subsystems) throws ValidationException {
+		
+		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
+		
+//		newAccount.setPassword(passwordManager.generateNewPassword(newAccount.getUid()));
+		
+		final Map<String, List<Group>> membershipGroupsMap = Collections.synchronizedMap(GroupMap.toMap(groupMaps));
+		
+		executor.execute(CreateAccount.class, subsystems != null ? subsystems : SubSystem.ALL_SUBSYSTEMS,
+				new ValidatedExecutionCallback<CreateAccount>() {
+//					@Override
+//					public void validateAction(CreateAccount operation)
+//							throws ValidationException {
+//						operation.validateNewAccount(newAccount, membershipGroupsMap, validationErrors);
+//						if(!validationErrors.isEmpty()) {
+//							throw new ValidationException(validationErrors.toArray(new String[validationErrors.size()]));
+//						}
+//					}
+
+					@Override
+					public void executeAction(CreateAccount operation) {
+						operation.createNewAccount(newAccount, membershipGroupsMap);
+					}
+
+					@Override
+					public void validateAction(CreateAccount operation)
+							throws ValidationException {
+						// TODO Auto-generated method stub
+						
+					}
+				}, false);
+		return newAccount;
 	}
 
 	@Override

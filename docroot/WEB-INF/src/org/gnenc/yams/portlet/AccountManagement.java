@@ -20,8 +20,11 @@ package org.gnenc.yams.portlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -29,20 +32,48 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.xml.bind.ValidationException;
 
+import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.GroupMap;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
+import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.util.PortletUtil;
+import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountManagement extends MVCPortlet {
-	@Override
-	public void processAction(ActionRequest actionRequest, 
-			ActionResponse actionResponse) {
-		System.out.println("Yeehaw!");
-		actionResponse.setRenderParameter("jspPage", PortletUtil.SEARCH_ACCOUNTS_JSP);
+	public void editAccount(
+			ActionRequest actionRequest, ActionResponse actionResponse) {
+		Account account = ActionUtil.accountFromRequest(actionRequest);
+		Account newAccount = null;
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		List<SubSystem> subsystems = new ArrayList<SubSystem>();
+		
+		subsystems.add(SubSystem.LDAP);
+		try {
+			newAccount = ams.createAccount(account, Collections.EMPTY_LIST, subsystems);
+		} catch (ValidationException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// That's Ok
+		}
+	}
+	
+	public static List<Group> getAllGroups() {
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.name, StringPool.STAR, false));
+		
+		return Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
 	}
 	
 	@Override
@@ -57,6 +88,8 @@ public class AccountManagement extends MVCPortlet {
 					PortletUtil.editAccount(resourceRequest, resourceResponse);
 				break;
 			case PROCESS_ACCOUNT_NAME: 
+				String group = DAOParamUtil.getString(
+						resourceRequest, UserDisplayTerms.GROUP);
 				String firstName = DAOParamUtil.getString(
 						resourceRequest, UserDisplayTerms.FIRST_NAME);
 				String lastName = DAOParamUtil.getString(

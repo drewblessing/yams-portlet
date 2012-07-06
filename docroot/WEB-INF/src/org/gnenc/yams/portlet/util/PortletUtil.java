@@ -135,10 +135,12 @@ public class PortletUtil {
 		// Make sure to lower case the names.
 		// TODO: Issue 49 - Learn how to get primary email domain for the group.
 		
-		responses.put(UserDisplayTerms.EMAIL_ADDRESS, 
-				firstName + StringPool.PERIOD + lastName);
-		responses.put(UserDisplayTerms.SCREEN_NAME, 
-				firstName + StringPool.PERIOD + lastName);
+		if (Validator.isNotNull(firstName) && Validator.isNotNull(lastName)) {
+			responses.put(UserDisplayTerms.EMAIL_ADDRESS, 
+					firstName + StringPool.PERIOD + lastName);
+			responses.put(UserDisplayTerms.SCREEN_NAME, 
+					firstName + StringPool.PERIOD + lastName);
+		}
 		
 		return responses;
 	}

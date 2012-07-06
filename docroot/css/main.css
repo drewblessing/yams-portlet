@@ -35,4 +35,13 @@
 		max-width: 175px;
 	}
 	
+	.step2-input .aui-field-content .aui-field-label {
+		display: block;
+	}
+	
+	.domain {
+		position: relative;
+		top: 7px;
+	}
+	
 }

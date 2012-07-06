@@ -45,7 +45,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 		<%
 	 	List<Group> tempResults = Search.getGroups(
 	 			searchTerms,
-	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
+	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol(), true);
 
 		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
 		total = tempResults.size();

@@ -47,7 +47,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 	>
 
 		<c:if test="<%= PermissionsChecker.hasGroupPermission(
-				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, null) %>">
+				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, StringPool.NULL) %>">
 			<portlet:renderURL var="addUserURL">
 				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
 				<portlet:param name="redirect" value="<%= searchViewURL %>" />
@@ -60,7 +60,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 			/>
 		</c:if>
 		<c:if test="<%= PermissionsChecker.hasGroupPermission(
-				callingAccount, PermissionsChecker.PERMISSION_GROUP_ADD, null) %>">
+				callingAccount, PermissionsChecker.PERMISSION_GROUP_ADD, StringPool.NULL) %>">
 
 			<portlet:renderURL var="addOrganizationURL">
 				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ORGANIZATION_EDIT_JSP %>" />

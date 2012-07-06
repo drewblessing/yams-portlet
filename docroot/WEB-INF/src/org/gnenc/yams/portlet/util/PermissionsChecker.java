@@ -1,11 +1,12 @@
 package org.gnenc.yams.portlet.util;
 
+import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.Group;
+import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
-
-import org.gnenc.yams.model.Account;
-import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 
 /**
  * @author Drew A. Blessing
@@ -55,6 +56,27 @@ public class PermissionsChecker extends PermissionsUtil {
 	 */
 	public static boolean hasGroupPermission(Account account, String permission, String fqgn) {
 		return hasPermission(account, null, permission, fqgn);
+	}
+	
+	/**
+	 * Check if an account has permission over a specific group.
+	 * <p>
+	 * This method has the same functionality as 
+	 * {@link #hasGroupPermission(Account, String, String)} except it accepts
+	 * an org.gnenc.yams.model.Group as the third parameter.  The Group is 
+	 * converted to a fqgn and then {@link #hasGroupPermission(Account, String, String)}
+	 * is called as normal. 
+	 * <p>
+	 *
+	 * @param account		The currently logged in user's account
+	 * @param permission	The permissions to check - Must be a constant
+	 * 						value from the PermissionChecker class (i.e.
+	 * 						PermissionChecker.PERMISSION_ACCOUNT_ADD)
+	 * @param group			The group to check permissions over
+	 * @return				true if the account has permission, else false
+	 */
+	public static boolean hasGroupPermission(Account account, String permission, Group group) {
+		return hasGroupPermission(account, permission, getFqgnFromDn(group.getAttribute("dn")));
 	}
 
 	/**

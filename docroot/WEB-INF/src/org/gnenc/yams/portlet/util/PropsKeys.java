@@ -39,4 +39,8 @@ public class PropsKeys {
 	public static final String PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = "portlets.active.accountmanagement";
 
 	public static final String ACCOUNT_CREATE_WITH_WIZARD = "account.create.with.wizard";
+	
+	public static final String ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT = "account.email.address.domain.default";
+	
+	public static final String ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED = "account.email.address.domain.override.enabled";
 }

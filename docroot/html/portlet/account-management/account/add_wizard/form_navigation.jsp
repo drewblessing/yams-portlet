@@ -21,7 +21,6 @@
 
 <%
 long requestStep = ParamUtil.getLong(request,"step", 1);
-System.out.println(requestStep);
 %>
 
 <portlet:renderURL var="formNavigationPrevURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -75,9 +74,6 @@ System.out.println(requestStep);
 		nextButton.on(
 			'click',
 			function() {
-				if (alloyStep == 1) {
-					processStep1();
-				}
 				nextStep(alloyStep);
 			}
 		);
@@ -99,6 +95,9 @@ System.out.println(requestStep);
 	A.all('.step2-input > .aui-field-content > .aui-field-element > .aui-field-input').on(
 		'focus',
 		function() {
+			if (alloyStep == 1) {
+					processStep1();
+				}
 			if (alloyStep != 2) {
 				unplugAndRemoveActive(alloyStep);
 				alloyStep = 2;
@@ -124,26 +123,40 @@ System.out.println(requestStep);
 			}
 		}
 	);
-	function previousStep(step) {
-		unplugAndRemoveActive(step);
-		step--;
-		plugAndActivate(step,'<%=formNavigationPrevURL %>');
+	
+	function focusOnFirstElement(step) {
+		switch (step) {
+			case 2:
+				A.one("#<portlet:namespace /><%=UserDisplayTerms.EMAIL_ADDRESS %>").focus();
+				break;
+			case 3:
+				A.one("#<portlet:namespace /><%=UserDisplayTerms.PASSWORD %>").focus();
+				break;
+		}
 	}
+	
 	function nextStep(step) {
 		unplugAndRemoveActive(step);
 		step++;
 		plugAndActivate(step,'<%=formNavigationNextURL %>');
+		focusOnFirstElement(step);
 	}
+	
 	function plugAndActivate(step, url) {
 		var currentStep = A.one("#step" + step);
 		currentStep.addClass('active-step').one('.add-account-instructions').plug(
 			A.Plugin.IO, {uri: url}
 		);
 	}
-	function unplugAndRemoveActive(step) {
-		A.one("#step" + step).removeClass('active-step').one('.add-account-instructions').unplug(A.Plugin.IO).html('');
+	
+	function previousStep(step) {
+		unplugAndRemoveActive(step);
+		step--;
+		plugAndActivate(step,'<%=formNavigationPrevURL %>');
 	}
+	
 	function processStep1() {
+		var group = A.one("#<portlet:namespace /><%=UserDisplayTerms.GROUP %> option:selected");
 		var firstName = A.one("#<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME%>");
 		var lastName = A.one("#<portlet:namespace /><%=UserDisplayTerms.LAST_NAME%>");
 		var emailAddress = A.one("#<portlet:namespace /><%=UserDisplayTerms.EMAIL_ADDRESS %>");
@@ -155,6 +168,7 @@ System.out.println(requestStep);
 			dataType: 'json',
 			data: {
 				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.PROCESS_ACCOUNT_NAME %>',
+				'<%=UserDisplayTerms.GROUP %>': group.val(),
 				'<%=UserDisplayTerms.FIRST_NAME %>': firstName.val(),
 				'<%=UserDisplayTerms.LAST_NAME %>': lastName.val()
 			},
@@ -197,4 +211,10 @@ System.out.println(requestStep);
 <!-- 			} -->
 <!-- 		); -->
 	}
+	
+	function unplugAndRemoveActive(step) {
+		A.one("#step" + step).removeClass('active-step').one('.add-account-instructions').unplug(A.Plugin.IO).html('');
+	}
+	
+	
 </aui:script>

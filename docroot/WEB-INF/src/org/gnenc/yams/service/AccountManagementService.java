@@ -5,8 +5,9 @@ import java.util.List;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.SearchFilter.Operand;
+import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 
 /**
@@ -33,6 +34,9 @@ public interface AccountManagementService {
 
 	public List<SubSystem> checkAccountExists(String accountUsername) 
 			throws ValidationException;
+
+	Account createAccount(Account newAccount, List<GroupMap> groupMaps,
+			List<SubSystem> subsystems) throws ValidationException;
 
 
 }

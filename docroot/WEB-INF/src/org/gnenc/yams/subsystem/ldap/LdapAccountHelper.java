@@ -124,7 +124,8 @@ public class LdapAccountHelper {
 					ldap.getDescription() == null ? StringPool.BLANK : ldap.getDescription());
 			account.setDisplayName(
 					ldap.getDisplayName() == null ? ldap.getCn().get(0) : ldap.getDisplayName());
-			account.setEmployeeNumber(ldap.getEmployeeNumber());
+			account.setEmployeeNumber(
+					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setGivenName(ldap.getGivenName() == null ? StringPool.BLANK : ldap.getGivenName());
 			account.getMail().addAll(
 					ldap.getMail() == null ? Collections.<String>emptyList() : ldap.getMail());
@@ -200,23 +201,23 @@ public class LdapAccountHelper {
 
 //			ldap.setStreet(parseAccountList(account.getStreet()));
 
-			ldap.setInitials(parseInitials(account));
+//			ldap.setInitials(parseInitials(account));
 
 //			ldap.setDateOfBirth(parseDateOfBirth(account.getDateOfBirth()));
 
 //			ldap.setDepartmentName(parseAccountField(account.getDepartmentName()));
 
-			ldap.setPreferredLanguage(getSingleValuedList(DEFAULT_PREFERRED_LANGUAGE));
+//			ldap.setPreferredLanguage(getSingleValuedList(DEFAULT_PREFERRED_LANGUAGE));
 
 //			ldap.setRoomNumber(parseAccountField(account.getRoomNumber()));
 
 //			ldap.setPostalCode(parseAccountField(account.getPostalCode()));
 
-			ldap.setDepartmentNumber(EMPTY_FIELD);
+//			ldap.setDepartmentNumber(EMPTY_FIELD);
 
-			ldap.setSecurityQuestion(parseAccountList(account.getSecurityQuestion()));
+//			ldap.setSecurityQuestion(parseAccountList(account.getSecurityQuestion()));
 
-			ldap.setSecurityAnswer(parseAccountList(account.getSecurityAnswer()));
+//			ldap.setSecurityAnswer(parseAccountList(account.getSecurityAnswer()));
 
 //			ldap.setSt(parseState(account.getSt()));
 
@@ -226,7 +227,7 @@ public class LdapAccountHelper {
 
 //			ldap.setObjectClass(getObjectClass(account.getAccountType()));
 
-			ldap.setStatus(account.getAccountStatus().name());
+//			ldap.setStatus(account.getAccountStatus().name());
 
 		}
 
@@ -479,6 +480,7 @@ public class LdapAccountHelper {
 		public static final DistinguishedName computeDn(final Account account) {
 			StringBuilder sb = new StringBuilder("uid=");
 			sb.append(account.getUid()).append(",ou=");
+			sb.append("esu10.org,o=ESU10,o=GNENC");
 //			sb.append(getOrganizationalUnit(account.getAccountType(), account.getAccountStatus()));
 			return new DistinguishedName(sb.toString());
 		}
@@ -486,14 +488,15 @@ public class LdapAccountHelper {
 		public static final Name computeDn(final String account, final AccountType accountType) {
 			StringBuilder sb = new StringBuilder("uid=");
 			sb.append(account).append(",ou=");
-			sb.append(getOrganizationalUnit(accountType, AccountStatus.ACTIVE));
+			sb.append("esu10.org,o=ESU10,o=GNENC");
 			return new DistinguishedName(sb.toString());
 		}
 
 		public static final Name computeDn(final String account, final AccountType accountType, final AccountStatus status) {
 			StringBuilder sb = new StringBuilder("uid=");
 			sb.append(account).append(",ou=");
-			sb.append(getOrganizationalUnit(accountType, status));
+			sb.append("esu10.org,o=ESU10,o=GNENC");
+//			sb.append(getOrganizationalUnit(accountType, status));
 			return new DistinguishedName(sb.toString());
 		}
 

@@ -18,7 +18,7 @@ import org.springframework.ldap.odm.annotations.Id;
  * @author Drew A. Blessing
  *
  */
-@Entry(objectClasses={"posixaccount","inetorgperson","top"})
+@Entry(objectClasses={"inetorgperson","top"})
 final public class LdapAccount {
 
 	@Id
@@ -41,9 +41,6 @@ final public class LdapAccount {
 
 	@Attribute(type=Type.STRING)
 	private String employeeType;
-
-	@Attribute(type=Type.STRING)
-	private String gecos;
 
 	@Attribute(type=Type.STRING)
 	private String gidNumber;
@@ -194,36 +191,12 @@ final public class LdapAccount {
 		this.employeeType = employeeType;
 	}
 
-	public String getGecos() {
-		return gecos;
-	}
-
-	public void setGecos(String gecos) {
-		this.gecos = gecos;
-	}
-
-	public String getGidNumber() {
-		return gidNumber;
-	}
-
-	public void setGidNumber(String gidNumber) {
-		this.gidNumber = gidNumber;
-	}
-
 	public String getGivenName() {
 		return givenName;
 	}
 
 	public void setGivenName(String givenName) {
 		this.givenName = givenName;
-	}
-
-	public String getHomeDirectory() {
-		return homeDirectory;
-	}
-
-	public void setHomeDirectory(String homeDirectory) {
-		this.homeDirectory = homeDirectory;
 	}
 
 	public List<String> getHomePhone() {
@@ -264,14 +237,6 @@ final public class LdapAccount {
 
 	public void setLocalityName(List<String> localityName) {
 		this.localityName = localityName;
-	}
-
-	public String getLoginShell() {
-		return loginShell;
-	}
-
-	public void setLoginShell(String loginShell) {
-		this.loginShell = loginShell;
 	}
 
 	public List<String> getMail() {

@@ -56,6 +56,7 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 				<%=selAccount.getMailStringWithDelimiter(
 	      				Account.DELIMITER_COMMA, true) %>
 			</dd>
+			<%=selAccount.getCn() %>
 		</c:if>
 	</dl>
 </div>
