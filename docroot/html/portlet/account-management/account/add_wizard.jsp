@@ -31,26 +31,30 @@ List<Group> groups = AccountManagement.getAllGroups();
 		<div class="aui-column aui-w50 aui-column-first">
 			<h3>Step 1</h3>
 			<aui:fieldset>
-				<aui:select name="group" label="primary-group" 
-						showEmptyOption="<%= true %>" cssClass="step1-input" >
-					<%
-					for (Group group : groups) {
-					%>
-						<c:if test="<%=PermissionsChecker.hasGroupPermission(
-								callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
-							<aui:option name="" value='<%=group.getAttribute("dn") %>'>
-								<%=group.getDisplayName() %>
-							</aui:option>
-						</c:if>
-					<%
-					}
-					%>
-				</aui:select>
+				<c:if test='<%=!PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %>' >
+					<aui:select name="<%=UserDisplayTerms.GROUP %>" label="primary-group" 
+							showEmptyOption="<%= true %>" cssClass="step1-input" >
+						<%
+						for (Group group : groups) {
+						%>
+							<c:if test="<%=PermissionsChecker.hasGroupPermission(
+									callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
+								<aui:option name="" value='<%=group.getAttribute("dn") %>'>
+									<%=group.getDisplayName() %>
+								</aui:option>
+							</c:if>
+						<%
+						}
+						%>
+					</aui:select>
+				</c:if>
 				<!-- Use the title values from the portal for ease -->
 				<aui:select name="title"  
-						listType="<%= ListTypeConstants.CONTACT_PREFIX %>" 
-						showEmptyOption="<%= true %>" cssClass="step1-input"/>
-				<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" >
+					listType="<%= ListTypeConstants.CONTACT_PREFIX %>" 
+					showEmptyOption="<%= true %>" 
+					cssClass="step1-input"
+				/>
+				<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" first="<%=true %>" >
 					<aui:validator name="required" />
 				</aui:input>
 				<aui:input name="<%=UserDisplayTerms.LAST_NAME %>" cssClass="step1-input"  >
@@ -67,32 +71,38 @@ List<Group> groups = AccountManagement.getAllGroups();
 	<div class="separator" ></div>
 	
 	<div id="step2" class="aui-layout-content">
-		<div class="aui-column aui-w50 aui-column-first" >
+		<div id="step2content" class="aui-column aui-w50 aui-column-first" >
 			<h3>Step 2</h3>
 			<aui:fieldset>
 			<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" cssClass="step2-input" 
 					inlineField="<%=true %>"  >
 				<aui:validator name="required" />
 			</aui:input>
-			<c:choose>
-				<c:when test="<%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" >
+<%-- 			<c:choose> --%>
+<%-- 				<c:when test="<%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" > --%>
 					<span class="domain"><%=StringPool.AT %></span>
 					<aui:input 
-						name="domain" 
+						name="<%=UserDisplayTerms.DOMAIN %>" 
 						label="<%=StringPool.BLANK %>" 
 						cssClass="step2-input domain" 
-						value="<%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT %>" 
+						value="<%=StringPool.BLANK %>" 
 						inlineField="<%=true %>" 
+						disabled="<%=!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>"
 					>
 						<aui:validator name="required" />
 					</aui:input>
-				</c:when>
-				<c:otherwise>
-					<span class="step2-input domain">
-						<%=StringPool.AT %><%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT %>
-					</span>
-				</c:otherwise>
-			</c:choose>
+					<c:if test="<%=!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" >
+						<liferay-ui:icon-help 
+							message="the-email-domain-field-is-disabled-because-overriding-the-default-domain-is-not-allowed"
+						/>
+					</c:if>
+<%-- 				</c:when> --%>
+<%-- 				<c:otherwise> --%>
+<!-- 					<span class="step2-input domain"> -->
+<%-- 						<%=StringPool.AT %><%=PropsValues.LDAP_ACCOUNT_DEFAULT_DOMAIN %> --%>
+<!-- 					</span> -->
+<%-- 				</c:otherwise> --%>
+<%-- 			</c:choose> --%>
 				<aui:input name="<%=UserDisplayTerms.SCREEN_NAME %>" cssClass="step2-input" >
 					<aui:validator name="required" />
 				</aui:input>
@@ -133,4 +143,8 @@ List<Group> groups = AccountManagement.getAllGroups();
 	stepOnLoad.addClass('active-step').one(
 			'.add-account-instructions').plug(
 					A.Plugin.IO, {uri: '<%=formNavigationURL %>'});
+					
+	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
+		Liferay.Util.focusFormField(document.<portlet:namespace />yamsFm.<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME %>);
+	</c:if>
 </aui:script>

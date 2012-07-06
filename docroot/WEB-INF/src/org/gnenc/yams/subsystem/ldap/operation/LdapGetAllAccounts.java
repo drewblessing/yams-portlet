@@ -44,13 +44,17 @@ public class LdapGetAllAccounts extends AbstractLdapOperation implements
 			logger.debug("Time to search LDAP ms: " + (System.currentTimeMillis() - start));
 			start = System.currentTimeMillis();
 		}
-
+		
 		for (LdapAccount ldap : ldapAccounts) {
-			final String accountId = ldap.getUid();
-			final Account account = accounts.containsKey(accountId) ? accounts.get(accountId) : new Account();
-			LdapAccountHelper.convertLdapAccountToSystemAccount(ldap, account);
-			account.getSubsystems().add(SubSystem.LDAP);
-			accounts.put(accountId, account);
+			try {
+				final String accountId = ldap.getUid();
+				final Account account = accounts.containsKey(accountId) ? accounts.get(accountId) : new Account();
+				LdapAccountHelper.convertLdapAccountToSystemAccount(ldap, account);
+				account.getSubsystems().add(SubSystem.LDAP);
+				accounts.put(accountId, account);
+			} catch (NullPointerException npe) {
+				// User has incorrect object classes
+			}
 		}
 
 		if (debug) {

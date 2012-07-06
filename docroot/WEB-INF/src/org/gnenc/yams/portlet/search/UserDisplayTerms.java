@@ -33,6 +33,8 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  */
 public class UserDisplayTerms extends YAMSDisplayTerms {
 
+	public static final String DOMAIN = "domain";
+	
 	public static final String EMAIL_ADDRESS = "emailAddress";
 
 	public static final String FIRST_NAME = "firstName";
@@ -64,11 +66,16 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 			status = GetterUtil.getInteger(statusString);
 		}
 
+		domain = ParamUtil.getString(portletRequest, DOMAIN);
 		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = ParamUtil.getString(portletRequest, ORGANIZATION);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 		uid = ParamUtil.getString(portletRequest, UID);
+	}
+	
+	public String getDomain() {
+		return domain;
 	}
 
 	public String getEmailAddress() {
@@ -127,6 +134,7 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 
 	}
 
+	protected String domain;
 	protected String emailAddress;
 	protected String firstName;
 	protected String organization;

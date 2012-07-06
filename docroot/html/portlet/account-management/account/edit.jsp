@@ -44,7 +44,7 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 <portlet:actionURL name="editAccount" var="editAccountURL" />
 
 <aui:form method="POST" action="<%=editAccountURL.toString() %>" name="yamsFm" id="yamsFm">
-	<aui:input type="hidden" name="cmd" value='<%=(selectedAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_ACCOUNT_CMD %>' />
+<%-- 	<aui:input type="hidden" name="cmd" value='<%=(selectedAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_ACCOUNT_CMD %>' /> --%>
 <c:choose>
 	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
 		<liferay-util:include

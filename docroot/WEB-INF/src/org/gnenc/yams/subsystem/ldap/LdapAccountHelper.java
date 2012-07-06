@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.AccountStatus;
 import org.gnenc.yams.model.AccountType;
+import org.gnenc.yams.portlet.search.UserDisplayTerms;
+import org.gnenc.yams.portlet.util.PropsValues;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
 import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
 
@@ -28,25 +30,16 @@ public class LdapAccountHelper {
 
 		private static final Logger logger = Logger.getLogger(LdapAccountHelper.class);
 
-		private static final String EMPTY_FIELD = "NONE";
+		private static final boolean DEFAULT_MODE_SIMPLE = PropsValues.LDAP_ACCOUNT_DEFAULT_MODE == "simple" ? false : true;
+		private static final String EMPTY_FIELD = StringPool.NULL;
 		private static final List<String> EMPTY_FIELD_LIST = getSingleValuedList(EMPTY_FIELD);
-		private static final String EMPTY_DOB = "00000000";
-		private static final String DEFAULT_PREFERRED_LANGUAGE = "en-US";
-		private static final String DEFAULT_PROVINCE = "SK"; //?
-		public static final String DEFAULT_DOMAIN = "chinooksd.ca"; //?
-
-		private static final String O_M_SUFFIX = "officemanagers";
-		private static final String PRINCIPALS_SUFFIX = "principals";
-		private static final String TEACHERS_SUFFIX = "teachers";
-
-		public static final String STAFF_OU = "staff";
-		public static final String STAFF_ARCHIVE_OU = "staffArchive";
-		public static final String STUDENT_OU = "students";
-		public static final String STUDENT_ARCHIVE_OU = "studentsArchive";
-		private static final String STAFF_OBJECT_CLASS = "chinookStaff";
-		private static final String STUDENT_OBJECT_CLASS = "chinookStudent";
-
-		private static final String ORGANIZATION_NAME = "Chinook School Division";
+		private static final String EMPTY_DOB = PropsValues.LDAP_ACCOUNT_EMPTY_DOB;
+		private static final String DEFAULT_PREFERRED_LANGUAGE = 
+				PropsValues.LDAP_ACCOUNT_DEFAULT_PREFERRED_LANGUAGE;
+//		private static final String DEFAULT_PROVINCE = "SK"; //?
+		public static final String DEFAULT_DOMAIN = PropsValues.LDAP_ACCOUNT_DEFAULT_DOMAIN; 
+		private static final String DEFAULT_USER_CONTAINER_DN = 
+				PropsValues.LDAP_ACCOUNT_DEFAULT_USER_CONTAINER_DN;
 
 		public static final String STAFF_PPOLICY_DN = "cn=staff,ou=ppolicies," + LdapHelper.DEFAULT_BASE_DN;
 		public static final String STUDENT_PPOLICY_DN = "cn=student,ou=ppolicies," + LdapHelper.DEFAULT_BASE_DN;
@@ -174,14 +167,12 @@ public class LdapAccountHelper {
 				ldap.setCn(cn);
 			}
 
-			ldap.setDisplayName(account.getDisplayName().isEmpty() ? account.getGivenName() :
-				account.getDisplayName().indexOf(" ") != -1 ? account.getDisplayName().split(" ")[0] : account.getDisplayName() );
+			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
+					account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
 
 			ldap.setDn(computeDn(account));
 
 			ldap.setEmployeeNumber(account.getEmployeeNumber());
-
-//			ldap.setEmployeeType(account.getEmployeeType().name());
 
 //			ldap.setHomePhone(parseAccountList(account.getHomePhone()));
 
@@ -191,13 +182,25 @@ public class LdapAccountHelper {
 
 //			ldap.setMobile(parseAccountList(account.getMobile()));
 
-//			ldap.setOrganizationalUnitName(getOrganizationalUnit(account.getAccountType(), account.getAccountStatus()));
+			try {
+				ldap.setOrganizationalUnitName(getOrganizationalUnit(ldap.getDn().toString()));
+			} catch (Exception e) {
+				// Do nothing
+			}
 
-//			ldap.setTitle(parseAccountField(account.getTitle()));
+			try {
+				ldap.setTitle(parseAccountField(account.getAttribute(UserDisplayTerms.TITLE)));
+			} catch (Exception e) {
+				// Do nothing
+			}
 
 //			ldap.setTelephoneNumber(parseAccountList(account.getTelephoneNumber()));
 
-			ldap.setOrganizationName(ORGANIZATION_NAME);
+			try {
+				ldap.setOrganizationName(getOrganization(ldap.getDn().toString()));
+			} catch (Exception e) {
+				// Do nothing
+			}
 
 //			ldap.setStreet(parseAccountList(account.getStreet()));
 
@@ -478,59 +481,64 @@ public class LdapAccountHelper {
 		}
 
 		public static final DistinguishedName computeDn(final Account account) {
-			StringBuilder sb = new StringBuilder("uid=");
-			sb.append(account.getUid()).append(",ou=");
-			sb.append("esu10.org,o=ESU10,o=GNENC");
-//			sb.append(getOrganizationalUnit(account.getAccountType(), account.getAccountStatus()));
-			return new DistinguishedName(sb.toString());
+			return computeDn(account.getUid(), null, account.getAccountStatus());
 		}
 
-		public static final Name computeDn(final String account, final AccountType accountType) {
-			StringBuilder sb = new StringBuilder("uid=");
-			sb.append(account).append(",ou=");
-			sb.append("esu10.org,o=ESU10,o=GNENC");
-			return new DistinguishedName(sb.toString());
+		public static final DistinguishedName computeDn(final String uid, final AccountType accountType) {
+			return computeDn(uid, accountType, null);
 		}
 
-		public static final Name computeDn(final String account, final AccountType accountType, final AccountStatus status) {
+		public static final DistinguishedName computeDn(final String uid, final AccountType accountType, final AccountStatus status) {
 			StringBuilder sb = new StringBuilder("uid=");
-			sb.append(account).append(",ou=");
-			sb.append("esu10.org,o=ESU10,o=GNENC");
-//			sb.append(getOrganizationalUnit(accountType, status));
-			return new DistinguishedName(sb.toString());
-		}
-
-		private static final String getOrganizationalUnit(final AccountType type, final AccountStatus status) {
-			switch(type) {
-			case EMPLOYEE:
-				switch(status) {
-				case ACTIVE:
-					return STAFF_OU;
-				default:
-					return STAFF_ARCHIVE_OU;
-				}
-			case STUDENT:
-				switch(status) {
-				case ACTIVE:
-					return STUDENT_OU;
-				default:
-					return STUDENT_ARCHIVE_OU;
-				}
-			default:
-				return STAFF_OU;
+			sb.append(uid).append(",");
+			if (DEFAULT_MODE_SIMPLE) {
+				sb.append(DEFAULT_USER_CONTAINER_DN);
+			} else {
+				//TODO: Implement group dn computing
 			}
+			System.out.println(sb.toString());
+			return new DistinguishedName(sb.toString());
+		}
+		
+		private static final String getOrganization(final String dn) {
+			return dn.substring(dn.indexOf("o=")) + "," + LdapHelper.DEFAULT_BASE_DN;
+		}
+		
+		private static final String getOrganizationalUnit(final String dn) {
+			return dn.substring(dn.indexOf("ou=")) + "," + LdapHelper.DEFAULT_BASE_DN;
 		}
 
-		private static final List<String> getObjectClass(final AccountType type) {
-			switch(type) {
-			case EMPLOYEE:
-				return getSingleValuedList(STAFF_OBJECT_CLASS);
-			case STUDENT:
-				return getSingleValuedList(STUDENT_OBJECT_CLASS);
-			default:
-				return getSingleValuedList(STAFF_OBJECT_CLASS);
-			}
-		}
+//		private static final String getOrganizationalUnit(final AccountType type, final AccountStatus status) {
+//			switch(type) {
+//			case EMPLOYEE:
+//				switch(status) {
+//				case ACTIVE:
+//					return STAFF_OU;
+//				default:
+//					return STAFF_ARCHIVE_OU;
+//				}
+//			case STUDENT:
+//				switch(status) {
+//				case ACTIVE:
+//					return STUDENT_OU;
+//				default:
+//					return STUDENT_ARCHIVE_OU;
+//				}
+//			default:
+//				return STAFF_OU;
+//			}
+//		}
+
+//		private static final List<String> getObjectClass(final AccountType type) {
+//			switch(type) {
+//			case EMPLOYEE:
+//				return getSingleValuedList(STAFF_OBJECT_CLASS);
+//			case STUDENT:
+//				return getSingleValuedList(STUDENT_OBJECT_CLASS);
+//			default:
+//				return getSingleValuedList(STAFF_OBJECT_CLASS);
+//			}
+//		}
 
 		private static final String parseInitials(Account account) {
 //			if (!account.getInitials().isEmpty()) return account.getInitials();
@@ -550,10 +558,10 @@ public class LdapAccountHelper {
 //			return account.getAccountType().name() + " - " + account.getTitle() + " @ " + account.getL().get(0) + " for the " + ORGANIZATION_NAME;
 //		}
 
-		private static final String parseState(String state) {
-			if (!state.isEmpty()) return state;
-			return DEFAULT_PROVINCE;
-		}
+//		private static final String parseState(String state) {
+//			if (!state.isEmpty()) return state;
+//			return DEFAULT_PROVINCE;
+//		}
 
 		private static final List<String> parseMail(Account account) {
 			final List<String> mail = new ArrayList<String>();

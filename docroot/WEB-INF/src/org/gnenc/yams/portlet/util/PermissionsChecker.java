@@ -117,7 +117,6 @@ public class PermissionsChecker extends PermissionsUtil {
 
 	private static boolean hasPermission(
 			Account callingAccount, Account account, String permission, String fqgn) {
-
 		if (Validator.isNull(callingAccount)) {
 			return false;
 		}

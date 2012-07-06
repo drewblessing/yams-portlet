@@ -18,6 +18,8 @@
  **/
 package org.gnenc.yams.portlet.util;
 
+import com.liferay.util.portlet.PortletProps;
+
 /**
  * Property key definitions
  *
@@ -29,12 +31,18 @@ public class PropsKeys {
 	public static final String LDAP_PROVIDER_URL = "ldap.provider.url";
 
 	public static final String LDAP_BASE_DN = "ldap.base.dn";
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_DOMAIN = "ldap.account.default.domain";
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_PREFERRED_LANGUAGE = "ldap.account.default.preferred.language";
+
+	public static final String LDAP_ACCOUNT_DEFAULT_MODE = "ldap.account.default.mode";
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_USER_CONTAINER_DN = "ldap.account.default.user.container.dn";
+	
+	public static final String LDAP_ACCOUNT_EMPTY_DOB = "ldap.account.emtpy.dob";
 
 	public static final String LDAP_DATE_FORMAT = "ldap.date.format";
-
-	public static final String LDAP_USER_CONTAINER_MODE = "ldap.user.container.mode";
-
-	public static final String LDAP_USER_CONTAINER_DN = "ldap.user.container.dn";
 	
 	public static final String PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = "portlets.active.accountmanagement";
 

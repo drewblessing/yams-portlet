@@ -61,8 +61,8 @@ String jspPage = "";
 	<liferay-ui:search-container-results>
 		<%
 	 	List<Account> tempResults = Search.getAccounts(
-	 			searchTerms,
-	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol());
+	 			searchTerms, searchContainer.getOrderByType(), 
+	 			searchContainer.getOrderByCol(), true);
 
 		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
 		total = tempResults.size();
@@ -117,3 +117,8 @@ String jspPage = "";
 	<liferay-ui:search-iterator />
 
 </liferay-ui:search-container>
+<aui:script use="aui-core" >
+<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
+	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME %>);
+</c:if>
+</aui:script>

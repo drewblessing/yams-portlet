@@ -79,3 +79,8 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 	<liferay-ui:search-iterator />
 
 </liferay-ui:search-container>
+<aui:script use="aui-core" >
+<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
+	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%=OrganizationDisplayTerms.NAME %>);
+</c:if>
+</aui:script>

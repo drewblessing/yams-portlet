@@ -43,9 +43,13 @@ page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.util.PortalUtil" %>
 
+<%@ page import="com.liferay.portlet.PortletURLUtil" %>
+
 <%@ page import="java.util.List" %>
 
-<%@ page import="javax.portlet.PortletURL" %>
+<%@ page import="javax.portlet.PortletMode" %><%@
+page import="javax.portlet.PortletURL" %><%@
+page import="javax.portlet.WindowState" %>
 
 <%@ page import="org.gnenc.yams.model.Account" %><%@
 page import="org.gnenc.yams.model.Group" %><%@
@@ -67,9 +71,28 @@ page import="org.gnenc.yams.portlet.util.PropsValues" %>
 
 <%
 Account callingAccount = null;
+PortletMode portletMode = null;
+PortletURL currentURLObj = null;
+WindowState windowState = null;
+
 if (Validator.isNull(request.getSession().getAttribute("callingAccount"))) {
 	callingAccount = PortletUtil.getAccountFromPortalUser(renderRequest, user);
 } else {
 	callingAccount = (Account)request.getSession().getAttribute("callingAccount");
 }
+
+if (renderRequest != null) {
+	windowState = renderRequest.getWindowState();
+	portletMode = renderRequest.getPortletMode();
+
+	currentURLObj = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+}
+else if (resourceRequest != null) {
+	windowState = resourceRequest.getWindowState();
+	portletMode = resourceRequest.getPortletMode();
+
+	currentURLObj = PortletURLUtil.getCurrent(resourceRequest, resourceResponse);
+}
+
+String currentURL = currentURLObj.toString();
 %>

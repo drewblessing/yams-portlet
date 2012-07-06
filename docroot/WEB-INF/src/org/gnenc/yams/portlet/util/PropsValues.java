@@ -32,12 +32,18 @@ public class PropsValues {
 	public static final String LDAP_PROVIDER_URL = PortletProps.get(PropsKeys.LDAP_PROVIDER_URL);
 
 	public static final String LDAP_BASE_DN = PortletProps.get(PropsKeys.LDAP_BASE_DN);
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_DOMAIN = PortletProps.get(PropsKeys.LDAP_ACCOUNT_DEFAULT_DOMAIN);
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_MODE = PortletProps.get(PropsKeys.LDAP_ACCOUNT_DEFAULT_MODE);
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_PREFERRED_LANGUAGE = PortletProps.get(PropsKeys.LDAP_ACCOUNT_DEFAULT_PREFERRED_LANGUAGE);
+	
+	public static final String LDAP_ACCOUNT_DEFAULT_USER_CONTAINER_DN = PortletProps.get(PropsKeys.LDAP_ACCOUNT_DEFAULT_USER_CONTAINER_DN);
+	
+	public static final String LDAP_ACCOUNT_EMPTY_DOB = PortletProps.get(PropsKeys.LDAP_ACCOUNT_EMPTY_DOB);
 
 	public static final String LDAP_DATE_FORMAT = PortletProps.get(PropsKeys.LDAP_DATE_FORMAT);
-
-	public static final String LDAP_USER_CONTAINER_MODE = PortletProps.get(PropsKeys.LDAP_USER_CONTAINER_MODE);
-
-	public static final String LDAP_USER_CONTAINER_DN = PortletProps.get(PropsKeys.LDAP_USER_CONTAINER_DN);
 	
 	public static final boolean PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = GetterUtil.getBoolean(PortletProps.get(PropsKeys.PORTLETS_ACTIVE_ACCOUNTMANAGEMENT));
 

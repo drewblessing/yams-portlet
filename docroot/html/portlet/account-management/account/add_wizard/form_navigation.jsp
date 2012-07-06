@@ -159,16 +159,17 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 		var group = A.one("#<portlet:namespace /><%=UserDisplayTerms.GROUP %> option:selected");
 		var firstName = A.one("#<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME%>");
 		var lastName = A.one("#<portlet:namespace /><%=UserDisplayTerms.LAST_NAME%>");
+		var domain = A.one("#<portlet:namespace /><%=UserDisplayTerms.DOMAIN %>");
 		var emailAddress = A.one("#<portlet:namespace /><%=UserDisplayTerms.EMAIL_ADDRESS %>");
 		var screenName = A.one("#<portlet:namespace /><%=UserDisplayTerms.SCREEN_NAME %>");
-		
+				
 		var request = A.io.request('<%=submissionURL %>', {
 			method: 'POST',
 			uri: '<%=submissionURL %>',
 			dataType: 'json',
 			data: {
-				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.PROCESS_ACCOUNT_NAME %>',
-				'<%=UserDisplayTerms.GROUP %>': group.val(),
+				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.ADD_ACCOUNT_STEP_1_CMD %>',
+				'<%=UserDisplayTerms.GROUP %>': <%=PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %> ? '<%=StringPool.BLANK %>' : group.val(),
 				'<%=UserDisplayTerms.FIRST_NAME %>': firstName.val(),
 				'<%=UserDisplayTerms.LAST_NAME %>': lastName.val()
 			},
@@ -178,6 +179,7 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 					if (emailAddress.val() == "") {
 						emailAddress.val(message.<%=UserDisplayTerms.EMAIL_ADDRESS%>);
 					}
+					domain.val(message.<%=UserDisplayTerms.DOMAIN %>);
 					if (screenName.val() == "") {
 						screenName.val(message.<%=UserDisplayTerms.SCREEN_NAME%>);
 					}

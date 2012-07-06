@@ -54,25 +54,25 @@ public class Search extends MVCPortlet {
 	 */
 	public static List<Account> getAccounts(
 			UserSearchTerms searchTerms,
-			String orderByType, String orderByCol) {
+			String orderByType, String orderByCol, boolean like) {
 
 		List<SearchFilter> filters = SearchUtil.getUserFilterList(searchTerms);
 		Operand operand = SearchUtil.getOperand(searchTerms);
 
-		List<Account> accounts = getAccounts(filters, operand, orderByType, orderByCol);
+		List<Account> accounts = getAccounts(filters, operand, orderByType, orderByCol, like);
 
 		return accounts;
 	}
 
 	public static List<Account> getAccounts(List<SearchFilter> filters, Operand operand,
-			String orderByType, String orderByCol) {
+			String orderByType, String orderByCol, boolean like) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();
 		List<Account> accounts = new ArrayList<Account>();
 
 		subsystems.add(SubSystem.LDAP);
 		try {
-			accounts = ams.getAccounts(filters, operand, subsystems);
+			accounts = ams.getAccounts(filters, operand, subsystems, like);
 		} catch (IllegalArgumentException e) {
 			// That's Ok
 		}
@@ -89,6 +89,7 @@ public class Search extends MVCPortlet {
 		Operand operand = SearchUtil.getOperand(searchTerms);
 
 		List<Group> groups = getGroups(filters, operand, orderByType, orderByCol, like);
+		SearchUtil.sortGroups(groups, orderByType, orderByCol);
 
 		return groups;
 	}

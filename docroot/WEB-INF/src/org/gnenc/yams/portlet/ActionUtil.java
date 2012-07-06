@@ -8,8 +8,11 @@ import javax.portlet.ActionRequest;
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.service.ListTypeServiceUtil;
 
 /**
  * 
@@ -20,6 +23,13 @@ public class ActionUtil {
 	
 	public static Account accountFromRequest(ActionRequest request) {
 		Account account = new Account();
+		String prefix = StringPool.BLANK;
+		try {
+			prefix = ListTypeServiceUtil.getListType(
+					ParamUtil.getInteger(request, UserDisplayTerms.TITLE)).getName();
+		} catch (Exception e) {
+			// Do nothing
+		} 
 		
 		account.setCn(cnFromRequest(request));
 		account.setDescription(null);
@@ -30,7 +40,9 @@ public class ActionUtil {
 		account.setPassword(passwordFromRequest(request));
 		account.setSn(ParamUtil.getString(request, UserDisplayTerms.LAST_NAME));
 		account.setUid(ParamUtil.getString(request, UserDisplayTerms.SCREEN_NAME));
-		account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS));
+		account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS) + 
+				StringPool.AT + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
+		account.setAttribute(UserDisplayTerms.TITLE, prefix);
 		
 		return account;
 	}

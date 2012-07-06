@@ -30,7 +30,7 @@ public interface AccountManagementService {
 	 */
 	public List<Account> getAccounts(
 			List<SearchFilter> filters, Operand operand,
-			List<SubSystem> subsystems);
+			List<SubSystem> subsystems, boolean like);
 
 	public List<SubSystem> checkAccountExists(String accountUsername) 
 			throws ValidationException;

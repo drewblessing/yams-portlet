@@ -81,7 +81,8 @@ public class PortletUtil {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(Filter.mail,user.getEmailAddress(),false));
 
-		accounts = Search.getAccounts(filters, null, StringPool.BLANK, StringPool.BLANK);
+		accounts = Search.getAccounts(filters, null, StringPool.BLANK, 
+				StringPool.BLANK, false);
 
 		if (accounts.size() == 0) {
 			return null;
@@ -104,7 +105,7 @@ public class PortletUtil {
 		List<Account> accounts = new ArrayList<Account>();
 
 		accounts = Search.getAccounts(
-				searchTerms, StringPool.BLANK, StringPool.BLANK);
+				searchTerms, StringPool.BLANK, StringPool.BLANK, false);
 
 		if (accounts.size() == 1) {
 			account = accounts.get(0);
@@ -129,9 +130,26 @@ public class PortletUtil {
 		return groups;
 	}
 	
-	public static HashMap<String, String> processAccountName(String firstName,
-			String lastName) {				
-		HashMap<String,String> responses = new HashMap<String,String>();
+	public static Group getGroupByDn(String groupDn) throws Exception {
+		List<Group> groups = new ArrayList<Group>();
+
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.cn,groupDn,false));
+
+		groups = Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
+
+		if (groups.size() > 1) {
+			throw new Exception("Too many groups");
+		} else if (groups.size() == 0) {
+			return null;
+		} 
+				
+		return groups.get(0);
+	}
+	
+	public static void processAccountName(String firstName,
+			String lastName, String groupDn, HashMap<String, String> responses) {
 		// Make sure to lower case the names.
 		// TODO: Issue 49 - Learn how to get primary email domain for the group.
 		
@@ -142,7 +160,8 @@ public class PortletUtil {
 					firstName + StringPool.PERIOD + lastName);
 		}
 		
-		return responses;
+		String domain = PropsValues.LDAP_ACCOUNT_DEFAULT_DOMAIN;
+		responses.put(UserDisplayTerms.DOMAIN, domain);
 	}
 
 	private static boolean validatePasswordFields(

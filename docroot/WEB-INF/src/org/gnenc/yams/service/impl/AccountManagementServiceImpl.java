@@ -144,10 +144,10 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	@Override
 	public List<Account> getAccounts(
 			final List<SearchFilter> filters, final Operand operand,
-			final List<SubSystem> subsystems) {
+			final List<SubSystem> subsystems, boolean like) {
 		final Map<String, Account> accounts =
 				Collections.synchronizedMap(new HashMap<String, Account>());
-		final String searchFilter = SearchFilter.buildFilterString(filters, operand);
+		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
 		System.out.println(searchFilter);
 		try {
 			executor.execute(

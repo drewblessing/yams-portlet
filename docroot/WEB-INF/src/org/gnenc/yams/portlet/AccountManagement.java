@@ -41,6 +41,7 @@ import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
+import org.gnenc.yams.portlet.search.util.SearchUtil;
 import org.gnenc.yams.portlet.util.PortletUtil;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
@@ -73,7 +74,11 @@ public class AccountManagement extends MVCPortlet {
 		filters.add(new SearchFilter(
 				Filter.name, StringPool.STAR, false));
 		
-		return Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
+		List<Group> groups = Search.getGroups(filters, null, 
+				StringPool.BLANK, StringPool.BLANK, false);
+		SearchUtil.sortGroups(groups, "asc", "cn");
+		
+		return groups;
 	}
 	
 	@Override
@@ -87,14 +92,15 @@ public class AccountManagement extends MVCPortlet {
 			case EDIT_ACCOUNT_CMD: responses =
 					PortletUtil.editAccount(resourceRequest, resourceResponse);
 				break;
-			case PROCESS_ACCOUNT_NAME: 
+			case ADD_ACCOUNT_STEP_1_CMD: 
 				String group = DAOParamUtil.getString(
 						resourceRequest, UserDisplayTerms.GROUP);
 				String firstName = DAOParamUtil.getString(
 						resourceRequest, UserDisplayTerms.FIRST_NAME);
 				String lastName = DAOParamUtil.getString(
 						resourceRequest, UserDisplayTerms.LAST_NAME);
-				responses = PortletUtil.processAccountName(firstName, lastName);
+				PortletUtil.processAccountName(firstName, lastName, 
+						group, responses);
 			default: //nothing
 				break;
 		}
@@ -112,8 +118,7 @@ public class AccountManagement extends MVCPortlet {
 		writer.write(jsonObject.toString());
 	}
 
-	public static final int ADD_ACCOUNT_CMD = 1;
+	public static final int ADD_ACCOUNT_STEP_1_CMD = 1;
 	public static final int EDIT_PASSWORD_CMD = 2;
 	public static final int EDIT_ACCOUNT_CMD = 3;
-	public static final int PROCESS_ACCOUNT_NAME = 4;
 }

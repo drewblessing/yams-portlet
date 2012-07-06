@@ -22,6 +22,7 @@ public class SearchFilter implements Serializable {
 	public static enum Operand {AND, OR};
 
 	public static enum Filter {
+		cn,
 		givenName,
 		name,
 		mail,
