@@ -21,21 +21,31 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%
+String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL", redirect);
+%>
+
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include
 			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>"
 			servletContext="<%=this.getServletContext() %>" />
 </c:if>
 
-<liferay-util:include
-		page="<%=PortletUtil.TABS_JSP %>"
-		servletContext="<%=this.getServletContext() %>" />
+<%-- <liferay-util:include --%>
+<%-- 		page="<%=PortletUtil.TABS_JSP %>" --%>
+<%-- 		servletContext="<%=this.getServletContext() %>" /> --%>
 
 <%
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 request.setAttribute("account.selAccount", selAccount);
 %>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= selAccount.getDisplayName() %>'
+/>
 
 <div class="account-information">
 	<div class="section account-details">

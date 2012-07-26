@@ -25,8 +25,6 @@
 Account selAccount = (Account)request.getAttribute("account.selAccount");
 %>
 
-<h2><%=selAccount.getDisplayName() %></h2>
-
 <div class="details">
 	<img alt="<liferay-ui:message key="account-photo" />" src='<%=renderRequest.getContextPath() %>/images/user_male_portrait.png' />
 
@@ -56,7 +54,6 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 				<%=selAccount.getMailStringWithDelimiter(
 	      				Account.DELIMITER_COMMA, true) %>
 			</dd>
-			<%=selAccount.getCn() %>
 		</c:if>
 	</dl>
 </div>
