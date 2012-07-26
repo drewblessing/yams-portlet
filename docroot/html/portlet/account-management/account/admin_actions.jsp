@@ -54,73 +54,78 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
 		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
 	</portlet:renderURL>
+	<%
+	String url = "javascript:" + renderResponse.getNamespace() + "changePassword();";
+	%>
 
-	<span id="change-password-<%=uidStripped %>">
-		<liferay-ui:icon image="key" message="change-password" url="javascript:;" />
+	<span id="change-password">
+		<liferay-ui:icon cssClass="<%=uidStripped %>" image="key" message="change-password" 
+			url="<%=url %>" />
 	</span>
 	<portlet:resourceURL var="changePasswordResourceURL" />
 
 	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
-	A.one('#change-password-<%=uidStripped %>').on(
-		'click',
-		function() {
-			var changePasswordDialog = new A.Dialog({
-				buttons: [
-				{
-					label: '<liferay-ui:message key="submit" />',
-					handler: function() {
-						changePasswordDialog.unplug(A.Plugin.IO);
-						changePasswordDialog.plug(
-							A.Plugin.IO, {
-								method: 'POST',
-								uri: '<%=changePasswordResourceURL %>',
-								dataType: 'json',
-								form: {
-									id: '<portlet:namespace />changePasswordFm'
-								},
-								on: {
-									success: function() {
-										var message = this.get('responseData');
+	window.<portlet:namespace />changePassword = function() {				
+		var changePasswordDialog = new A.Dialog({
+			buttons: [
+			{
+				label: '<liferay-ui:message key="submit" />',
+				handler: function() {
+					changePasswordDialog.unplug(A.Plugin.IO);
+					changePasswordDialog.plug(
+						A.Plugin.IO, {
+							method: 'POST',
+							uri: '<%=changePasswordResourceURL %>',
+							dataType: 'json',
+<!-- 							form: { -->
+<%-- 								id: '<portlet:namespace />changePasswordFm' --%>
+<!-- 							}, -->
+							form: {
+								id: '<portlet:namespace />changePasswordFm'
+							},
+							on: {
+								success: function() {
+									var message = this.get('responseData');
+									alert(message.error);
 
-										if (message.response.toLowerCase() == 'success') {
-											changePasswordDialog.close();
-										} else {
-											alert(message.response);
-										}
-									},
-									failure: function() {
-										alert("failure");
-									}
+<!-- 									if (message.response.toLowerCase() == 'success') { -->
+<!-- 										changePasswordDialog.close(); -->
+<!-- 									} else { -->
+<!-- 										alert(message.response); -->
+<!-- 									} -->
+								},
+								failure: function() {
+									alert("failure");
 								}
 							}
-						);
-					}
-				},
-				{
-					label: '<liferay-ui:message key="cancel" />',
-					handler: function() {
-						this.close();
-					}
-				}],
-				title: '<liferay-ui:message key="change-password" />',
-				height: 225,
-				width: 225,
-				align: {
-					node: '#change-password-<%=uidStripped %>',
-					points: [ 'rc','lc' ]
-				},
-				constrain2view: true,
-				group: 'default',
-				stack: true,
-				modal: true,
-				destroyOnClose: true
-			}).plug(
-				A.Plugin.IO, {
-					uri: '<%=changePasswordRenderURL %>'
+						}
+					);
 				}
-			).render();
-		}
-	);
+			},
+			{
+				label: '<liferay-ui:message key="cancel" />',
+				handler: function() {
+					this.close();
+				}
+			}],
+			title: '<liferay-ui:message key="change-password" />',
+			height: 225,
+			width: 225,
+			align: {
+				node: '#change-password .<%=uidStripped %>',
+				points: [ 'rc','lc' ]
+			},
+			constrain2view: true,
+			group: 'default',
+			stack: true,
+			modal: true,
+			destroyOnClose: true
+		}).plug(
+			A.Plugin.IO, {
+				uri: '<%=changePasswordRenderURL %>'
+			}
+		).render();
+	}
 	</aui:script>
 </c:if>
 

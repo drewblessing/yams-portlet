@@ -24,6 +24,12 @@
 <%
 long step = ParamUtil.getLong(request, "step", 1);
 List<Group> groups = AccountManagement.getAllGroups();
+System.out.println("Group Size: " + groups.size());
+String readonly = StringPool.BLANK;
+
+if (!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED) {
+	readonly = "readonly=\"readonly\"";
+}
 %>
 
 <div class="aui-layout">
@@ -78,24 +84,35 @@ List<Group> groups = AccountManagement.getAllGroups();
 					inlineField="<%=true %>"  >
 				<aui:validator name="required" />
 			</aui:input>
-<%-- 			<c:choose> --%>
-<%-- 				<c:when test="<%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" > --%>
-					<span class="domain"><%=StringPool.AT %></span>
+			<span class="domain"><%=StringPool.AT %></span>
+			<c:choose>
+				<c:when test="<%=PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" >
+					<aui:input 
+						name="<%=UserDisplayTerms.DOMAIN %>" 
+						label="<%=StringPool.BLANK %>" 
+						cssClass="step2-input domain" 
+						value="<%=StringPool.BLANK %>" 
+						inlineField="<%=true %>"
+					>
+						<aui:validator name="required" />
+					</aui:input>
+				</c:when>
+				<c:otherwise>
 					<aui:input 
 						name="<%=UserDisplayTerms.DOMAIN %>" 
 						label="<%=StringPool.BLANK %>" 
 						cssClass="step2-input domain" 
 						value="<%=StringPool.BLANK %>" 
 						inlineField="<%=true %>" 
-						disabled="<%=!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>"
+						readonly="readonly"
 					>
 						<aui:validator name="required" />
 					</aui:input>
-					<c:if test="<%=!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED %>" >
-						<liferay-ui:icon-help 
-							message="the-email-domain-field-is-disabled-because-overriding-the-default-domain-is-not-allowed"
-						/>
-					</c:if>
+					<liferay-ui:icon-help 
+						message="the-email-domain-field-is-disabled-because-overriding-the-default-domain-is-not-allowed"
+					/>
+				</c:otherwise>
+			</c:choose>
 <%-- 				</c:when> --%>
 <%-- 				<c:otherwise> --%>
 <!-- 					<span class="step2-input domain"> -->

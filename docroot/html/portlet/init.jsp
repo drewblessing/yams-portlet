@@ -45,6 +45,7 @@ page import="com.liferay.portal.util.PortalUtil" %>
 
 <%@ page import="com.liferay.portlet.PortletURLUtil" %>
 
+<%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
 
 <%@ page import="javax.portlet.PortletMode" %><%@

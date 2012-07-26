@@ -60,17 +60,24 @@ public class PortletUtil {
 		return null;
 	}
 
-	public static HashMap<String, String> editPassword(
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
-		String result = "Error";
+	public static void editPassword(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			HashMap<String, String> responses) {
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		String password = DAOParamUtil.getString(resourceRequest, "password");
 		String verify = DAOParamUtil.getString(resourceRequest, "verify");
-		String uid = DAOParamUtil.getString(resourceRequest, "uid");
+		Account account = getAccountFromRequest(resourceRequest);
+		
+		boolean valid = validatePasswordFields(password, verify, responses);
+		
+		if (valid) {
 
-//		boolean valid = validatePasswordFields(
-//				actionRequest, password, verify, uid);
-
-		return null;
+			try {
+				ams.changePassword(account, password);
+			} catch (ValidationException e) {
+				responses.put("error", "Password change failed");
+			}
+		}
 	}
 
 	public static Account getAccountFromPortalUser(RenderRequest request, User user)
@@ -98,9 +105,20 @@ public class PortletUtil {
 
 		return accounts.get(0);
 	}
+	
+	public static Account getAccountFromRequest(ResourceRequest request) {
+		UserSearchTerms searchTerms = new UserSearchTerms(request);
+		
+		return getAccountFromUserSearchTerms(searchTerms);
+	}
 
 	public static Account getAccountFromRequest(RenderRequest request) {
 		UserSearchTerms searchTerms = new UserSearchTerms(request);
+		
+		return getAccountFromUserSearchTerms(searchTerms);
+	}
+	
+	private static Account getAccountFromUserSearchTerms(UserSearchTerms searchTerms) {
 		Account account = new Account();
 		List<Account> accounts = new ArrayList<Account>();
 
@@ -116,6 +134,7 @@ public class PortletUtil {
 		}
 
 		return account;
+		
 	}
 
 	public static List<Group> getGroupsByAccount(Account account) {
@@ -150,14 +169,17 @@ public class PortletUtil {
 	
 	public static void processAccountName(String firstName,
 			String lastName, String groupDn, HashMap<String, String> responses) {
+		System.out.println("Processing account name!");
 		// Make sure to lower case the names.
 		// TODO: Issue 49 - Learn how to get primary email domain for the group.
 		
 		if (Validator.isNotNull(firstName) && Validator.isNotNull(lastName)) {
 			responses.put(UserDisplayTerms.EMAIL_ADDRESS, 
-					firstName + StringPool.PERIOD + lastName);
+					firstName.toLowerCase() + 
+						StringPool.PERIOD + lastName.toLowerCase());
 			responses.put(UserDisplayTerms.SCREEN_NAME, 
-					firstName + StringPool.PERIOD + lastName);
+					firstName.toLowerCase() + 
+						StringPool.PERIOD + lastName.toLowerCase());
 		}
 		
 		String domain = PropsValues.LDAP_ACCOUNT_DEFAULT_DOMAIN;
@@ -165,31 +187,26 @@ public class PortletUtil {
 	}
 
 	private static boolean validatePasswordFields(
-			ActionRequest actionRequest, String password,
-			String verify, String uid) {
+			String password, String verify, 
+			HashMap<String, String> responses) {
 		boolean result = false;
-
+		
 		while (true) {
 			if (Validator.equals(password, verify)) {
 				result = true;
 			} else {
-				SessionErrors.add(actionRequest, "password-fields-must-match");
+				responses.put("error", "password-fields-must-match");
 				break;
 			}
 			if ((Validator.isNotNull(password)) && (Validator.isNotNull(verify))) {
 				result = true;
 			} else {
-				SessionErrors.add(actionRequest, "please-enter-all-required-fields");
+				responses.put("error", "please-enter-all-required-fields");
 				break;
 			}
-			if (Validator.isNotNull(uid)) {
-				result = true;
-			} else {
-				SessionErrors.add(actionRequest, "invalid-use-detected");
-				break;
-			}
+			break;
 		}
-
+		
 		return result;
 	}
 

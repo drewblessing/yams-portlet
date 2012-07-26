@@ -105,6 +105,29 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	}
 	
 	@Override
+	public void changePassword(final Account account, final String newPassword) 
+			throws ValidationException {
+		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
+		
+		executor.execute(ChangePassword.class, SubSystem.ALL_SUBSYSTEMS,
+				new ValidatedExecutionCallback<ChangePassword>() {
+					@Override
+					public void validateAction(ChangePassword operation)
+							throws ValidationException {
+						operation.validateChangePassword(account, newPassword, validationErrors);
+//						if (!validationErrors.isEmpty()) {
+//							throw new ValidationException(validationErrors.toArray(new String[validationErrors.size()]));
+//						}
+					}
+
+					@Override
+					public void executeAction(ChangePassword operation) {
+						operation.changePassword(account, newPassword);
+					}
+				}, false);
+	}
+	
+	@Override
 	public Account createAccount(final Account newAccount,
 			final List<GroupMap> groupMaps,
 			final List<SubSystem> subsystems) throws ValidationException {

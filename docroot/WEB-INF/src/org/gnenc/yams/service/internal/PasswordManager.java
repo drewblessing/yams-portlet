@@ -1,29 +1,32 @@
 package org.gnenc.yams.service.internal;
 
-import com.liferay.portal.kernel.util.Base64;
-import com.liferay.portal.kernel.util.Validator;
-
 import java.io.IOException;
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+
+import com.liferay.portal.kernel.util.Base64;
+import com.liferay.portal.kernel.util.Validator;
+
 @Service("passwordManager")
 public class PasswordManager {
 
 	@Value("${ldap.minPasswordLength}")
 	private int minPasswordLength;
+	
+	@Autowired
+	private PasswordEncoder encoder;
 
 //	@Autowired
 //	private MessageService messages;
@@ -70,6 +73,10 @@ public class PasswordManager {
 
 	public String encryptSSHA1(String password) {
 		return computeAndEncode(4, password.getBytes());
+	}
+	
+	public String encryptSha1(String password) {
+		return computeAndEncodeSha1(password);
 	}
 
     public boolean verifySSHA1(String encodedPassword, String plaintextPassword)
@@ -163,6 +170,12 @@ public class PasswordManager {
     	if (!numeric) {
 //    		validationErrors.add(messages.getMessage(17));
     	}
+    }
+    
+    private String computeAndEncodeSha1(String password) {
+    	String hash = encoder.encodePassword(password, null);
+    	System.out.println("Hash: " + hash);
+    	return hash;
     }
 
 	private String computeAndEncode(int saltBytes, byte[] password) {

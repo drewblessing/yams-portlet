@@ -23,7 +23,8 @@
 <liferay-ui:error key="password-fields-must-match" message="password-fields-must-match" />
 
 <aui:form method="POST" name="changePasswordFm" id="changePasswordFm">
-	<aui:input type="hidden" name="cmd" value='<%=AccountManagement.EDIT_PASSWORD_CMD %>' />
+	<aui:input type="hidden" name="<%=UserDisplayTerms.CMD %>" value="<%=AccountManagement.EDIT_PASSWORD_CMD %>" />
+	<aui:input type="hidden" name="date" value="<%=new Date() %>" />
 	<aui:input type="hidden" name="uid" value='<%=ParamUtil.getString(renderRequest, "uid") %>' />
 	<aui:input type="password" name="password" size="25">
 		<aui:validator name="required" />

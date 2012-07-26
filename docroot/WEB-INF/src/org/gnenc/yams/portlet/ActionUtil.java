@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.ResourceRequest;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ListTypeServiceUtil;
@@ -42,6 +41,7 @@ public class ActionUtil {
 		account.setUid(ParamUtil.getString(request, UserDisplayTerms.SCREEN_NAME));
 		account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS) + 
 				StringPool.AT + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
+		System.out.println("Domain: " + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
 		account.setAttribute(UserDisplayTerms.TITLE, prefix);
 		
 		return account;

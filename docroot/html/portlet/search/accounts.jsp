@@ -24,14 +24,6 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.ACCOUNTS);
 String jspPage = "";
 %>
-<c:choose>
-	<c:when test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
-		<% jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP; %>
-	</c:when>
-	<c:otherwise>
-		<% jspPage = PortletUtil.SEARCH_VIEW_ACCOUNT_JSP; %>
-	</c:otherwise>
-</c:choose>
 
 <liferay-ui:search-container searchContainer="<%=new UserSearch(renderRequest, portletURL) %>">
 	<%
@@ -77,10 +69,11 @@ String jspPage = "";
 			keyProperty="uid"
 			modelVar="yamsAccount"
 	>
-	<liferay-portlet:renderURL varImpl="rowURL">
-			<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
-			<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
-			<portlet:param name="jspPage" value="<%=jspPage %>" />
+	
+		<liferay-portlet:renderURL varImpl="rowURL">
+				<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
+				<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
+				<portlet:param name="jspPage" value="<%=PortletUtil.SEARCH_VIEW_ACCOUNT_JSP %>" />
 		</liferay-portlet:renderURL>
 
 		<liferay-ui:search-container-column-text

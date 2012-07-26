@@ -17,6 +17,9 @@ import org.gnenc.yams.model.SubSystem;
  */
 public interface AccountManagementService {
 
+	public void changePassword(Account account, String newPassword)
+			throws ValidationException;
+	
 	public void changePassword(Account account, String oldPassword, String newPassword)
 			throws ValidationException;
 

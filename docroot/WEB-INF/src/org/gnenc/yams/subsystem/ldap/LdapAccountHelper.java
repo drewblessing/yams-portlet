@@ -156,7 +156,7 @@ public class LdapAccountHelper {
 		}
 
 		public static final void convertSystemAccountToLdapAccount(Account account, LdapAccount ldap) {
-			ldap.setUid(account.getUid());
+			ldap.setUid(parseUid(account));
 			ldap.setGivenName(account.getGivenName());
 			ldap.setSn(account.getSn());
 			if (!account.getCn().isEmpty()) {
@@ -462,6 +462,10 @@ public class LdapAccountHelper {
 			}
 			return "";
 		}
+		
+		private static String parseUid(Account account) {
+			return account.getUid().toLowerCase();
+		}
 
 		private static final String parseAccountField(String field) {
 			if (!field.trim().isEmpty()) return field;
@@ -564,22 +568,24 @@ public class LdapAccountHelper {
 //		}
 
 		private static final List<String> parseMail(Account account) {
-			final List<String> mail = new ArrayList<String>();
+			final List<String> mails = new ArrayList<String>();
 			if (!account.getMail().isEmpty()) {
 				boolean hasUidAccount = false;
 				for (String m : account.getMail()) {
-					if (!hasUidAccount && m.split("@")[0].equals(account.getUid())) {
+					if (!hasUidAccount && m.split(StringPool.AT)[0].equals(account.getUid())) {
 						hasUidAccount = true;
 					}
-					mail.add(m);
+					mails.add(m.toLowerCase());
 				}
-				if (!hasUidAccount) {
-					mail.add(account.getUid() + "@" + DEFAULT_DOMAIN);
-				}
+//				if (!hasUidAccount) {
+//					String mail = account.getUid() + StringPool.AT + DEFAULT_DOMAIN;
+//					mails.add(mail.toLowerCase());
+//				}
 			} else {
-				mail.add(account.getUid() + "@" + DEFAULT_DOMAIN);
+				String mail = account.getUid() + StringPool.AT + DEFAULT_DOMAIN;
+				mails.add(mail.toLowerCase());
 			}
-			return mail;
+			return mails;
 		}
 
 		private static boolean isMember(final CheckedGroups membershipType, final String department, final String title,

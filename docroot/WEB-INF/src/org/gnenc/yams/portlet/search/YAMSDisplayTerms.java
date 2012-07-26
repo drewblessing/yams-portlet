@@ -11,5 +11,5 @@ public class YAMSDisplayTerms extends DisplayTerms {
 		super(portletRequest);
 	}
 
-	public static final String CMD = "cmd";
+	public static final String CMD = "command";
 }

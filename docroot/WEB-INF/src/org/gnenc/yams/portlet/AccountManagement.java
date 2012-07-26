@@ -49,6 +49,7 @@ import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountManagement extends MVCPortlet {
@@ -85,12 +86,11 @@ public class AccountManagement extends MVCPortlet {
 	public void serveResource(ResourceRequest resourceRequest, 
 			ResourceResponse resourceResponse) throws IOException {
 		HashMap<String,String> responses = new HashMap<String,String>();
+		
 		switch (DAOParamUtil.getInteger(resourceRequest, UserDisplayTerms.CMD)) {
-			case EDIT_PASSWORD_CMD: responses =
-					PortletUtil.editPassword(resourceRequest, resourceResponse);
-				break;
-			case EDIT_ACCOUNT_CMD: responses =
-					PortletUtil.editAccount(resourceRequest, resourceResponse);
+			case EDIT_PASSWORD_CMD: 
+				PortletUtil.editPassword(resourceRequest, resourceResponse,
+						responses);
 				break;
 			case ADD_ACCOUNT_STEP_1_CMD: 
 				String group = DAOParamUtil.getString(
@@ -101,7 +101,8 @@ public class AccountManagement extends MVCPortlet {
 						resourceRequest, UserDisplayTerms.LAST_NAME);
 				PortletUtil.processAccountName(firstName, lastName, 
 						group, responses);
-			default: //nothing
+			default: 
+				//nothing
 				break;
 		}
 
