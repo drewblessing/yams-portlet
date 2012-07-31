@@ -15,6 +15,6 @@ import org.gnenc.yams.operation.Operation;
 public interface CreateAccount extends Operation {
 	
 	public void validateNewAccount(final Account account, final Map<String, List<Group>> membershipGroups, final List<String> validationErrors);
-	public void createNewAccount(final Account account, final Map<String, List<Group>> membershipGroups);
+	public void createNewAccount(final Account account);
 
 }

@@ -22,13 +22,6 @@ public class ActionUtil {
 	
 	public static Account accountFromRequest(ActionRequest request) {
 		Account account = new Account();
-		String prefix = StringPool.BLANK;
-		try {
-			prefix = ListTypeServiceUtil.getListType(
-					ParamUtil.getInteger(request, UserDisplayTerms.TITLE)).getName();
-		} catch (Exception e) {
-			// Do nothing
-		} 
 		
 		account.setCn(cnFromRequest(request));
 		account.setDescription(null);
@@ -39,10 +32,16 @@ public class ActionUtil {
 		account.setPassword(passwordFromRequest(request));
 		account.setSn(ParamUtil.getString(request, UserDisplayTerms.LAST_NAME));
 		account.setUid(ParamUtil.getString(request, UserDisplayTerms.SCREEN_NAME));
+		
+		// This won't work for existing accounts
 		account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS) + 
 				StringPool.AT + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
+		
 		System.out.println("Domain: " + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
-		account.setAttribute(UserDisplayTerms.TITLE, prefix);
+		System.out.println("Uid: " + ParamUtil.getString(request, UserDisplayTerms.SCREEN_NAME));
+		
+		account.setAttribute(UserDisplayTerms.TITLE, ParamUtil.getString(request, UserDisplayTerms.TITLE));
+		account.setAttribute(UserDisplayTerms.PRIMARY_GROUP, ParamUtil.getString(request, UserDisplayTerms.PRIMARY_GROUP));
 		
 		return account;
 	}

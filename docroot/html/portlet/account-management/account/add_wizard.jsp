@@ -38,14 +38,14 @@ if (!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED) {
 			<h3>Step 1</h3>
 			<aui:fieldset>
 				<c:if test='<%=!PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %>' >
-					<aui:select name="<%=UserDisplayTerms.GROUP %>" label="primary-group" 
+					<aui:select name="<%=UserDisplayTerms.PRIMARY_GROUP %>" label="primary-group" 
 							showEmptyOption="<%= true %>" cssClass="step1-input" >
 						<%
 						for (Group group : groups) {
 						%>
 							<c:if test="<%=PermissionsChecker.hasGroupPermission(
 									callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
-								<aui:option name="" value='<%=group.getAttribute("dn") %>'>
+								<aui:option name='<%=group.getAttribute("dn") %>' value='<%=group.getAttribute("dn") %>'>
 									<%=group.getDisplayName() %>
 								</aui:option>
 							</c:if>
@@ -54,13 +54,21 @@ if (!PropsValues.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED) {
 						%>
 					</aui:select>
 				</c:if>
-				<!-- Use the title values from the portal for ease -->
-				<aui:select name="title"  
-					listType="<%= ListTypeConstants.CONTACT_PREFIX %>" 
-					showEmptyOption="<%= true %>" 
-					cssClass="step1-input"
-				/>
-				<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" first="<%=true %>" >
+				<aui:select name="title" showEmptyOption="<%= true %>" cssClass="step1-input" first="<%=true %>" >
+					<aui:option value="Dr.">
+						<liferay-ui:message key="dr." />
+					</aui:option>
+					<aui:option value="Mr.">
+						<liferay-ui:message key="mr." />
+					</aui:option>
+					<aui:option value="Mrs.">
+						<liferay-ui:message key="mrs." />
+					</aui:option>
+					<aui:option value="Ms.">
+						<liferay-ui:message key="ms." />
+					</aui:option>
+				</aui:select>
+				<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" >
 					<aui:validator name="required" />
 				</aui:input>
 				<aui:input name="<%=UserDisplayTerms.LAST_NAME %>" cssClass="step1-input"  >

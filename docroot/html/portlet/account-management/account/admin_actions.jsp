@@ -35,98 +35,176 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 %>
 
 <liferay-ui:icon-menu showWhenSingleIcon="<%= true %>">
-<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(
-			callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>">
-	<portlet:renderURL var="editAccountRenderURL">
-		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
-		<portlet:param name="redirect" value="<%= redirect %>" />
-		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
-	</portlet:renderURL>
-
-	<span id="edit-account-<%=uidStripped %>">
-		<liferay-ui:icon image="edit" message="edit" url="<%=editAccountRenderURL %>" />
-	</span>
-</c:if>
-
-<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount,
-			PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>">
-	<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
-		<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
-	</portlet:renderURL>
-	<%
-	String url = "javascript:" + renderResponse.getNamespace() + "changePassword();";
-	%>
-
-	<span id="change-password">
-		<liferay-ui:icon cssClass="<%=uidStripped %>" image="key" message="change-password" 
-			url="<%=url %>" />
-	</span>
-	<portlet:resourceURL var="changePasswordResourceURL" />
-
-	<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
-	window.<portlet:namespace />changePassword = function() {				
-		var changePasswordDialog = new A.Dialog({
-			buttons: [
-			{
-				label: '<liferay-ui:message key="submit" />',
-				handler: function() {
-					changePasswordDialog.unplug(A.Plugin.IO);
-					changePasswordDialog.plug(
-						A.Plugin.IO, {
-							method: 'POST',
-							uri: '<%=changePasswordResourceURL %>',
-							dataType: 'json',
-<!-- 							form: { -->
-<%-- 								id: '<portlet:namespace />changePasswordFm' --%>
-<!-- 							}, -->
-							form: {
-								id: '<portlet:namespace />changePasswordFm'
-							},
-							on: {
-								success: function() {
-									var message = this.get('responseData');
-									alert(message.error);
-
-<!-- 									if (message.response.toLowerCase() == 'success') { -->
-<!-- 										changePasswordDialog.close(); -->
-<!-- 									} else { -->
-<!-- 										alert(message.response); -->
-<!-- 									} -->
+	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(
+				callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>">
+		<portlet:renderURL var="editAccountRenderURL">
+			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
+			<portlet:param name="redirect" value="<%= redirect %>" />
+			<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
+		</portlet:renderURL>
+	
+		<span id="edit-account-<%=uidStripped %>">
+			<liferay-ui:icon image="edit" message="edit" url="<%=editAccountRenderURL %>" />
+		</span>
+	</c:if>
+	
+	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount,
+				PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>">
+		<portlet:renderURL var="changePasswordRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP %>" />
+			<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
+		</portlet:renderURL>
+		<%
+		String url = "javascript:" + renderResponse.getNamespace() + "changePassword();";
+		%>
+	
+		<span id="change-password">
+			<liferay-ui:icon cssClass="<%=uidStripped %>" image="key" message="change-password" 
+				url="<%=url %>" />
+		</span>
+		<portlet:resourceURL var="changePasswordResourceURL" />
+	
+		<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
+		window.<portlet:namespace />changePassword = function() {				
+			var changePasswordDialog = new A.Dialog({
+				buttons: [
+				{
+					label: '<liferay-ui:message key="submit" />',
+					handler: function() {
+						changePasswordDialog.unplug(A.Plugin.IO);
+						changePasswordDialog.plug(
+							A.Plugin.IO, {
+								method: 'POST',
+								uri: '<%=changePasswordResourceURL %>',
+								dataType: 'json',
+	<!-- 							form: { -->
+	<%-- 								id: '<portlet:namespace />changePasswordFm' --%>
+	<!-- 							}, -->
+								form: {
+									id: '<portlet:namespace />changePasswordFm'
 								},
-								failure: function() {
-									alert("failure");
+								on: {
+									success: function() {
+										var message = this.get('responseData');
+										alert(message.error);
+	
+	<!-- 									if (message.response.toLowerCase() == 'success') { -->
+	<!-- 										changePasswordDialog.close(); -->
+	<!-- 									} else { -->
+	<!-- 										alert(message.response); -->
+	<!-- 									} -->
+									},
+									failure: function() {
+										alert("failure");
+									}
 								}
 							}
-						}
-					);
+						);
+					}
+				},
+				{
+					label: '<liferay-ui:message key="cancel" />',
+					handler: function() {
+						this.close();
+					}
+				}],
+				title: '<liferay-ui:message key="change-password" />',
+				height: 225,
+				width: 225,
+				align: {
+					node: '#change-password .<%=uidStripped %>',
+					points: [ 'rc','lc' ]
+				},
+				constrain2view: true,
+				group: 'default',
+				stack: true,
+				modal: true,
+				destroyOnClose: true
+			}).plug(
+				A.Plugin.IO, {
+					uri: '<%=changePasswordRenderURL %>'
 				}
-			},
-			{
-				label: '<liferay-ui:message key="cancel" />',
-				handler: function() {
-					this.close();
+			).render();
+		}
+		</aui:script>
+	</c:if>
+	
+	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasGroupPermissionGrantable(callingAccount, selAccount,
+ 				StringPool.NULL) %>">
+		<portlet:renderURL var="grantPermissionsRenderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_GRANT_PERMISSIONS_JSP %>" />
+			<portlet:param name="uid" value="<%=selAccount.getUid() %>" />
+		</portlet:renderURL>
+		<%
+		String url = "javascript:" + renderResponse.getNamespace() + "grantPermissions();";
+		%>
+	
+		<span id="grant-permissions">
+			<liferay-ui:icon cssClass="<%=uidStripped %>" image="key" message="grant-permissions" 
+				url="<%=url %>" />
+		</span>
+		<portlet:resourceURL var="grantPermissionsResourceURL" />
+	
+		<aui:script use="aui-dialog,aui-overlay-manager,aui-io,io-form">
+		window.<portlet:namespace />grantPermissions = function() {				
+			var grantPermissionsDialog = new A.Dialog({
+				buttons: [
+				{
+					label: '<liferay-ui:message key="submit" />',
+					handler: function() {
+						grantPermissionsDialog.unplug(A.Plugin.IO);
+						grantPermissionsDialog.plug(
+							A.Plugin.IO, {
+								method: 'POST',
+								uri: '<%=grantPermissionsResourceURL %>',
+								dataType: 'json',
+								form: {
+									id: '<portlet:namespace />grantPermissionsFm'
+								},
+								on: {
+									success: function() {
+										var message = this.get('responseData');
+										alert(message.error);
+	
+	<!-- 									if (message.response.toLowerCase() == 'success') { -->
+	<!-- 										changePasswordDialog.close(); -->
+	<!-- 									} else { -->
+	<!-- 										alert(message.response); -->
+	<!-- 									} -->
+									},
+									failure: function() {
+										alert("failure");
+									}
+								}
+							}
+						);
+					}
+				},
+				{
+					label: '<liferay-ui:message key="cancel" />',
+					handler: function() {
+						this.close();
+					}
+				}],
+				title: '<liferay-ui:message key="grant-permissions" />',
+				height: 225,
+				width: 225,
+				align: {
+					node: '#grant-permissions .<%=uidStripped %>',
+					points: [ 'rc','lc' ]
+				},
+				constrain2view: true,
+				group: 'default',
+				stack: true,
+				modal: true,
+				destroyOnClose: true
+			}).plug(
+				A.Plugin.IO, {
+					uri: '<%=grantPermissionsRenderURL %>'
 				}
-			}],
-			title: '<liferay-ui:message key="change-password" />',
-			height: 225,
-			width: 225,
-			align: {
-				node: '#change-password .<%=uidStripped %>',
-				points: [ 'rc','lc' ]
-			},
-			constrain2view: true,
-			group: 'default',
-			stack: true,
-			modal: true,
-			destroyOnClose: true
-		}).plug(
-			A.Plugin.IO, {
-				uri: '<%=changePasswordRenderURL %>'
-			}
-		).render();
-	}
-	</aui:script>
-</c:if>
+			).render();
+		}
+		</aui:script>
+	</c:if>
 
 </liferay-ui:icon-menu>

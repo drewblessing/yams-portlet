@@ -25,28 +25,30 @@
 String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL", redirect);
 
-Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
+Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 %>
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include
 			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>"
 			servletContext="<%=this.getServletContext() %>">
-		<liferay-util:param name="toolbarItem" value='<%= (selectedAccount == null) ? "add" : "view" %>' />
+		<liferay-util:param name="toolbarItem" value='<%= (selAccount == null) ? "add" : "view" %>' />
 	</liferay-util:include>
 </c:if>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (selectedAccount == null) ? "new-user" : selectedAccount.getDisplayName() %>'
+	title='<%= (selAccount == null) ? "new-user" : selAccount.getDisplayName() %>'
 />
 
 <portlet:actionURL name="editAccount" var="editAccountURL" />
 
 <aui:form method="POST" action="<%=editAccountURL.toString() %>" name="yamsFm" id="yamsFm">
-<%-- 	<aui:input type="hidden" name="cmd" value='<%=(selectedAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_ACCOUNT_CMD %>' /> --%>
+	<aui:input type="hidden" name="<%=UserDisplayTerms.CMD %>" 
+			value="<%= (selAccount != null) ? AccountManagement.EDIT_ACCOUNT_CMD : AccountManagement.ADD_ACCOUNT_CMD  %>" />
+<%-- 	<aui:input type="hidden" name="cmd" value='<%=(selAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_ACCOUNT_CMD %>' /> --%>
 <c:choose>
-	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selectedAccount == null %>">
+	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selAccount == null %>">
 		<liferay-util:include
 				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP %>"
 				servletContext="<%=this.getServletContext() %>" >
@@ -57,7 +59,7 @@ Account selectedAccount = PortletUtil.getAccountFromRequest(renderRequest);
 		<liferay-util:include
 				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP %>"
 				servletContext="<%=this.getServletContext() %>">
-			<liferay-util:param name="uid" value="<%=selectedAccount.getUid() %>" />
+			<liferay-util:param name="uid" value="<%=selAccount.getUid() %>" />
 			<liferay-util:param name="backURL" value="<%= backURL %>" />
 		</liferay-util:include>
 	</c:otherwise>

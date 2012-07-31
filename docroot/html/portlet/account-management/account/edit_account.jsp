@@ -22,16 +22,44 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
+String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL", redirect);
+
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 request.setAttribute("account.selAccount", selAccount);
-%>
-<%= PermissionsChecker.hasGroupPermission(selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD,"gnenc.esu10.esu10_org") %>
 
-Account Add <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_ADD) %>
-Account Edit <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT) %>
-Account Edit Password <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>
-Account Remove <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE) %>
-Account Remove Force <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE) %>
-Group Add <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_ADD) %>
-Group Edit <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_EDIT) %>
-Group Remove <%= PermissionsChecker.hasPermission(callingAccount,selAccount,PermissionsChecker.PERMISSION_GROUP_REMOVE) %>
+String[] mainSections = {"basic","password"};
+
+String[][] categorySections = {mainSections};
+
+%>
+
+<liferay-util:buffer var="htmlTop">
+	<c:if test="<%= selAccount != null %>">
+		<div class="user-info">
+			<div class="float-container">
+<%-- 					<img alt="<%= HtmlUtil.escape(selAccount.getDisplayName()) %>" class="user-logo" src="<%= selUser.getPortraitURL(themeDisplay) %>" /> --%>
+
+<%-- 					<span class="user-name"><%= HtmlUtil.escape(selAccount.getDisplayName()) %></span> --%>
+			</div>
+		</div>
+	</c:if>
+</liferay-util:buffer>
+
+<liferay-util:buffer var="htmlBottom">
+	<c:if test="<%= (selAccount != null) %>">
+	</c:if>
+</liferay-util:buffer>
+
+	<liferay-ui:form-navigator
+		backURL="<%= backURL %>"
+		categoryNames="<%= _CATEGORY_NAMES %>"
+		categorySections="<%= categorySections %>"
+		htmlBottom="<%= htmlBottom %>"
+		htmlTop="<%= htmlTop %>"
+		jspPath="<%= PortletUtil.ACCT_MGMT_ACCOUNT_SECTIONS_DIRECTORY %>"
+	/>
+
+<%!
+private static String[] _CATEGORY_NAMES = {"account-information"};
+%>

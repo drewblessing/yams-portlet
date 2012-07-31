@@ -38,7 +38,10 @@ public interface AccountManagementService {
 	public List<SubSystem> checkAccountExists(String accountUsername) 
 			throws ValidationException;
 
-	Account createAccount(Account newAccount, List<GroupMap> groupMaps,
+	Account createAccount(Account newAccount, List<SubSystem> subsystems) 
+			throws ValidationException;
+
+	Account modifyAccount(Account account, List<GroupMap> groupMaps,
 			List<SubSystem> subsystems) throws ValidationException;
 
 

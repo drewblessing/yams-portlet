@@ -156,7 +156,7 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 	}
 	
 	function processStep1() {
-		var group = A.one("#<portlet:namespace /><%=UserDisplayTerms.GROUP %> option:selected");
+		var group = A.one("#<portlet:namespace /><%=UserDisplayTerms.PRIMARY_GROUP %> option:selected");
 		var firstName = A.one("#<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME%>");
 		var lastName = A.one("#<portlet:namespace /><%=UserDisplayTerms.LAST_NAME%>");
 		var domain = A.one("#<portlet:namespace /><%=UserDisplayTerms.DOMAIN %>");
@@ -169,7 +169,7 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 			dataType: 'json',
 			data: {
 				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.ADD_ACCOUNT_STEP_1_CMD %>',
-				'<%=UserDisplayTerms.GROUP %>': <%=PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %> ? '<%=StringPool.BLANK %>' : group.val(),
+				'<%=UserDisplayTerms.PRIMARY_GROUP %>': <%=PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %> ? '<%=StringPool.BLANK %>' : group.val(),
 				'<%=UserDisplayTerms.FIRST_NAME %>': firstName.val(),
 				'<%=UserDisplayTerms.LAST_NAME %>': lastName.val()
 			},

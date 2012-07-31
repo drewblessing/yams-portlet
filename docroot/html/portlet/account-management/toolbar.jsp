@@ -50,7 +50,8 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, StringPool.NULL) %>">
 			<portlet:renderURL var="addUserURL">
 				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP %>" />
-				<portlet:param name="redirect" value="<%= searchViewURL %>" />
+				<portlet:param name="redirect" value="<%= searchViewURL %>" />	
+				<portlet:param name="toolbarItem" value="add" />
 			</portlet:renderURL>
 
 			<liferay-ui:icon
@@ -65,6 +66,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 			<portlet:renderURL var="addOrganizationURL">
 				<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ORGANIZATION_EDIT_JSP %>" />
 				<portlet:param name="redirect" value="<%= searchViewURL %>" />
+				<portlet:param name="toolbarItem" value="add" />
 			</portlet:renderURL>
 			<liferay-ui:icon
 				image="group"

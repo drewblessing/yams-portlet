@@ -62,7 +62,11 @@ public class AccountManagement extends MVCPortlet {
 		
 		subsystems.add(SubSystem.LDAP);
 		try {
-			newAccount = ams.createAccount(account, Collections.EMPTY_LIST, subsystems);
+			if (ParamUtil.getInteger(actionRequest, UserDisplayTerms.CMD) == ADD_ACCOUNT_CMD) {
+				newAccount = ams.createAccount(account, subsystems);
+			} else if (ParamUtil.getInteger(actionRequest, UserDisplayTerms.CMD) == EDIT_ACCOUNT_CMD) {
+				newAccount = ams.modifyAccount(account, Collections.EMPTY_LIST, subsystems);
+			}
 		} catch (ValidationException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -119,7 +123,9 @@ public class AccountManagement extends MVCPortlet {
 		writer.write(jsonObject.toString());
 	}
 
-	public static final int ADD_ACCOUNT_STEP_1_CMD = 1;
-	public static final int EDIT_PASSWORD_CMD = 2;
+	public static final int ADD_ACCOUNT_CMD = 1;
+	public static final int ADD_ACCOUNT_STEP_1_CMD = 2;
 	public static final int EDIT_ACCOUNT_CMD = 3;
+	public static final int EDIT_PASSWORD_CMD = 4;
+	public static final int GRANT_PERMISSIONS_CMD = 5;
 }

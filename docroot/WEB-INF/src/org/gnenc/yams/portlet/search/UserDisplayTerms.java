@@ -47,6 +47,8 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	
 	public static final String PASSWORD = "password";
 	
+	public static final String PRIMARY_GROUP = "primaryGroup";
+	
 	public static final String SCREEN_NAME = "screenName";
 
 	public static final String STATUS = "status";

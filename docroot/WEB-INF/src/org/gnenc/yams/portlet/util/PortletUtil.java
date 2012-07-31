@@ -228,6 +228,12 @@ public class PortletUtil {
 
 	public static final String PORTLET_ACCT_MGMT_DIRECTORY =
 			"/html/portlet/account-management";
+	
+	public final static String PORTLET_ACCT_MGMT_ACCOUNT_SECTIONS_DIRECTORY =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/sections";
+	
+	public final static String PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions";
 
 	// JSPs
 	public static final String ACCT_MGMT_TOOLBAR_JSP =
@@ -243,13 +249,16 @@ public class PortletUtil {
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard/form_navigation.jsp";
 
 	public static final String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP =
-			PORTLET_ACCT_MGMT_DIRECTORY + "/account/change_password.jsp";
+			PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY + "/change_password.jsp";
 
 	public static final String ACCT_MGMT_ACCOUNT_EDIT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit.jsp";
 
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_account.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_GRANT_PERMISSIONS_JSP =
+			PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY + "/grant_permissions.jsp";
 
 	public static final String ACCT_MGMT_ORGANIZATION_EDIT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";

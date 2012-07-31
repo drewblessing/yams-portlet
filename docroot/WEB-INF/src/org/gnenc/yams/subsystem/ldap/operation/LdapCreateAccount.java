@@ -6,9 +6,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.naming.Name;
+
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.Group;
 import org.gnenc.yams.operation.account.CreateAccount;
+import org.gnenc.yams.portlet.search.UserDisplayTerms;
+import org.gnenc.yams.portlet.util.PropsValues;
 import org.gnenc.yams.service.internal.PasswordManager;
 import org.gnenc.yams.subsystem.ldap.LdapAccountHelper;
 import org.gnenc.yams.subsystem.ldap.LdapGroupHelper;
@@ -54,12 +58,25 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 	}
 
 	@Override
-	public void createNewAccount(Account account, Map<String, List<Group>> membershipGroups) {
+	public void createNewAccount(Account account) {
 		final LdapAccount ldap = new LdapAccount();
 		
 		LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
 		
-		ldap.setUserPassword(passwordEncoder.encryptSSHA1(account.getPassword()));
+		ldap.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+		
+		final List<LdapGroup> ldapGroups = manager.findAll(
+				LdapGroup.class, new DistinguishedName(
+						account.getAttribute(UserDisplayTerms.PRIMARY_GROUP)), 
+				LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+		
+		if (ldapGroups.size() == 1) {
+			ldap.setDn(LdapAccountHelper.computeDn(account, ldapGroups.get(0)));
+		} else {
+			// Problem
+		}
+
+		manager.create(ldap);
 		
 //		switch (account.getAccountType()) {
 //		case EMPLOYEE:
@@ -71,8 +88,6 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 //		default:
 //			ldap.setPwdPolicy(LdapAccountHelper.DEFAULT_PPOLICY_DN);
 //		}
-		
-		manager.create(ldap);
 		
 //		logger.info("Successfully created LDAP Account: " + account.getUid());
 //		

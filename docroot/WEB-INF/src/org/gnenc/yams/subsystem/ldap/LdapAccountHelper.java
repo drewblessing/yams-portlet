@@ -30,7 +30,7 @@ public class LdapAccountHelper {
 
 		private static final Logger logger = Logger.getLogger(LdapAccountHelper.class);
 
-		private static final boolean DEFAULT_MODE_SIMPLE = PropsValues.LDAP_ACCOUNT_DEFAULT_MODE == "simple" ? false : true;
+		private static final boolean DEFAULT_MODE_SIMPLE = PropsValues.LDAP_ACCOUNT_DEFAULT_MODE == "simple" ? true : false;
 		private static final String EMPTY_FIELD = StringPool.NULL;
 		private static final List<String> EMPTY_FIELD_LIST = getSingleValuedList(EMPTY_FIELD);
 		private static final String EMPTY_DOB = PropsValues.LDAP_ACCOUNT_EMPTY_DOB;
@@ -134,7 +134,7 @@ public class LdapAccountHelper {
 //			account.setPreferredLanguage(ldap.getPreferredLanguage().get(0));
 //			account.setRoomNumber(ldap.getRoomNumber());
 //			account.setSt(ldap.getSt());
-//			account.setTitle(ldap.getTitle());
+			account.setAttribute("title", ldap.getTitle());
 
 //			account.getHomePostalAddress().addAll(ldap.getHomePostalAddress());
 //			account.getHomePhone().addAll(ldap.getHomePhone());
@@ -169,8 +169,8 @@ public class LdapAccountHelper {
 
 			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
 					account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
-
-			ldap.setDn(computeDn(account));
+			
+//			ldap.setDn(computeDn(account));
 
 			ldap.setEmployeeNumber(account.getEmployeeNumber());
 
@@ -484,23 +484,17 @@ public class LdapAccountHelper {
 			return result;
 		}
 
-		public static final DistinguishedName computeDn(final Account account) {
-			return computeDn(account.getUid(), null, account.getAccountStatus());
-		}
-
-		public static final DistinguishedName computeDn(final String uid, final AccountType accountType) {
-			return computeDn(uid, accountType, null);
-		}
-
-		public static final DistinguishedName computeDn(final String uid, final AccountType accountType, final AccountStatus status) {
+		public static final DistinguishedName computeDn(final Account account, final LdapGroup group) {
 			StringBuilder sb = new StringBuilder("uid=");
-			sb.append(uid).append(",");
+			sb.append(account.getUid()).append(",");
 			if (DEFAULT_MODE_SIMPLE) {
 				sb.append(DEFAULT_USER_CONTAINER_DN);
 			} else {
-				//TODO: Implement group dn computing
+				String seeAlso = group.getSeeAlso();
+				String dnString = seeAlso.substring(0, seeAlso.indexOf(LdapHelper.DEFAULT_BASE_DN)-1);
+
+				sb.append(dnString);
 			}
-			System.out.println(sb.toString());
 			return new DistinguishedName(sb.toString());
 		}
 		

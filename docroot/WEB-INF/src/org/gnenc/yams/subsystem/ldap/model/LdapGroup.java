@@ -43,6 +43,9 @@ final public class LdapGroup {
 
 	@Attribute(type=Type.STRING)
 	private String owner;
+	
+	@Attribute(type=Type.STRING)
+	private String seeAlso;
 
 	/**
 	 * @return the dn
@@ -154,6 +157,14 @@ final public class LdapGroup {
 	 */
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public String getSeeAlso() {
+		return seeAlso;
+	}
+	
+	public void setSeeAlso(String seeAlso) {
+		this.seeAlso = seeAlso;
 	}
 
 }
