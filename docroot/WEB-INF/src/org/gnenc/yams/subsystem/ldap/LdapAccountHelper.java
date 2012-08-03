@@ -1,11 +1,8 @@
 package org.gnenc.yams.subsystem.ldap;
 
-import com.liferay.portal.kernel.util.StringPool;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +13,17 @@ import javax.naming.directory.SearchControls;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.AccountStatus;
-import org.gnenc.yams.model.AccountType;
-import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.util.PropsValues;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
+import org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup;
 import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
-
 import org.springframework.ldap.core.DistinguishedName;
+
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 public class LdapAccountHelper {
 
 		private static final Logger logger = Logger.getLogger(LdapAccountHelper.class);
@@ -95,23 +93,22 @@ public class LdapAccountHelper {
 //				return;
 //			}
 		}
+		
+		public static final void convertLdapAccountToSystemAccount(final LdapAccountEsuccStudent ldap, final Account account) {
 
-		public static final void convertLdapAccountToSystemAccount(final LdapAccount ldap, final Account account) {
-//			account.setAccountStatus(AccountStatus.valueOf(ldap.getStatus()));
-//			account.setAccountType((ldap.getOrganizationalUnitName().equalsIgnoreCase(STAFF_OU)
-//					|| ldap.getOrganizationalUnitName().equalsIgnoreCase(STAFF_ARCHIVE_OU))
-//					? AccountType.EMPLOYEE : AccountType.STUDENT);
-
-			// Required attributes
-			try {
-				account.setCn(ldap.getCn());
-				account.setSn(ldap.getSn());
-			} catch (NullPointerException e) {
-				// Invalid account in LDAP
-				// TODO: handle this better
-				e.printStackTrace();
-			}
-
+			account.setCn(ldap.getCn());
+			account.setGivenName(ldap.getGivenName());
+			account.getMail().addAll(ldap.getMail());
+			account.setSn(ldap.getSn());
+			account.setDn(ldap.getDn().toString());
+			account.setAttribute("dn", ldap.getDn().toString());
+			account.setAttribute("esuccEntity", ldap.getEsuccEntity());
+			account.setAttribute("esuccProvider", ldap.getEsuccProvider());
+			account.setAttribute("esuccSystem", ldap.getEsuccSystem());
+			account.setAttribute("esuccMailPrimaryLocalPart", ldap.getEsuccMailPrimaryLocalPart());
+			account.setAttribute("esuccMailPrimaryDomain", ldap.getEsuccMailPrimaryDomain());
+			account.setAttribute("uidNumber", ldap.getUidNumber());
+			
 			//Optional attributes
 			account.setDescription(
 					ldap.getDescription() == null ? StringPool.BLANK : ldap.getDescription());
@@ -119,11 +116,40 @@ public class LdapAccountHelper {
 					ldap.getDisplayName() == null ? ldap.getCn().get(0) : ldap.getDisplayName());
 			account.setEmployeeNumber(
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
-			account.setGivenName(ldap.getGivenName() == null ? StringPool.BLANK : ldap.getGivenName());
-			account.getMail().addAll(
-					ldap.getMail() == null ? Collections.<String>emptyList() : ldap.getMail());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
-			account.setAttribute("dn", ldap.getDn().toString() + "," + LdapHelper.DEFAULT_BASE_DN);
+			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
+		}
+
+		public static final void convertLdapAccountToSystemAccount(final LdapAccountEsuccStaff ldap, final Account account) {
+//			account.setAccountStatus(AccountStatus.valueOf(ldap.getStatus()));
+//			account.setAccountType((ldap.getOrganizationalUnitName().equalsIgnoreCase(STAFF_OU)
+//					|| ldap.getOrganizationalUnitName().equalsIgnoreCase(STAFF_ARCHIVE_OU))
+//					? AccountType.EMPLOYEE : AccountType.STUDENT);
+
+			account.setCn(ldap.getCn());
+			account.setGivenName(ldap.getGivenName());
+			account.getMail().addAll(ldap.getMail());
+			account.setSn(ldap.getSn());
+			account.setDn(ldap.getDn().toString());
+			account.setAttribute("dn", ldap.getDn().toString());
+			account.setAttribute("esuccEntity", ldap.getEsuccEntity());
+			account.setAttribute("esuccProvider", ldap.getEsuccProvider());
+			account.setAttribute("esuccSystem", ldap.getEsuccSystem());
+			account.setAttribute("esuccMailPrimaryLocalPart", ldap.getEsuccMailPrimaryLocalPart());
+			account.setAttribute("esuccMailPrimaryDomain", ldap.getEsuccMailPrimaryDomain());
+			account.setAttribute("uidNumber", ldap.getUidNumber());
+			
+			System.out.println("UID Number: " + ldap.getUidNumber());
+			
+			//Optional attributes
+			account.setDescription(
+					ldap.getDescription() == null ? StringPool.BLANK : ldap.getDescription());
+			account.setDisplayName(
+					ldap.getDisplayName() == null ? ldap.getCn().get(0) : ldap.getDisplayName());
+			account.setEmployeeNumber(
+					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
+			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
+			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 //			account.setDepartmentName(ldap.getDepartmentName());
 
 //			account.setEmployeeType(EmployeeType.valueOf(ldap.getEmployeeType()));
@@ -134,7 +160,6 @@ public class LdapAccountHelper {
 //			account.setPreferredLanguage(ldap.getPreferredLanguage().get(0));
 //			account.setRoomNumber(ldap.getRoomNumber());
 //			account.setSt(ldap.getSt());
-			account.setAttribute("title", ldap.getTitle());
 
 //			account.getHomePostalAddress().addAll(ldap.getHomePostalAddress());
 //			account.getHomePhone().addAll(ldap.getHomePhone());
@@ -154,11 +179,8 @@ public class LdapAccountHelper {
 //				account.setDateOfBirth(cal.getTime());
 //			}
 		}
-
-		public static final void convertSystemAccountToLdapAccount(Account account, LdapAccount ldap) {
-			ldap.setUid(parseUid(account));
-			ldap.setGivenName(account.getGivenName());
-			ldap.setSn(account.getSn());
+		
+		public static final void convertSystemAccountToLdapAccount(Account account, LdapAccountEsuccStudent ldap) {
 			if (!account.getCn().isEmpty()) {
 				ldap.setCn(account.getCn());
 			} else {
@@ -166,302 +188,66 @@ public class LdapAccountHelper {
 				cn.add(account.getGivenName() + " " + account.getSn());
 				ldap.setCn(cn);
 			}
-
-			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
-					account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
+			ldap.setGivenName(account.getGivenName());
+//			ldap.setMail(parseMail(account));
+			ldap.setMail(account.getMail());
+//			ldap.setUid(account.getUid());
+			ldap.setUid(account.getUid());
+			ldap.setSn(account.getSn());
+			ldap.setEsuccEntity(account.getAttribute("esuccEntity"));
+			ldap.setEsuccMailPrimaryLocalPart(account.getAttribute("esuccMailPrimaryLocalPart"));
+			ldap.setEsuccMailPrimaryDomain(account.getAttribute("esuccMailPrimaryDomain"));
+			ldap.setOrganizationName(account.getAttribute("esuccMailPrimaryDomain"));
+			ldap.setHomeDirectory("/tmp/" + account.getUid());
+			ldap.setGidNumber("10243");
 			
-//			ldap.setDn(computeDn(account));
+			//Optional attributes
+			ldap.setDescription(
+					account.getDescription() == null ? StringPool.BLANK : ldap.getDescription());
+			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
+							account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
+			ldap.setTitle(parseAccountField(account.getAttribute("title")));
+		}
 
-			ldap.setEmployeeNumber(account.getEmployeeNumber());
-
-//			ldap.setHomePhone(parseAccountList(account.getHomePhone()));
-
-//			ldap.setHomePostalAddress(parseAccountList(account.getHomePostalAddress()));
-
+		public static final void convertSystemAccountToLdapAccount(Account account, LdapAccountEsuccStaff ldap) {
+			ldap.setCn(account.getCn());
+			ldap.setGivenName(account.getGivenName());
 			ldap.setMail(parseMail(account));
-
-//			ldap.setMobile(parseAccountList(account.getMobile()));
-
-			try {
-				ldap.setOrganizationalUnitName(getOrganizationalUnit(ldap.getDn().toString()));
-			} catch (Exception e) {
-				// Do nothing
-			}
-
-			try {
-				ldap.setTitle(parseAccountField(account.getAttribute(UserDisplayTerms.TITLE)));
-			} catch (Exception e) {
-				// Do nothing
-			}
-
-//			ldap.setTelephoneNumber(parseAccountList(account.getTelephoneNumber()));
-
-			try {
-				ldap.setOrganizationName(getOrganization(ldap.getDn().toString()));
-			} catch (Exception e) {
-				// Do nothing
-			}
-
-//			ldap.setStreet(parseAccountList(account.getStreet()));
-
-//			ldap.setInitials(parseInitials(account));
-
-//			ldap.setDateOfBirth(parseDateOfBirth(account.getDateOfBirth()));
-
-//			ldap.setDepartmentName(parseAccountField(account.getDepartmentName()));
-
-//			ldap.setPreferredLanguage(getSingleValuedList(DEFAULT_PREFERRED_LANGUAGE));
-
-//			ldap.setRoomNumber(parseAccountField(account.getRoomNumber()));
-
-//			ldap.setPostalCode(parseAccountField(account.getPostalCode()));
-
-//			ldap.setDepartmentNumber(EMPTY_FIELD);
-
-//			ldap.setSecurityQuestion(parseAccountList(account.getSecurityQuestion()));
-
-//			ldap.setSecurityAnswer(parseAccountList(account.getSecurityAnswer()));
-
-//			ldap.setSt(parseState(account.getSt()));
-
-//			ldap.setL(parseAccountList(account.getL()));
-
-//			ldap.setDescription(parseDescription(account));
-
-//			ldap.setObjectClass(getObjectClass(account.getAccountType()));
-
-//			ldap.setStatus(account.getAccountStatus().name());
-
+			ldap.setUid(parseUid(account));
+			ldap.setSn(account.getSn());
+			ldap.setEsuccEntity(account.getAttribute("esuccEntity"));
+			ldap.setEsuccMailPrimaryLocalPart(account.getAttribute("esuccMailPrimaryLocalPart"));
+			ldap.setEsuccMailPrimaryDomain(account.getAttribute("esuccMailPrimaryDomain"));
+			ldap.setOrganizationName(account.getAttribute("esuccMailPrimaryDomain"));
+			ldap.setUidNumber(account.getAttribute("uidNumber"));
+			ldap.setHomeDirectory("/tmp/" + account.getUid());
+			ldap.setGidNumber("10243");
+			
+			//Optional attributes
+			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
+							account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
+			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+			
 		}
-
-//		public static final void processAdditionalGroupMemberships(
-//				final LdapAccount account, final Set<String> newMembershipGroupNames, final Set<String> existingMembershipGroupNames, List<LdapGroup> ldapGroups,
-//				final Set<String> additionalGroups, final Set<String> removedGroups) {
-////			final String department = account.getDepartmentName().toLowerCase();
-//			final String title = account.getTitle().toLowerCase();
-//			final Set<String> locations = new HashSet<String>();
-//
-//			// Make sure everything is in lower case
-//			for (String l : account.getL()) {
-//				locations.add(l.trim().toLowerCase());
-//			}
-//
-//			final String school = getLdapSchoolName(locations);
-//
-//			final Map<String, LdapGroup> ldapGroupsMap = new HashMap<String, LdapGroup>();
-//			for (LdapGroup g : ldapGroups) {
-////				ldapGroupsMap.put(g.getCn().toLowerCase(), g);
-//			}
-//
-//			final boolean checkForRemovedGroups = removedGroups != null && existingMembershipGroupNames != null;
-//
-//			if (isMember(CheckedGroups.BOARD, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("board").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("board")) {
-//				removedGroups.add("board");
-//			}
-//
-//			if (isMember(CheckedGroups.FACILITY, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("facilities").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("facilities")) {
-//				removedGroups.add("facility");
-//			}
-//
-//			if (isMember(CheckedGroups.LIBRARY, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("library").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("library")) {
-//				removedGroups.add("library");
-//			}
-//
-//			if (isMember(CheckedGroups.STUDENT_SERVICES, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("studentservices").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("studentservices")) {
-//				removedGroups.add("student servies");
-//			}
-//
-//			if (isMember(CheckedGroups.TIS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("tis").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("tis")) {
-//				removedGroups.add("tis");
-//			}
-//
-//			if (isMember(CheckedGroups.TRANSPORTATION, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("transportation").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("transportation")) {
-//				removedGroups.add("transportation");
-//			}
-//
-//			if (isMember(CheckedGroups.COORDINATORS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("coordinators").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("coordinators")) {
-//				removedGroups.add("coordinator");
-//			}
-//
-//			if (isMember(CheckedGroups.SUPERINTENDENTS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("superintendents").getCn());
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("superintendents")) {
-//				removedGroups.add("superintendents");
-//			}
-//
-//			if (isMember(CheckedGroups.OFFICE_MANAGERS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("officemanagers").getCn());
-//				if (!school.isEmpty()) {
-//					final String omSchool = school + O_M_SUFFIX;
-//					if (ldapGroupsMap.containsKey(omSchool)) {
-//						additionalGroups.add(ldapGroupsMap.get(omSchool).getCn());
-//					} else if (checkForRemovedGroups && existingMembershipGroupNames.contains(omSchool)) {
-//						removedGroups.add(omSchool.toLowerCase());
-//					}
-//				}
-//			} else if (checkForRemovedGroups) {
-//
-//				if (existingMembershipGroupNames.contains("officemanagers")) {
-//					removedGroups.add("officemanagers");
-//				}
-//
-//				// Handle role changes within the same location
-//				for (final String m : existingMembershipGroupNames) {
-//					if (m.endsWith("officemanagers") && m.length() > 14) {
-//						removedGroups.add(m);
-//					}
-//				}
-//			}
-//
-//			if (isMember(CheckedGroups.PRINCIPALS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				additionalGroups.add(ldapGroupsMap.get("principals").getCn());
-//
-//				if (!school.isEmpty()) {
-//					final String principalSchool = school + PRINCIPALS_SUFFIX;
-//
-//					if (ldapGroupsMap.containsKey(principalSchool)) {
-//						additionalGroups.add(ldapGroupsMap.get(principalSchool).getCn());
-//					} else if (checkForRemovedGroups && existingMembershipGroupNames.contains(principalSchool)) {
-//						removedGroups.add(principalSchool.toLowerCase());
-//					}
-//				}
-//			} else if (checkForRemovedGroups) {
-//				if (existingMembershipGroupNames.contains("principals")) {
-//					removedGroups.add("principals");
-//				}
-//
-//				for (final String m : existingMembershipGroupNames) {
-//					if (m.endsWith("principals") && m.length() > 10) {
-//						removedGroups.add(m);
-//					}
-//				}
-//			}
-//
-//			if (isMember(CheckedGroups.TEACHERS, department, title, ldapGroupsMap, existingMembershipGroupNames)) {
-//				if (ldapGroupsMap.containsKey("teachers")) {
-//					additionalGroups.add(ldapGroupsMap.get("teachers").getCn());
-//
-//					if (!school.isEmpty()) {
-//						final String teacherSchool = school + TEACHERS_SUFFIX;
-//
-//						if (ldapGroupsMap.containsKey(teacherSchool)) {
-//							additionalGroups.add(ldapGroupsMap.get(teacherSchool).getCn());
-//						} else if (checkForRemovedGroups && existingMembershipGroupNames.contains(teacherSchool)) {
-//							removedGroups.add(teacherSchool.toLowerCase());
-//						}
-//					}
-//				}
-//
-//			} else if (checkForRemovedGroups) {
-//
-//				if (existingMembershipGroupNames.contains("teachers")) {
-//					removedGroups.add("teachers");
-//				}
-//
-//				// Handle role changes within the same location
-//				for (final String m : existingMembershipGroupNames) {
-//					if (m.endsWith("teachers") && m.length() > 8) {
-//						removedGroups.add(m);
-//					}
-//				}
-//
-//			}
-//
-//			if (locations.contains("chinook education center") || locations.contains("chinook main office")) {
-//				if (!newMembershipGroupNames.contains("cec") && ldapGroupsMap.containsKey("cec")) {
-//					additionalGroups.add(ldapGroupsMap.get("cec").getCn());
-//				}
-//			} else if (checkForRemovedGroups && existingMembershipGroupNames.contains("cec")) {
-//				removedGroups.add("cec");
-//			}
-//
-//			// Handle location changes
-//			if (checkForRemovedGroups) {
-//
-//				for (final String m : existingMembershipGroupNames) {
-//					if (m.endsWith("teachers") && m.length() > 8) {
-//						final String teacherSchool = school + TEACHERS_SUFFIX;
-//						if (!m.equalsIgnoreCase(teacherSchool)) {
-//							removedGroups.add(m);
-//						}
-//					}
-//
-//					if (m.endsWith("principals") && m.length() > 10) {
-//						final String principalSchool = school + PRINCIPALS_SUFFIX;
-//						if (!m.equalsIgnoreCase(principalSchool)) {
-//							removedGroups.add(m);
-//						}
-//					}
-//
-//					if (m.endsWith("officemanagers") && m.length() > 14) {
-//						final String omSchool = school + O_M_SUFFIX;
-//						if (!m.equalsIgnoreCase(omSchool)) {
-//							removedGroups.add(m);
-//						}
-//					}
-//				}
-//			}
-//
-//
-//			if (logger.isInfoEnabled()) {
-//				for (String g : additionalGroups) {
-//					logger.info("Automatically determined additional Group: " + g + " for Account: " + account.getUid());
-//				}
-//			}
-//
-//			// When we automatically remove a group, we also want it to be removed from the client's selection list.
-//			if (checkForRemovedGroups) {
-//				newMembershipGroupNames.removeAll(removedGroups);
-//
-//				if (logger.isInfoEnabled()) {
-//					for (String g : removedGroups) {
-//						logger.info("Automatically removed Account: " + account.getUid() + " from Group: " + g);
-//					}
-//				}
-//			}
-//
-//		}
-//
-		private static final String getLdapSchoolName(final Set<String> locations) {
-			for (String l : locations) {
-				if (l.endsWith("school")) {
-					// anamolies
-					if (l.equalsIgnoreCase("Swift Current Comprehensive High School")) return "scchs";
-					if (l.equalsIgnoreCase("Maple Creek Composite HS")) return "mcchs";
-					if (l.equalsIgnoreCase("O.M. Irwin Middle School")) return "omirwin";
-					if (l.equalsIgnoreCase("CAMPS (Transition) School")) return "camps";
-					if (l.equalsIgnoreCase("Fairview Middle School")) return "fairview";
-					if (l.equalsIgnoreCase("Success Elem School")) return "success";
-					if (l.equalsIgnoreCase("Leader Composite School")) return "leader";
-
-					String name = "";
-					String[] names = l.split(" ");
-					for (int i=0; i< names.length - 1; i++) {
-						if (i == 0)
-							name += names[i].toLowerCase();
-						else
-							name += names[i];
-					}
-					logger.info("Determined location name: " + name);
-					return name.toLowerCase();
-				}
-			}
-			return "";
+		
+		public static final void convertSystemAccountToExistingLdapAccount(Account account, LdapAccountEsuccStaff ldap) {
+			ldap.setCn(account.getCn());
+			ldap.setDisplayName(account.getDisplayName());
+			ldap.setGivenName(account.getGivenName());
+			ldap.setSn(account.getSn());
+			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+			ldap.setEsuccScreenName(account.getAttribute("screenName"));
 		}
+		
+		public static final void convertSystemAccountToExistingLdapAccount(Account account, LdapAccountEsuccStudent ldap) {
+			ldap.setCn(account.getCn());
+			ldap.setDisplayName(account.getDisplayName());
+			ldap.setGivenName(account.getGivenName());
+			ldap.setSn(account.getSn());
+			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+			ldap.setEsuccScreenName(account.getAttribute("screenName"));
+		}
+		
 		
 		private static String parseUid(Account account) {
 			return account.getUid().toLowerCase();
@@ -483,19 +269,72 @@ public class LdapAccountHelper {
 			result.add(value);
 			return result;
 		}
+		
+//		public static final DistinguishedName computeDn(final LdapAccountEsuccStaff account) {
+			
+			
+//			StringBuilder sb = new StringBuilder("uid=");
+//			sb.append(account.getUid()).append(",");
+//			sb.append("ou=staff,");
+//			sb.append("o=").append(account.getEsuccMailPrimaryDomain()).append(",");
+//			sb.append("o=").append(account.getEsuccProvider()).append(",");
+//			sb.append("o=").append(account.getEsuccSystem());
+//			
+//			return new DistinguishedName(sb.toString());
+//		}
+		
+		public static final DistinguishedName computeDn(final LdapAccountEsuccStudent account, final LdapGroup group) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("uid=").append(account.getUid()).append(",");
+			
+			List<String> seeAlsos = group.getSeeAlso();
+			for (String seeAlso : seeAlsos) {
+				if (seeAlso.contains(account.getEsuccMailPrimaryDomain())) {
 
-		public static final DistinguishedName computeDn(final Account account, final LdapGroup group) {
-			StringBuilder sb = new StringBuilder("uid=");
-			sb.append(account.getUid()).append(",");
-			if (DEFAULT_MODE_SIMPLE) {
-				sb.append(DEFAULT_USER_CONTAINER_DN);
-			} else {
-				String seeAlso = group.getSeeAlso();
-				String dnString = seeAlso.substring(0, seeAlso.indexOf(LdapHelper.DEFAULT_BASE_DN)-1);
-
-				sb.append(dnString);
+					String dnString = parseDnToString(seeAlso);
+					sb.append(dnString);
+				}
 			}
+//			String dnString = seeAlso.substring(0, seeAlso.indexOf(LdapHelper.DEFAULT_BASE_DN)-1)
+			
+			System.out.println("New dn: " + sb.toString());
+			
 			return new DistinguishedName(sb.toString());
+		}
+
+		public static final DistinguishedName computeDn(final LdapAccountEsuccStaff account, final LdapGroup group) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("uid=").append(account.getUid()).append(",");
+			
+			List<String> seeAlsos = group.getSeeAlso();
+			for (String seeAlso : seeAlsos) {
+				if (seeAlso.contains(account.getEsuccMailPrimaryDomain())) {
+
+					String dnString = parseDnToString(seeAlso);
+					sb.append(dnString);
+				}
+			}
+			
+			System.out.println("New dn: " + sb.toString());
+			
+			return new DistinguishedName(sb.toString());
+		}
+		
+		public static final DistinguishedName parseDn(String dn) {
+			String dnString;
+			if (dn.indexOf(",dc") != -1) {
+				dnString = dn.substring(0, dn.indexOf(",dc"));
+			} else {
+				dnString = dn;
+			}
+			
+			return new DistinguishedName(dnString);
+		}
+		
+		public static final String parseDnToString(String dn) {
+			Name trueDn = parseDn(dn);
+			
+			return trueDn.toString(); 
 		}
 		
 		private static final String getOrganization(final String dn) {
@@ -583,7 +422,7 @@ public class LdapAccountHelper {
 		}
 
 		private static boolean isMember(final CheckedGroups membershipType, final String department, final String title,
-				final Map<String, LdapGroup> ldapGroupsMap, final Set<String> existingMembershipGroupNames) {
+				final Map<String, LdapEntityGroup> ldapGroupsMap, final Set<String> existingMembershipGroupNames) {
 
 			switch (membershipType) {
 			case BOARD:

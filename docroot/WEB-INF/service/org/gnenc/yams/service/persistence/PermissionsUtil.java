@@ -186,6 +186,139 @@ public class PermissionsUtil {
 	}
 
 	/**
+	* Returns all the permissionses where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @return the matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByEmailAddressAndFqgn(emailAddress, fqgn);
+	}
+
+	/**
+	* Returns a range of all the permissionses where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param start the lower bound of the range of permissionses
+	* @param end the upper bound of the range of permissionses (not inclusive)
+	* @return the range of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByEmailAddressAndFqgn(emailAddress, fqgn, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the permissionses where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param start the lower bound of the range of permissionses
+	* @param end the upper bound of the range of permissionses (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.gnenc.yams.model.Permissions> findByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByEmailAddressAndFqgn(emailAddress, fqgn, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.gnenc.yams.model.Permissions findByEmailAddressAndFqgn_First(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException {
+		return getPersistence()
+				   .findByEmailAddressAndFqgn_First(emailAddress, fqgn,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.gnenc.yams.model.Permissions findByEmailAddressAndFqgn_Last(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException {
+		return getPersistence()
+				   .findByEmailAddressAndFqgn_Last(emailAddress, fqgn,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param id the primary key of the current permissions
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next permissions
+	* @throws org.gnenc.yams.NoSuchPermissionsException if a permissions with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.gnenc.yams.model.Permissions[] findByEmailAddressAndFqgn_PrevAndNext(
+		long id, java.lang.String emailAddress, java.lang.String fqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.gnenc.yams.NoSuchPermissionsException {
+		return getPersistence()
+				   .findByEmailAddressAndFqgn_PrevAndNext(id, emailAddress,
+			fqgn, orderByComparator);
+	}
+
+	/**
 	* Returns all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
 	* @param emailAddress the email address
@@ -639,6 +772,19 @@ public class PermissionsUtil {
 	}
 
 	/**
+	* Removes all the permissionses where emailAddress = &#63; and fqgn = &#63; from the database.
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByEmailAddressAndFqgn(emailAddress, fqgn);
+	}
+
+	/**
 	* Removes all the permissionses where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63; from the database.
 	*
 	* @param emailAddress the email address
@@ -687,6 +833,20 @@ public class PermissionsUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
+	}
+
+	/**
+	* Returns the number of permissionses where emailAddress = &#63; and fqgn = &#63;.
+	*
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @return the number of matching permissionses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByEmailAddressAndFqgn(emailAddress, fqgn);
 	}
 
 	/**

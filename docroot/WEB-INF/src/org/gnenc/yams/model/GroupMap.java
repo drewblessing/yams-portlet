@@ -9,7 +9,7 @@ public class GroupMap {
 
 	private String groupContainer;
 
-	private List<Group> groups;
+	private List<Group> Groups;
 
 	public String getGroupContainer() {
 		return groupContainer;
@@ -20,11 +20,11 @@ public class GroupMap {
 	}
 
 	public List<Group> getGroups() {
-		return groups == null ? Collections.<Group>emptyList() : groups;
+		return Groups == null ? Collections.<Group>emptyList() : Groups;
 	}
 
 	public void setGroups(List<Group> groups) {
-		this.groups = groups;
+		this.Groups = groups;
 	}
 
 	public static Map<String, List<Group>> toMap(final List<GroupMap> groupMaps) {

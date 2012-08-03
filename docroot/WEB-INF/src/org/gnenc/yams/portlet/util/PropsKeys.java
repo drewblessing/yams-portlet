@@ -44,6 +44,8 @@ public class PropsKeys {
 
 	public static final String LDAP_DATE_FORMAT = "ldap.date.format";
 	
+	public static final String LDAP_GROUP_BASE_DN = "ldap.group.base.dn";
+	
 	public static final String PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = "portlets.active.accountmanagement";
 
 	public static final String ACCOUNT_CREATE_WITH_WIZARD = "account.create.with.wizard";
@@ -51,4 +53,6 @@ public class PropsKeys {
 	public static final String ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT = "account.email.address.domain.default";
 	
 	public static final String ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED = "account.email.address.domain.override.enabled";
+
+	public static final String JVM_DIR = "yams.jvm.dir";
 }

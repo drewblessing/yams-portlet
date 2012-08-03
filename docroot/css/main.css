@@ -1,5 +1,9 @@
 @import "compass";
 
+.bold {
+	font-weight: bold;
+}
+
 .yams-portlet {	
 	.taglib-search-toggle {
 		box-shadow: 0 0 8px #cecece inset;
@@ -44,4 +48,65 @@
 		top: 7px;
 	}
 	
+	.permissions {
+		
+		.aui-fieldset {
+			border: 1px solid #C8C9CA;
+			border-radius: 4px;
+			margin-right: 15px;
+			width: 250px;
+		}
+	}
+	
+	.aui-button-holder {
+		padding-top: 15px;
+	
+		.step {
+			padding-top: 10px;
+		}
+	}
+	
+	.lfr-portlet-toolbar {
+	
+		.import-button a {
+			background-image: url(/html/themes/control_panel/images/arrows/01_up.png);
+		}
+	}
+	
+	.edit-password {
+		min-width: 250px;
+	}
+	
+	.import-accounts {
+		min-width: 650px;
+	
+		.header-values,
+		.instructions,
+		.statistics {
+			padding-bottom: 15px;
+		}
+		
+		.statistics {
+			.aui-column {
+				min-width: 135px;
+				min-height: 90px;
+				border: 1px solid #C8C9CA;
+				border-radius: 4px;
+				margin: 20px 10px 10px 10px;
+				text-align: center;
+				font-size: 1.3em;
+				
+				.aui-column-content {
+					margin-top: 20px;
+				}
+				
+				.aui-button {
+					display: block;
+					font-size: .8em;
+				}
+			}
+		}
+	}
+	
 }
+

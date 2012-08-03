@@ -6,11 +6,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.operation.group.GetAllGroups;
 import org.gnenc.yams.subsystem.ldap.LdapGroupHelper;
 import org.gnenc.yams.subsystem.ldap.LdapHelper;
-import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
+import org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DistinguishedName;
@@ -32,16 +32,16 @@ public class LdapGetAllGroups extends AbstractLdapOperation implements GetAllGro
 	private static final boolean debug = logger.isDebugEnabled();
 
 	@Override
-	public void getAllGroups(final Map<String, List<Group>> groupsMap, final String filter) {
+	public void getAllGroups(final Map<String, List<EntityGroup>> groupsMap, final String filter) {
 
 		long start = System.currentTimeMillis();
 
-		final List<LdapGroup> ldap = manager.search(LdapGroup.class,
+		final List<LdapEntityGroup> ldap = manager.search(LdapEntityGroup.class,
 				new DistinguishedName(LdapGroupHelper.GROUP_BASE_DN),
 				filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 
-//		final List<LdapGroup> ldap = manager.findAll(
-//				LdapGroup.class, new DistinguishedName(LdapGroupHelper.GROUP_BASE_DN),
+//		final List<LdapEntityGroup> ldap = manager.findAll(
+//				LdapEntityGroup.class, new DistinguishedName(LdapGroupHelper.GROUP_BASE_DN),
 //				LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 
 		if (debug) {
@@ -51,13 +51,13 @@ public class LdapGetAllGroups extends AbstractLdapOperation implements GetAllGro
 		}
 
 		if (ldap != null) {
-			for (final LdapGroup l : ldap) {
+			for (final LdapEntityGroup l : ldap) {
 
 				final String groupContainer = LdapGroupHelper.getGroupContainer(l.getDn());
-				final List<Group> groups = groupsMap.containsKey(groupContainer) ?
-						groupsMap.get(groupContainer) : new ArrayList<Group>();
-				final Group group = new Group();
-				groups.add(LdapGroupHelper.convertLdapGroupToSystemGroup(l, group));
+				final List<EntityGroup> groups = groupsMap.containsKey(groupContainer) ?
+						groupsMap.get(groupContainer) : new ArrayList<EntityGroup>();
+				final EntityGroup group = new EntityGroup();
+				groups.add(LdapGroupHelper.convertLdapEntityGroupToSystemGroup(l, group));
 				groupsMap.put(groupContainer, groups);
 			}
 

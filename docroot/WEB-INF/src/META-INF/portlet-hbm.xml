@@ -2,8 +2,25 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.gnenc.yams.model.ActionLog" />
 	<import class="org.gnenc.yams.model.Permissions" />
 	<import class="org.gnenc.yams.model.PermissionsDefined" />
+	<class name="org.gnenc.yams.model.impl.ActionLogImpl" table="yams_ActionLog">
+		<cache usage="read-write" />
+		<id name="id" column="id_" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="userEmailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="modifiedUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedUserEmailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedDescription" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedFqgn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
 	<class name="org.gnenc.yams.model.impl.PermissionsImpl" table="yams_Permissions">
 		<cache usage="read-write" />
 		<id name="id" column="id_" type="long">

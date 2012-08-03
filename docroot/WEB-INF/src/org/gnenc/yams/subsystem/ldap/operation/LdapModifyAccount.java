@@ -1,23 +1,21 @@
 package org.gnenc.yams.subsystem.ldap.operation;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.AccountStatus;
-import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.EntityGroup;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.operation.account.ModifyAccount;
 import org.gnenc.yams.service.internal.PasswordManager;
 import org.gnenc.yams.subsystem.ldap.LdapAccountHelper;
-import org.gnenc.yams.subsystem.ldap.LdapGroupHelper;
 import org.gnenc.yams.subsystem.ldap.LdapHelper;
-import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
-import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.InvalidAttributeValueException;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.odm.core.OdmManager;
 import org.springframework.stereotype.Service;
@@ -45,7 +43,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 
 	@Override
 	public void validateAccount(final Account account,
-			final Map<String, List<Group>> membershipGroups, final List<String> validationErrors) {		
+			final Map<String, List<EntityGroup>> membershipGroups, final List<String> validationErrors) {		
 		LdapAccountHelper.validateSystemAccountCommon(account, validationErrors);
 		
 		if(!checker.checkAccountExists(account.getUid())) {
@@ -54,22 +52,49 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 	}
 
 	@Override
-	public void modifyAccount(final Account account,
-			final Map<String, List<Group>> membershipGroups) {
+	public void modifyAccount(final Account account) {
 		
-		final LdapAccount ldap = manager.read(LdapAccount.class, LdapAccountHelper.computeDn(account));
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.uidNumber, account.getAttribute("uidNumber"), false));
 		
-		LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
+		String filter = SearchFilter.buildFilterString(filters, null, false);
 		
-		if(!account.getPassword().isEmpty()) {
-			ldap.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+		try {
+			final List<LdapAccountEsuccStaff> staffs = manager.search(LdapAccountEsuccStaff.class,
+					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
-//			ldap.setChinookUserPassword(passwordEncoder.encryptBlowfish(account.getPassword()));
+			if (staffs.size() == 1) {
+				LdapAccountEsuccStaff staff = staffs.get(0);
+				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, staff);
+				
+				staff.setDn(LdapAccountHelper.parseDn(staff.getDn().toString()));
+				
+				if(!account.getPassword().isEmpty()) {
+					staff.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+				}
+				
+				manager.update(staff);
+			} else {
+				throw new IndexOutOfBoundsException();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			final List<LdapAccountEsuccStudent> students = manager.search(LdapAccountEsuccStudent.class,
+					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
-//			logger.info("Updating password for LDAP Account: " + account.getUid());
+			if (students.size() == 1) {
+				LdapAccountEsuccStudent student = students.get(0);
+				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, student);
+			
+				student.setDn(LdapAccountHelper.parseDn(student.getDn().toString()));
+				
+				if(!account.getPassword().isEmpty()) {
+					student.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+				}
+				
+				manager.update(students);
+			}
 		}
-		
-		manager.update(ldap);
 		
 //		logger.info("Successfully updated LDAP Account: " + account.getUid());
 		
@@ -78,9 +103,9 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 //		final Set<String> sanitizedGroupNames = new HashSet<String>();
 //		for(final String key : membershipGroups.keySet()) {
 //			if(LdapGroupHelper.isLdapGroup(key)) {
-//				final List<Group> gl = membershipGroups.get(key);
+//				final List<EntityGroup> gl = membershipGroups.get(key);
 //				if(gl != null) {
-//					for(final Group g : gl)
+//					for(final EntityGroup g : gl)
 //						sanitizedGroupNames.add(g.getCn().toLowerCase());
 //				}
 //			}
@@ -95,7 +120,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 //		
 //		// Groups that this account is currently a member of
 //		final Set<String> existingGroups = new HashSet<String>();
-//		for(final LdapGroup group : manager.search(LdapGroup.class, DistinguishedName.EMPTY_PATH,
+//		for(final LdapEntityGroup group : manager.search(LdapEntityGroup.class, DistinguishedName.EMPTY_PATH,
 //				"(uniqueMember=" + accountDn + ")",
 //				LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE)) {
 //			existingGroups.add(group.getCn().toLowerCase());
@@ -109,8 +134,8 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 ////		}
 //		
 //		// All available groups in the ldap
-//		final List<LdapGroup> ldapGroups = manager.findAll(
-//				LdapGroup.class, DistinguishedName.EMPTY_PATH, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+//		final List<LdapEntityGroup> ldapGroups = manager.findAll(
+//				LdapEntityGroup.class, DistinguishedName.EMPTY_PATH, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 //		
 //		// System determined additional groups based on department and job title
 //		final Set<String> additionalGroupNames = new HashSet<String>();
@@ -133,7 +158,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 //		}
 		
 		// Remove groups the user is no longer a member of
-//		for(final LdapGroup g : ldapGroups) {
+//		for(final LdapEntityGroup g : ldapGroups) {
 //			final String groupCn = g.getCn().toLowerCase();
 //			
 //			for(final String removedCn : removedGroups) {
@@ -170,7 +195,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 //							g.getMembers().add(LdapGroupHelper.EMPTY_GROUP_MEMBER_DN);
 //						}
 //						manager.update(g);
-////						logger.info("Removed Account: " + account.getUid() + " from Group: " + g.getCn());
+////						logger.info("Removed Account: " + account.getUid() + " from EntityGroup: " + g.getCn());
 //					}
 //					
 //					break;
@@ -179,7 +204,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 			
 //		}
 //		
-//		for(final LdapGroup group : ldapGroups) {
+//		for(final LdapEntityGroup group : ldapGroups) {
 //			
 //			final String cn = group.getCn().toLowerCase();
 //			
@@ -202,7 +227,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 //						group.getMembers().add(accountDn);
 //						
 //						manager.update(group);
-////						logger.info("Added LDAP Account: " + account.getUid() + " to Group: " + group.getCn());
+////						logger.info("Added LDAP Account: " + account.getUid() + " to EntityGroup: " + group.getCn());
 //					}
 //					
 //					break;

@@ -1,5 +1,6 @@
 package org.gnenc.yams.subsystem.ldap.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Name;
@@ -10,14 +11,14 @@ import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
 /**
- * LDAP Group model based on the original LDAP Group model
+ * LDAP EntityGroup model based on the original LDAP EntityGroup model
  * created by Jeshurun Daniel. Class represents commonly used
  * attributes that can be found in the inetorgperson schema.
  *
  * @author Drew A. Blessing
  *
  */
-@Entry(objectClasses={"groupofnames","top"})
+@Entry(objectClasses={"top","groupOfURLs","esuccGroup","dgIdentityAux"})
 final public class LdapGroup {
 
 	@Id
@@ -45,7 +46,19 @@ final public class LdapGroup {
 	private String owner;
 	
 	@Attribute(type=Type.STRING)
-	private String seeAlso;
+	private List<String> seeAlso;
+	
+	@Attribute(type=Type.STRING, name="esucc-entity")
+	private String esuccEntity;
+	
+	@Attribute(type=Type.STRING, name="esucc-groupType")
+	private String esuccGroupType;
+	
+	@Attribute(type=Type.STRING, name="esucc-provider")
+	private String esuccProvider;
+	
+	@Attribute(type=Type.STRING, name="esucc-system")
+	private String esuccSystem;
 
 	/**
 	 * @return the dn
@@ -159,12 +172,69 @@ final public class LdapGroup {
 		this.owner = owner;
 	}
 
-	public String getSeeAlso() {
+	public List<String> getSeeAlso() {
+		if (seeAlso == null) {
+			seeAlso = new ArrayList<String>();
+		}
 		return seeAlso;
 	}
 	
-	public void setSeeAlso(String seeAlso) {
-		this.seeAlso = seeAlso;
+	/**
+	 * @return the esucc entity
+	 */
+	public String getEsuccEntity() {
+		return esuccEntity;
 	}
+
+	/**
+	 * @param esuccEntity the esuccEntity to set
+	 */
+	public void setEsuccEntity(String esuccEntity) {
+		this.esuccEntity = esuccEntity;
+	}
+	
+	/**
+	 * @return the esucc group type
+	 */
+	public String getEsuccGroupType() {
+		return esuccGroupType;
+	}
+
+	/**
+	 * @param esuccEntity the esuccEntity to set
+	 */
+	public void setGroupType(String esuccGroupType) {
+		this.esuccGroupType = esuccGroupType;
+	}
+	
+	/**
+	 * @return the esucc entity
+	 */
+	public String getEsuccProvider() {
+		return esuccProvider;
+	}
+
+	/**
+	 * @param esuccEntity the esuccEntity to set
+	 */
+	public void setEsuccProvider(String esuccProvider) {
+		this.esuccProvider = esuccProvider;
+	}
+	
+	/**
+	 * @return the esucc entity
+	 */
+	public String getEsuccSystem() {
+		return esuccSystem;
+	}
+
+	/**
+	 * @param esuccEntity the esuccEntity to set
+	 */
+	public void setEsuccSystem(String esuccSystem) {
+		this.esuccSystem = esuccSystem;
+	}
+	
+	
 
 }

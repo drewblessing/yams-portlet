@@ -23,12 +23,19 @@ public class SearchFilter implements Serializable {
 
 	public static enum Filter {
 		cn,
+		esuccMailPrimaryDomain,
+		esuccEntity,
 		givenName,
+		esuccGroupType,
+		esuccProvider,
 		name,
 		mail,
+		o,
 		sn,
 		uid,
-		member};
+		member, 
+		uidNumber
+		};
 
 	private final Filter filter;
 
@@ -72,14 +79,26 @@ public class SearchFilter implements Serializable {
 		 *  isn't necessary)
 		 */
 		for (SearchFilter f : searchFilters) {
+			String filterName;
+			
+			if (f.filter.name().contains("esucc")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("esucc-");
+				String filterSubstring = f.filter.name().substring(5);
+				sb.append(filterSubstring);
+				filterName = sb.toString();
+			} else {
+				filterName = f.filter.name();
+			}
+			
 			result.append("(");
 			if (f.negated) {
 				result.append("!(");
 			}
 			if (like) {
-				result.append(f.filter.name()).append("=*").append(f.value).append("*)");
+				result.append(filterName).append("=*").append(f.value).append("*)");
 			} else {
-				result.append(f.filter.name()).append("=").append(f.value).append(")");
+				result.append(filterName).append("=").append(f.value).append(")");
 			}
 			if (f.negated) {
 				result.append(")");
@@ -91,7 +110,7 @@ public class SearchFilter implements Serializable {
 
 		final String r = result.toString();
 		logger.debug("Search Filter: " + r);
-
+		System.out.println("Search filter: " + r);
 		return r;
 	}
 

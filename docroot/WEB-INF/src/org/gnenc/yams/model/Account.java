@@ -83,7 +83,7 @@ public class Account {
 		if ( this == obj ) return true;
 	    if ( !(obj instanceof Account) ) return false;
 	    Account account = (Account) obj;
-	    return this.getUid().equals(account.getUid());
+	    return this.getAttribute("uidNumber").equals(account.getAttribute("uidNumber"));
 	}
 
 	@Override
@@ -137,6 +137,14 @@ public class Account {
 
 	public void setCn(List<String> cn) {
 		this.cn = cn;
+	}
+	
+	public String getDn() {
+		return dn;
+	}
+	
+	public void setDn(String dn) {
+		this.dn = dn;
 	}
 
 	public String getDescription() {
@@ -249,6 +257,7 @@ public class Account {
 	private AccountStatus accountStatus = AccountStatus.ACTIVE;
 	private List<AdditionalAttributeHolder> attributes; // Attrs that only apply to particular subsystem
 	private List<String> cn;
+	private String dn;
 	private String description = "";
 	private String displayName = "";
 	private Integer employeeNumber = 0; //????

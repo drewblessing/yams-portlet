@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.operation.Operation;
 
 /**
@@ -14,7 +14,7 @@ import org.gnenc.yams.operation.Operation;
  */
 public interface CreateAccount extends Operation {
 	
-	public void validateNewAccount(final Account account, final Map<String, List<Group>> membershipGroups, final List<String> validationErrors);
+	public void validateNewAccount(final Account account, final Map<String, List<EntityGroup>> membershipGroups, final List<String> validationErrors);
 	public void createNewAccount(final Account account);
 
 }

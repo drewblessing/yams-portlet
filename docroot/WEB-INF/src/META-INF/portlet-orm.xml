@@ -7,6 +7,29 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<mapped-superclass class="org.gnenc.yams.model.impl.ActionLogModelImpl">
+		<attributes>
+			<id name="id">
+				<column name="ID_" />
+			</id>
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="userEmailAddress" />
+			<basic name="modifiedUserId" />
+			<basic name="modifiedUserName" />
+			<basic name="modifiedUserEmailAddress" />
+			<basic name="modifiedDescription" />
+			<basic name="modifiedFqgn" />
+			<transient name="modifiedUserUuid" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<mapped-superclass class="org.gnenc.yams.model.impl.PermissionsModelImpl">
 		<attributes>
 			<id name="id">
@@ -49,6 +72,10 @@
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
+	<entity class="org.gnenc.yams.model.impl.ActionLogImpl" name="ActionLog">
+		<table name="yams_ActionLog" />
+		<attributes />
+	</entity>
 	<entity class="org.gnenc.yams.model.impl.PermissionsImpl" name="Permissions">
 		<table name="yams_Permissions" />
 		<attributes />

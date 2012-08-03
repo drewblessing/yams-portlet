@@ -1,20 +1,21 @@
 package org.gnenc.yams.subsystem.ldap;
 
 import java.lang.reflect.Field;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.directory.SearchControls;
 
 import org.gnenc.yams.portlet.util.PropsValues;
-
 import org.springframework.ldap.odm.annotations.Attribute;
 public class LdapHelper {
 	private LdapHelper() {}
 
 	public static final SearchControls SEARCH_CONTROL_ALL_SUBTREE_SCOPE = new SearchControls(
 			SearchControls.SUBTREE_SCOPE, 0, 0, null, true, false);
+	
+	public static final SearchControls SEARCH_CONTROL_OBJECT_SCOPE = new SearchControls(
+			SearchControls.OBJECT_SCOPE, 0, 0, null, true, false);
 
 	public static final String DEFAULT_BASE_DN = PropsValues.LDAP_BASE_DN;
 

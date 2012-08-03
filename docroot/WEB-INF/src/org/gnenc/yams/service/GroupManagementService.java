@@ -2,9 +2,10 @@ package org.gnenc.yams.service;
 
 import java.util.List;
 
+import org.gnenc.yams.model.EntityGroupMap;
 import org.gnenc.yams.model.GroupMap;
-import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 
 /**
@@ -32,19 +33,19 @@ public interface GroupManagementService {
 	 * @throws ValidationException
 	 */
 
-//	public Group createGroup(Group group, List<String> containers)
+//	public EntityGroup createGroup(EntityGroup group, List<String> containers)
 //			throws ValidationException;
 
 	/**
 	 * Allows modifying a group's aliases, members and description.
 	 * @return the modified group
 	 */
-//	public Group modifyGroup(String groupContainer, Group group);
+//	public EntityGroup modifyGroup(String groupContainer, EntityGroup group);
 //
 //
-//	public void removeGroup(String groupContainer, Group group);
+//	public void removeGroup(String groupContainer, EntityGroup group);
 //
-//	public Group renameGroup(String groupContainer, Group group, String newCn)
+//	public EntityGroup renameGroup(String groupContainer, EntityGroup group, String newCn)
 //			throws ValidationException;
 
 	/**
@@ -53,7 +54,7 @@ public interface GroupManagementService {
 	 * @param groupContainer
 	 * @return
 	 */
-//	public Group initializeGroup(String groupContainer, Group group);
+//	public EntityGroup initializeGroup(String groupContainer, EntityGroup group);
 
 	/**
 	 * Gets all groups in the given subsystems. The key to the resultant map is:
@@ -64,7 +65,11 @@ public interface GroupManagementService {
 	 * To fetch the members of a group, use the initializeGroup call.
 	 * @return
 	 */
-	public List<GroupMap> getAllGroups(
+	public List<EntityGroupMap> getAllGroups(
+			final List<SearchFilter> filters, final Operand operand,
+			final List<SubSystem> subsystems, boolean like);
+	
+	public List<GroupMap> getGroups(
 			final List<SearchFilter> filters, final Operand operand,
 			final List<SubSystem> subsystems, boolean like);
 

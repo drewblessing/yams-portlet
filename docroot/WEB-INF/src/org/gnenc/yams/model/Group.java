@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Based on original Group model written
+ * Based on original EntityGroup model written
  * by Jeshurun Daniel
  *
  * @author Drew A. Blessing
@@ -41,8 +41,12 @@ public class Group {
 	private String displayName;
 
 	private String description;
+	
+	private String esuccEntity;
 
 	private List<Account> members;
+	
+	private List<String> seeAlso;
 
 	private Map<String, String> additionalAttributes;
 
@@ -75,11 +79,26 @@ public class Group {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+	
+	public String getEsuccEntity() {
+		return esuccEntity;
+	}
+
+	public void setEsuccEntity(String esuccEntity) {
+		this.esuccEntity = esuccEntity;
+	}
 
 	public List<Account> getMembers() {
 		if (members == null)
 			members = new ArrayList<Account>();
 		return members;
+	}
+	
+	public List<String> getSeeAlso() {
+		if (seeAlso == null) {
+			seeAlso = new ArrayList<String>();
+		}
+		return seeAlso;
 	}
 
 	public String getAttribute(String key) {

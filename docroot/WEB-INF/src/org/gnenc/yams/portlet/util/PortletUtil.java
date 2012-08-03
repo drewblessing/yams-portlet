@@ -18,10 +18,14 @@
  **/
 package org.gnenc.yams.portlet.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletSession;
@@ -31,21 +35,47 @@ import javax.portlet.ResourceResponse;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.AccountType;
+import org.gnenc.yams.model.Domain;
+import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 
-import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
+
+import edu.vt.middleware.dictionary.ArrayWordList;
+import edu.vt.middleware.dictionary.WordListDictionary;
+import edu.vt.middleware.dictionary.WordLists;
+import edu.vt.middleware.dictionary.sort.ArraysSort;
+import edu.vt.middleware.password.AlphabeticalSequenceRule;
+import edu.vt.middleware.password.CharacterCharacteristicsRule;
+import edu.vt.middleware.password.DictionarySubstringRule;
+import edu.vt.middleware.password.DigitCharacterRule;
+import edu.vt.middleware.password.LengthRule;
+import edu.vt.middleware.password.LowercaseCharacterRule;
+import edu.vt.middleware.password.NumericalSequenceRule;
+import edu.vt.middleware.password.Password;
+import edu.vt.middleware.password.PasswordData;
+import edu.vt.middleware.password.PasswordValidator;
+import edu.vt.middleware.password.QwertySequenceRule;
+import edu.vt.middleware.password.Rule;
+import edu.vt.middleware.password.RuleResult;
+import edu.vt.middleware.password.UsernameRule;
+import edu.vt.middleware.password.WhitespaceRule;
 public class PortletUtil {
 	private static List<SubSystem> checkAccountExists(String mail) 
 			throws ValidationException {
@@ -60,26 +90,6 @@ public class PortletUtil {
 		return null;
 	}
 
-	public static void editPassword(
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
-			HashMap<String, String> responses) {
-		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
-		String password = DAOParamUtil.getString(resourceRequest, "password");
-		String verify = DAOParamUtil.getString(resourceRequest, "verify");
-		Account account = getAccountFromRequest(resourceRequest);
-		
-		boolean valid = validatePasswordFields(password, verify, responses);
-		
-		if (valid) {
-
-			try {
-				ams.changePassword(account, password);
-			} catch (ValidationException e) {
-				responses.put("error", "Password change failed");
-			}
-		}
-	}
-
 	public static Account getAccountFromPortalUser(RenderRequest request, User user)
 			throws Exception {
 
@@ -89,7 +99,7 @@ public class PortletUtil {
 		filters.add(new SearchFilter(Filter.mail,user.getEmailAddress(),false));
 
 		accounts = Search.getAccounts(filters, null, StringPool.BLANK, 
-				StringPool.BLANK, false);
+				StringPool.BLANK, false, AccountType.ALL);
 
 		if (accounts.size() == 0) {
 			return null;
@@ -106,8 +116,8 @@ public class PortletUtil {
 		return accounts.get(0);
 	}
 	
-	public static Account getAccountFromRequest(ResourceRequest request) {
-		UserSearchTerms searchTerms = new UserSearchTerms(request);
+	public static Account getAccountFromRequest(ActionRequest actionRequest) {
+		UserSearchTerms searchTerms = new UserSearchTerms(actionRequest);
 		
 		return getAccountFromUserSearchTerms(searchTerms);
 	}
@@ -129,37 +139,42 @@ public class PortletUtil {
 			account = accounts.get(0);
 		} else if (accounts.size() == 0) {
 			account = null;
+
+			System.out.println("Crap1");
 		} else if (accounts.size() > 1) {
 			//Exception!
+			System.out.println("Crap2");
 		}
 
 		return account;
 		
 	}
 
-	public static List<Group> getGroupsByAccount(Account account) {
-		List<Group> groups = null;
+	public static List<EntityGroup> getGroupsByAccount(Account account) {
+		List<EntityGroup> groups = null;
 
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
-				Filter.member,account.getAttribute("dn"),false));
+				Filter.esuccEntity, account.getAttribute("esuccEntity"), false));
 
 		groups = Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
+		
+		System.out.println("Groups: " + groups.size());
 
 		return groups;
 	}
 	
-	public static Group getGroupByDn(String groupDn) throws Exception {
-		List<Group> groups = new ArrayList<Group>();
+	public static EntityGroup getGroupByCn(String groupCn) {
+		List<EntityGroup> groups = new ArrayList<EntityGroup>();
 
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
-				Filter.cn,groupDn,false));
+				Filter.cn,groupCn,false));
 
 		groups = Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
 
 		if (groups.size() > 1) {
-			throw new Exception("Too many groups");
+			return null;
 		} else if (groups.size() == 0) {
 			return null;
 		} 
@@ -167,11 +182,56 @@ public class PortletUtil {
 		return groups.get(0);
 	}
 	
+	public static List<PermissionsDefined> getPermissionsDefined() {
+		try {
+			return PermissionsDefinedLocalServiceUtil.getPermissionsDefineds(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+	}
+	
 	public static void processAccountName(String firstName,
-			String lastName, String groupDn, HashMap<String, String> responses) {
+			String lastName, String entity, String accountType, 
+			TreeMap<String, String> responses) {
 		System.out.println("Processing account name!");
-		// Make sure to lower case the names.
-		// TODO: Issue 49 - Learn how to get primary email domain for the group.
+		
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.esuccEntity, entity, false));
+//		filters.add(new SearchFilter(
+//				Filter.esuccGroupType, accountType, false));
+
+		System.out.println("Filter: " + SearchFilter.buildFilterString(filters, Operand.AND, false));
+		
+		List<Group> groups = Search.getGroupsForAccountType(filters, null, 
+				StringPool.BLANK, StringPool.BLANK, false);
+		
+		System.out.println("Groups: " + groups.size());
+		
+		filters.clear();
+		
+		StringBuilder domains = new StringBuilder();
+		
+		for (Group group : groups) {
+			if (group.getAttribute("esuccGroupType").equals(accountType)) {
+				List<String> seeAlsos = groups.get(0).getSeeAlso();
+			
+				for (String seeAlso : seeAlsos) {
+					String domain = seeAlso.substring(seeAlso.indexOf("o="));
+					domain = domain.substring(2, domain.indexOf(","));
+					
+					System.out.println("Domain: " + domain);
+					
+					domains.append(domain).append(StringPool.COMMA);
+				}
+			}
+		}
+		domains.delete(domains.length()-1, domains.length()); // Delete trailing comma
+		
+		responses.put("domains", domains.toString());
+		
 		
 		if (Validator.isNotNull(firstName) && Validator.isNotNull(lastName)) {
 			responses.put(UserDisplayTerms.EMAIL_ADDRESS, 
@@ -182,30 +242,148 @@ public class PortletUtil {
 						StringPool.PERIOD + lastName.toLowerCase());
 		}
 		
-		String domain = PropsValues.LDAP_ACCOUNT_DEFAULT_DOMAIN;
-		responses.put(UserDisplayTerms.DOMAIN, domain);
 	}
 
-	private static boolean validatePasswordFields(
+	public static void getEntityAccountTypes(String entity,
+			TreeMap<String, String> responses) {
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.esuccEntity, entity, false));
+		
+		List<Group> groups = Search.getGroupsForAccountType(filters, null, 
+				"asc", "name", false);
+		
+		System.out.println("Groups: " + groups.size());
+		
+		for (Group group : groups) {
+			System.out.println("Group type: " + group.getAttribute("esuccGroupType"));
+			responses.put(group.getAttribute("esuccGroupType"), 
+					group.getAttribute("esuccGroupType"));
+		}
+	}
+
+	public static boolean validatePasswordFields(
 			String password, String verify, 
-			HashMap<String, String> responses) {
+			String firstName, String lastName, 
+			List<String> responses) {
 		boolean result = false;
 		
 		while (true) {
 			if (Validator.equals(password, verify)) {
 				result = true;
 			} else {
-				responses.put("error", "password-fields-must-match");
+				responses.add("password-fields-must-match");
 				break;
 			}
 			if ((Validator.isNotNull(password)) && (Validator.isNotNull(verify))) {
 				result = true;
 			} else {
-				responses.put("error", "please-enter-all-required-fields");
+				responses.add("please-enter-all-required-fields");
 				break;
-			}
+			}	
 			break;
 		}
+		
+		// Virginia Tech Password checking library - http://code.google.com/p/vt-middleware/
+		
+		LengthRule lengthRule = new LengthRule(8,64);
+		
+		WhitespaceRule whitespaceRule = new WhitespaceRule();
+		
+		AlphabeticalSequenceRule alphaRule = new AlphabeticalSequenceRule();
+		
+		// Restrict numerical sequences - like 1234.  False means do not wrap sequences - 8901 is OK
+		NumericalSequenceRule numRule = new NumericalSequenceRule(3, false);
+		
+		QwertySequenceRule qwertyRule = new QwertySequenceRule();
+		
+		// Restrict usernames - true and true say match backwards and ignore case
+		UsernameRule usernameRule = new UsernameRule(true, true);
+		
+		// Add minimum requirements for number of digits and lower case chars
+		CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
+		charRule.getRules().add(new DigitCharacterRule());
+		charRule.getRules().add(new LowercaseCharacterRule());
+		charRule.setNumberOfCharacteristics(2);
+		
+		WordListDictionary dict1 = null;
+		WordListDictionary dict2 = null;
+		
+		try {
+			ArrayWordList awl1 = WordLists.createFromReader(
+					new FileReader[] {
+							new FileReader(PropsValues.JVM_DIR + "/webapps/yams-portlet/WEB-INF/classes/dict-webster2")
+					}, 
+					false, new ArraysSort());
+			dict1 = new WordListDictionary(awl1);
+			
+			ArrayWordList awl2 = WordLists.createFromReader(
+					new FileReader[] {
+							new FileReader(PropsValues.JVM_DIR + "/webapps/yams-portlet/WEB-INF/classes/dict-propernames")
+					}, 
+					false, new ArraysSort());
+			dict2 = new WordListDictionary(awl2);
+		} catch (FileNotFoundException e) {
+			responses.add("could-not-find-dictionary");
+			result = false;
+			e.printStackTrace();
+		} catch (IOException e) {
+			responses.add("could-not-find-dictionary");
+			result = false;
+			e.printStackTrace();
+		}
+		
+		DictionarySubstringRule dictRule1 = new DictionarySubstringRule(dict1);
+		dictRule1.setWordLength(5);
+		dictRule1.setMatchBackwards(true);
+		
+		DictionarySubstringRule dictRule2 = new DictionarySubstringRule(dict2);
+		dictRule2.setWordLength(4);
+		dictRule2.setMatchBackwards(true);
+		
+		List<Rule> ruleList1 = new ArrayList<Rule>();
+		ruleList1.add(lengthRule);
+		ruleList1.add(whitespaceRule);
+		ruleList1.add(alphaRule);
+		ruleList1.add(numRule);
+		ruleList1.add(qwertyRule);
+		ruleList1.add(usernameRule);
+		ruleList1.add(charRule);
+		ruleList1.add(dictRule1);
+		
+		PasswordValidator validator = new PasswordValidator(ruleList1);
+		PasswordData passwordData = new PasswordData(new Password(password));
+		passwordData.setUsername(firstName);
+		
+		RuleResult rs1 = validator.validate(passwordData);
+		if (!rs1.isValid()) {
+			for (String msg : validator.getMessages(rs1)) {
+				responses.add(msg);
+				System.out.println(msg);
+			}
+			result = false;
+		} else {
+			result = true;
+		}
+		
+		List<Rule> ruleList2 = new ArrayList<Rule>();
+		ruleList2.add(usernameRule);
+		
+		passwordData.setUsername(lastName);
+		
+		RuleResult rs2 = validator.validate(passwordData);
+		if (!rs2.isValid()) {
+			for (String msg : validator.getMessages(rs2)) {
+				//Only put the username failure messages on the stack if it's not there already
+				if (!responses.contains(msg)){
+					responses.add(msg);
+					System.out.println(msg);
+				}
+			}
+			result = false;
+		} else {
+			result = true;
+		}	
 		
 		return result;
 	}
@@ -230,10 +408,10 @@ public class PortletUtil {
 			"/html/portlet/account-management";
 	
 	public final static String PORTLET_ACCT_MGMT_ACCOUNT_SECTIONS_DIRECTORY =
-			PORTLET_ACCT_MGMT_DIRECTORY + "/account/sections";
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/sections/";
 	
-	public final static String PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY = 
-			PORTLET_ACCT_MGMT_DIRECTORY + "/account/admin_actions";
+	public final static String PORTLET_ACCT_MGMT_PERMISSIONS_DIRECTORY = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/permissions";
 
 	// JSPs
 	public static final String ACCT_MGMT_TOOLBAR_JSP =
@@ -248,17 +426,29 @@ public class PortletUtil {
 	public static final String ACCT_MGMT_ACCOUNT_ADD_WIZARD_FORM_NAVIGATION_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/add_wizard/form_navigation.jsp";
 
-	public static final String ACCT_MGMT_ACCOUNT_CHANGE_PASSWORD_JSP =
-			PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY + "/change_password.jsp";
-
 	public static final String ACCT_MGMT_ACCOUNT_EDIT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit.jsp";
 
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_account.jsp";
+
+	public static final String ACCT_MGMT_ACCOUNT_EDIT_PASSWORD_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_password.jsp";
 	
-	public final static String ACCT_MGMT_ACCOUNT_GRANT_PERMISSIONS_JSP =
-			PORTLET_ACCT_MGMT_ADMIN_ACTIONS_DIRECTORY + "/grant_permissions.jsp";
+	public static final String ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/import_accounts/view.jsp";
+	
+	public static final String ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_PREVIEW_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/import_accounts/preview.jsp";
+	
+	public static final String ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_SUMMARY_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/import_accounts/summary.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_GROUP_JSP =
+			PORTLET_ACCT_MGMT_PERMISSIONS_DIRECTORY + "/choose_group.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_PERMISSIONS_JSP =
+			PORTLET_ACCT_MGMT_PERMISSIONS_DIRECTORY + "/choose_permissions.jsp";
 
 	public static final String ACCT_MGMT_ORGANIZATION_EDIT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";
@@ -290,6 +480,5 @@ public class PortletUtil {
 
 	// Images
 	public static final String STOCK_AVATAR = "/images/user_male_portrait.png";
-
 
 }

@@ -22,8 +22,7 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-String redirect = ParamUtil.getString(request, "redirect");
-String backURL = ParamUtil.getString(request, "backURL", redirect);
+String backURL = ParamUtil.getString(request, "backURL");
 %>
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
@@ -32,12 +31,9 @@ String backURL = ParamUtil.getString(request, "backURL", redirect);
 			servletContext="<%=this.getServletContext() %>" />
 </c:if>
 
-<%-- <liferay-util:include --%>
-<%-- 		page="<%=PortletUtil.TABS_JSP %>" --%>
-<%-- 		servletContext="<%=this.getServletContext() %>" /> --%>
-
 <%
-Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
+// Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
+Account selAccount = ActionUtil.accountFromUidNumber(ParamUtil.getString(request, "uidNumber"));
 
 request.setAttribute("account.selAccount", selAccount);
 %>
@@ -52,5 +48,7 @@ request.setAttribute("account.selAccount", selAccount);
 		<jsp:include page="/html/portlet/search/account/details.jsp" />
 	</div>
 </div>
+
+<aui:button id="back" value="back" onClick="<%=backURL %>" />
 
 

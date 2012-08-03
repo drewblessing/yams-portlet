@@ -7,18 +7,21 @@ import java.util.Map;
 
 import javax.xml.bind.ValidationException;
 
+import org.gnenc.yams.model.EntityGroup;
+import org.gnenc.yams.model.EntityGroupMap;
 import org.gnenc.yams.model.Group;
 import org.gnenc.yams.model.GroupMap;
-import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.operation.group.GetAllGroups;
+import org.gnenc.yams.operation.group.GetGroups;
 import org.gnenc.yams.service.GroupManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 /**
  *
@@ -62,7 +65,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 
 //	@Override
-//	public Group createGroup(final Group group, final List<String> containers)
+//	public EntityGroup createGroup(final EntityGroup group, final List<String> containers)
 //			throws ValidationException {
 //
 //		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
@@ -89,7 +92,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 //
 //	@Override
-//	public Group modifyGroup(final String groupContainer, final Group group) {
+//	public EntityGroup modifyGroup(final String groupContainer, final EntityGroup group) {
 //
 //		executor.execute(ModifyGroup.class,
 //				SubSystem.ALL_SUBSYSTEMS, new ExecutionCallback<ModifyGroup>() {
@@ -103,7 +106,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 //
 //	@Override
-//	public void removeGroup(final String groupContainer, final Group group) {
+//	public void removeGroup(final String groupContainer, final EntityGroup group) {
 //
 //		executor.execute(DeleteGroup.class,
 //				SubSystem.ALL_SUBSYSTEMS, new ExecutionCallback<DeleteGroup>() {
@@ -116,7 +119,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 //
 //	@Override
-//	public Group renameGroup(final String groupContainer, final Group group, final String newCn)
+//	public EntityGroup renameGroup(final String groupContainer, final EntityGroup group, final String newCn)
 //			throws ValidationException {
 //
 //		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
@@ -142,7 +145,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 //
 //	@Override
-//	public Group initializeGroup(final String groupContainer, final Group group) {
+//	public EntityGroup initializeGroup(final String groupContainer, final EntityGroup group) {
 //
 //		executor.execute(InitializeGroup.class,
 //				SubSystem.ALL_SUBSYSTEMS, new ExecutionCallback<InitializeGroup>() {
@@ -156,11 +159,11 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 //	}
 
 	@Override
-	public List<GroupMap> getAllGroups(
+	public List<EntityGroupMap> getAllGroups(
 			final List<SearchFilter> filters, final Operand operand,
 			final List<SubSystem> subsystems, boolean like) {
-		final Map<String, List<Group>> results =
-				Collections.synchronizedMap(new HashMap<String, List<Group>>());
+		final Map<String, List<EntityGroup>> results =
+				Collections.synchronizedMap(new HashMap<String, List<EntityGroup>>());
 		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
 		System.out.println(searchFilter);
 		try {
@@ -176,9 +179,37 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 		}
 
 		// Sorting
-		for (final List<Group> g : results.values()) {
-			Collections.sort(g, Group.NAME_COMPARATOR_ASC);
+		for (final List<EntityGroup> g : results.values()) {
+			Collections.sort(g, EntityGroup.NAME_COMPARATOR_ASC);
 		}
+
+		return EntityGroupMap.toGroupMap(results);
+	}
+	
+	@Override
+	public List<GroupMap> getGroups(
+			final List<SearchFilter> filters, final Operand operand,
+			final List<SubSystem> subsystems, boolean like) {
+		final Map<String, List<Group>> results =
+				Collections.synchronizedMap(new HashMap<String, List<Group>>());
+		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
+		System.out.println(searchFilter);
+		try {
+			executor.execute(GetGroups.class,
+					subsystems, new ExecutionCallback<GetGroups>() {
+						@Override
+						public void executeAction(GetGroups operation) {
+							operation.getGroups(results, searchFilter);
+						}
+					}, true);
+		} catch (ValidationException e) {
+			e.printStackTrace();
+		}
+
+		// Sorting
+//		for (final List<Group> g : results.values()) {
+//			Collections.sort(g, EntityGroup.NAME_COMPARATOR_ASC);
+//		}
 
 		return GroupMap.toGroupMap(results);
 	}

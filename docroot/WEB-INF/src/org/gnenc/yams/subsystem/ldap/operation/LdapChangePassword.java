@@ -1,15 +1,20 @@
 package org.gnenc.yams.subsystem.ldap.operation;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.gnenc.yams.model.Account;
+import org.gnenc.yams.model.AccountType;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.operation.account.ChangePassword;
 import org.gnenc.yams.operation.account.ResetPassword;
 import org.gnenc.yams.service.internal.PasswordManager;
 import org.gnenc.yams.subsystem.ldap.LdapAccountHelper;
+import org.gnenc.yams.subsystem.ldap.LdapHelper;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
-import org.gnenc.yams.subsystem.ldap.model.LdapPasswordPolicy;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
@@ -66,14 +71,39 @@ public class LdapChangePassword extends AbstractLdapOperation implements ChangeP
 
 	@Override
 	public void changePassword(final Account account, final String newPassword) {
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.uidNumber, account.getAttribute("uidNumber"), false));
 		
-		final LdapAccount ldap = manager.read(LdapAccount.class, LdapAccountHelper.computeDn(account));
+		String filter = SearchFilter.buildFilterString(filters, null);
 		
-		if(ldap != null) {
-			ldap.setUserPassword(pwdManager.encryptSha1(newPassword));
-			manager.update(ldap);
+		
+		try{
+			final List<LdapAccountEsuccStaff> staffs = manager.search(LdapAccountEsuccStaff.class,
+					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
-//			logger.info("Updated password for LDAP Account: " + account.getUid());
+			if(staffs.size() == 1) {
+				LdapAccountEsuccStaff staff = staffs.get(0);
+				
+				staff.setDn(LdapAccountHelper.parseDn(staff.getDn().toString()));
+				
+				staff.setUserPassword(pwdManager.encryptSha1(newPassword));
+				manager.update(staff);
+			} else {
+				throw new IndexOutOfBoundsException();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			final List<LdapAccountEsuccStudent> students = manager.search(LdapAccountEsuccStudent.class,
+					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+			
+			if(students.size() == 1) {
+				LdapAccountEsuccStudent student = students.get(0);
+				
+				student.setDn(LdapAccountHelper.parseDn(student.getDn().toString()));
+				
+				student.setUserPassword(pwdManager.encryptSha1(newPassword));
+				manager.update(student);
+			}
 		}
 
 	}

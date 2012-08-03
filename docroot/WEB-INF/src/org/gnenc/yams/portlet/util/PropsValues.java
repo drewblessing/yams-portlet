@@ -45,6 +45,8 @@ public class PropsValues {
 
 	public static final String LDAP_DATE_FORMAT = PortletProps.get(PropsKeys.LDAP_DATE_FORMAT);
 	
+	public static final String LDAP_GROUP_BASE_DN = PortletProps.get(PropsKeys.LDAP_GROUP_BASE_DN);
+	
 	public static final boolean PORTLETS_ACTIVE_ACCOUNTMANAGEMENT = GetterUtil.getBoolean(PortletProps.get(PropsKeys.PORTLETS_ACTIVE_ACCOUNTMANAGEMENT));
 
 	public static final boolean ACCOUNT_CREATE_WITH_WIZARD = GetterUtil.getBoolean(PortletProps.get(PropsKeys.ACCOUNT_CREATE_WITH_WIZARD));
@@ -52,4 +54,6 @@ public class PropsValues {
 	public static final String ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT = PortletProps.get(PropsKeys.ACCOUNT_EMAIL_ADDRESS_DOMAIN_DEFAULT);
 	
 	public static final boolean ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED = GetterUtil.getBoolean(PortletProps.get(PropsKeys.ACCOUNT_EMAIL_ADDRESS_DOMAIN_OVERRIDE_ENABLED));
+
+	public static final String JVM_DIR = GetterUtil.getString(PortletProps.get(PropsKeys.JVM_DIR));
 }

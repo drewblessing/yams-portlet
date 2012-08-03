@@ -56,7 +56,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 
 			<liferay-ui:icon
 				image="user_icon"
-				message="user"
+				message="account"
 				url="<%= addUserURL %>"
 			/>
 		</c:if>
@@ -76,4 +76,17 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 
 		</c:if>
 	</liferay-ui:icon-menu>
+	
+	<c:if test="<%=false %>" >
+<%-- 	<c:if test="<%= PermissionsChecker.hasGroupPermission( --%>
+<%-- 				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_PERMISSIONS, StringPool.NULL) %>"> --%>
+		<portlet:renderURL var="importURL">
+			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP %>" />
+			<portlet:param name="redirect" value="<%= redirect %>" />
+			<portlet:param name="toolbarItem" value="import" />
+		</portlet:renderURL>
+		<span class="lfr-toolbar-button import-button <%= toolbarItem.equals("import") ? "current" : StringPool.BLANK %>">
+			<a href="<%= importURL %>"><liferay-ui:message key="import-accounts" /></a>
+		</span>
+	</c:if>
 </div>

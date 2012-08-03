@@ -20,8 +20,10 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+	PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 String tabs1 = ParamUtil.getString(request, "tabs1", PortletUtil.ACCOUNTS);
+List<EntityGroup> groups = AccountManagement.getAllGroups();
+List<Domain> domains = AccountManagement.getAllDomains();
 String jspPage = "";
 %>
 
@@ -46,6 +48,31 @@ String jspPage = "";
 			<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS%>" size="20"
 					value="<%=searchTerms.getLastName() %>" />
 		</aui:fieldset>
+		<aui:fieldset>
+			<aui:select name="<%=UserDisplayTerms.ESUCC_ENTITY %>" label="entity" showEmptyOption="<%= true %>">
+				<% for (EntityGroup group : groups) { %>
+<%-- 				<c:forEach var="groupItem" items="<%=groups %>"> --%>
+					<aui:option value="<%=group.getEsuccEntity() %>" selected="<%=searchTerms.getEsuccEntity() != null ? searchTerms.getEsuccEntity().equals(group.getEsuccEntity()) : false %>">
+						<%=group.getEsuccEntity() %>
+					</aui:option>
+<%-- 				</c:forEach> --%>
+				<% } %>
+			</aui:select>
+			<aui:select name="<%=UserDisplayTerms.DOMAIN %>" label="domain" showEmptyOption="<%=true %>" >
+			<% for (Domain domain : domains) { %>
+<%-- 				<c:forEach var="domainItem" items="<%=domains %>"> --%>
+					<aui:option value="<%=domain.getOrganization() %>" selected="<%=searchTerms.getDomain() != null ? searchTerms.getDomain().equals(domain.getOrganization()) : false %>">
+						<%=domain.getOrganization() %>
+					</aui:option>
+<%-- 				</c:forEach> --%>
+			<% } %>
+			</aui:select>
+			<aui:select name="<%=UserDisplayTerms.ESUCC_ACCOUNT_TYPE %>" label="account-type" >
+				<aui:option value="<%=AccountType.ALL %>" selected="<%=searchTerms.getEsuccAccountType() != null ? searchTerms.getEsuccAccountType().equals(AccountType.ALL ) : false %>" ><liferay-ui:message key="all" /></aui:option>
+				<aui:option value="<%=AccountType.ESUCC_STAFF %>" selected="<%=searchTerms.getEsuccAccountType() != null ? searchTerms.getEsuccAccountType().equals(AccountType.ESUCC_STAFF ) : false %>" ><liferay-ui:message key="staff" /></aui:option>
+				<aui:option value="<%=AccountType.ESUCC_STUDENT %>" selected="<%=searchTerms.getEsuccAccountType() != null ? searchTerms.getEsuccAccountType().equals(AccountType.ESUCC_STUDENT ) : false %>" ><liferay-ui:message key="student" /></aui:option>
+			</aui:select>
+		</aui:fieldset>
 	</liferay-ui:search-toggle>
 
 	<div class="separator"><!-- Separator --></div>
@@ -66,13 +93,13 @@ String jspPage = "";
 
 	<liferay-ui:search-container-row
 			className="org.gnenc.yams.model.Account"
-			keyProperty="uid"
+			keyProperty="dn"
 			modelVar="yamsAccount"
 	>
 	
 		<liferay-portlet:renderURL varImpl="rowURL">
 				<portlet:param name="backURL" value="<%= searchContainer.getIteratorURL().toString() %>" />
-				<portlet:param name="uid" value="<%= yamsAccount.getUid() %>" />
+				<portlet:param name="uidNumber" value='<%= yamsAccount.getAttribute("uidNumber") %>' />
 				<portlet:param name="jspPage" value="<%=PortletUtil.SEARCH_VIEW_ACCOUNT_JSP %>" />
 		</liferay-portlet:renderURL>
 

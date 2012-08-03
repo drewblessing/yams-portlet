@@ -18,7 +18,7 @@
 		<control-panel-entry-class>org.gnenc.yams.portlet.util.YAMSControlPanelEntry</control-panel-entry-class>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
 		<css-class-wrapper>yams-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>

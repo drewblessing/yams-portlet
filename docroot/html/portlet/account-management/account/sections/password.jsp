@@ -21,19 +21,44 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%
+Set<String> errors = SessionErrors.keySet(renderRequest);
+%>
+
 <h3><liferay-ui:message key="password" /></h3>
 
 <aui:fieldset column="<%=true %>" cssClass="aui-w100">
 
-	<aui:input type="password" name="password" size="25" first="<%=true %>">
-		<aui:validator name="rangeLength">
-			[8,50]
-		</aui:validator>
-	</aui:input>
-	<aui:input type="password" name="verify" size="25">
-		<aui:validator name="rangeLength">
-			[8,50]
-		</aui:validator>
-	</aui:input>
+	<div class="section edit-password aui-column aui-w50">
+			<aui:input type="password" name="password" size="25">
+				<aui:validator name="rangeLength">
+					[8,64]
+				</aui:validator>
+			</aui:input>
+			<aui:input type="password" name="verify" size="25">
+				<aui:validator name="rangeLength">
+					[8,64]
+				</aui:validator>
+			</aui:input>
+		</div>
+		<div class="section edit-password aui-column aui-w50">
+			Passwords must adhere to the following rules:
+			<ul>
+			<li>Minimum of 8 characters</li>
+			<li>Must have a mix of characters and digits</li>
+			<li>Must not contain a dictionary word, either forward or backward</li>
+			<li>Must not contain a common proper name</li>
+			<li>Must not contain the user's first or last name, either forward or backward</li>
+			<li>Must not contain a space </li>
+			<li>Must not contain a character or digit sequence - abc, 123</li>
+			<li>Must not contain a keyboard sequence - qwerty, asdf</li>
+			</ul>
+			<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match" />
+			<c:if test="<%=errors.size() > 0 %>" >
+				<c:forEach var="error" items="<%=errors %>">
+					<div class="portlet-msg-error">${error}</div>
+				</c:forEach>
+			</c:if>
+		</div>
 
 </aui:fieldset>

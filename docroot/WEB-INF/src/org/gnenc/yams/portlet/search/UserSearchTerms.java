@@ -17,13 +17,12 @@ public class UserSearchTerms extends UserDisplayTerms {
 	public UserSearchTerms(PortletRequest portletRequest) {
 		super(portletRequest);
 
+		domain = DAOParamUtil.getString(portletRequest, DOMAIN);
 		emailAddress = DAOParamUtil.getString(portletRequest, EMAIL_ADDRESS);
+		esuccEntity = DAOParamUtil.getString(portletRequest, ESUCC_ENTITY);
+		esuccAccountType = DAOParamUtil.getString(portletRequest, ESUCC_ACCOUNT_TYPE);
 		firstName = DAOParamUtil.getString(portletRequest, FIRST_NAME);
-		organization = DAOParamUtil.getString(portletRequest, ORGANIZATION);
 		lastName = DAOParamUtil.getString(portletRequest, LAST_NAME);
-		status = ParamUtil.getInteger(
-			portletRequest, STATUS, WorkflowConstants.STATUS_APPROVED);
-		uid = DAOParamUtil.getString(portletRequest, UID);
+		uidNumber = DAOParamUtil.getString(portletRequest, UID_NUMBER);
 	}
-
 }

@@ -1,3 +1,17 @@
+create table yams_ActionLog (
+	id_ LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	modifiedDate DATE null,
+	userEmailAddress VARCHAR(75) null,
+	modifiedUserId LONG,
+	modifiedUserName VARCHAR(75) null,
+	modifiedUserEmailAddress VARCHAR(75) null,
+	modifiedDescription VARCHAR(75) null,
+	modifiedFqgn VARCHAR(75) null
+);
+
 create table yams_Permissions (
 	id_ LONG not null primary key,
 	companyId LONG,

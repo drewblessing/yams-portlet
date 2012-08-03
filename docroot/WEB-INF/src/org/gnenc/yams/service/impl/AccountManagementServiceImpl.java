@@ -9,8 +9,6 @@ import java.util.Map;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Group;
-import org.gnenc.yams.model.GroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
@@ -24,6 +22,7 @@ import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
 import org.gnenc.yams.service.internal.ValidatedExecutionCallback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.NameAlreadyBoundException;
 import org.springframework.stereotype.Service;
 
 import com.liferay.portal.kernel.util.Validator;
@@ -70,6 +69,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 					public  void executeAction(CheckAccountExists operation) {
 						if(operation.checkAccountExists(accountUsername)) {
 							subsystems.add(operation.getSubsystemType());
+//							throw new ValidationException("account-exists");
 						}
 					}
 				}, true);
@@ -130,13 +130,13 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	
 	@Override
 	public Account createAccount(final Account newAccount, final List<SubSystem> subsystems) 
-			throws ValidationException {
+			throws ValidationException, NameAlreadyBoundException {
 		
 		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
 		
 //		newAccount.setPassword(passwordManager.generateNewPassword(newAccount.getUid()));
 		
-//		final Map<String, List<Group>> membershipGroupsMap = Collections.synchronizedMap(GroupMap.toMap(groupMaps));
+//		final Map<String, List<EntityGroup>> membershipGroupsMap = Collections.synchronizedMap(EntityGroupMap.toMap(groupMaps));
 		
 		
 		
@@ -169,7 +169,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	@Override
 	public List<Account> getAccounts(
 			final List<SearchFilter> filters, final Operand operand,
-			final List<SubSystem> subsystems, boolean like) {
+			final List<SubSystem> subsystems, boolean like, final String esuccAccountType) {
 		final Map<String, Account> accounts =
 				Collections.synchronizedMap(new HashMap<String, Account>());
 		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
@@ -180,7 +180,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 					new ExecutionCallback<GetAllAccounts>() {
 						@Override
 						public void executeAction(GetAllAccounts operation) {
-							operation.getAllAccounts(accounts, searchFilter);
+							operation.getAllAccounts(accounts, searchFilter, esuccAccountType);
 						}
 					}, true);
 		} catch (ValidationException e) {
@@ -193,11 +193,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	}
 	
 	@Override
-	public Account modifyAccount(final Account account,
-			final List<GroupMap> groupMaps, final List<SubSystem> subsystems)
+	public Account modifyAccount(final Account account, final List<SubSystem> subsystems)
 			throws ValidationException {
 		
-		final Map<String, List<Group>> membershipGroupsMap = Collections.synchronizedMap(GroupMap.toMap(groupMaps));
 		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
 		
 		executor.execute(ModifyAccount.class, subsystems,
@@ -213,7 +211,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 					@Override
 					public void executeAction(ModifyAccount operation) {
-						operation.modifyAccount(account, membershipGroupsMap);
+						operation.modifyAccount(account);
 					}
 				}, false);
 		

@@ -20,10 +20,5 @@
 %>
 
 <%@ include file="/html/portlet/init.jsp" %>
-Grant Perms
-<aui:form method="POST" name="grantPermissionsFm" id="grantPermissionsFm">
-	<aui:input type="hidden" name="<%=UserDisplayTerms.CMD %>" value="<%=AccountManagement.GRANT_PERMISSIONS_CMD %>" />
-	<aui:input type="hidden" name="date" value="<%=new Date() %>" />
-	<aui:input type="hidden" name="uid" value='<%=ParamUtil.getString(renderRequest, "uid") %>' />
-	
-</aui:form>
+
+<%@ page import="com.liferay.util.PwdGenerator"%>

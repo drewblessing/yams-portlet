@@ -115,8 +115,12 @@
 		<property name="contextSource" ref="contextSource" />
 		<property name="managedClasses">
 			<set>
-				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapDomain</value>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapSystem</value>
 			</set>
 		</property>
 	</bean>

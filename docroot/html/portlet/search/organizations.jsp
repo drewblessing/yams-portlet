@@ -20,13 +20,13 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
+	PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 %>
 
-<liferay-ui:search-container searchContainer="<%=new OrganizationSearch(renderRequest, portletURL) %>">
+<liferay-ui:search-container searchContainer="<%=new OrganizationSearch(renderRequest, portletURL)%>">
 	<%
-	OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
-	OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
+		OrganizationDisplayTerms displayTerms = (OrganizationDisplayTerms)searchContainer.getDisplayTerms();
+		OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
 	%>
 
 <liferay-ui:search-toggle
@@ -43,16 +43,16 @@ PortletURL portletURL = (PortletURL)request.getAttribute("view.jsp-portletURL");
 
 	<liferay-ui:search-container-results>
 		<%
-	 	List<Group> tempResults = Search.getGroups(
-	 			searchTerms,
-	 			searchContainer.getOrderByType(), searchContainer.getOrderByCol(), true);
+			List<EntityGroup> tempResults = Search.getGroups(
+			 			searchTerms,
+			 			searchContainer.getOrderByType(), searchContainer.getOrderByCol(), true);
 
-		results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
-		total = tempResults.size();
+				results = ListUtil.subList(tempResults, searchContainer.getStart(), searchContainer.getEnd());
+				total = tempResults.size();
 
-		pageContext.setAttribute("results", results);
-		pageContext.setAttribute("total", total);
-	    %>
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+		%>
 	</liferay-ui:search-container-results>
 
 	<liferay-ui:search-container-row

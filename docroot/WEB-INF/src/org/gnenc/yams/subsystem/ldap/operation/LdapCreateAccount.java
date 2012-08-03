@@ -1,23 +1,24 @@
 package org.gnenc.yams.subsystem.ldap.operation;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
-
-import javax.naming.Name;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.AccountType;
+import org.gnenc.yams.model.EntityGroup;
+import org.gnenc.yams.model.SearchFilter;
+import org.gnenc.yams.model.SearchFilter.Filter;
+import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.operation.account.CreateAccount;
-import org.gnenc.yams.portlet.search.UserDisplayTerms;
-import org.gnenc.yams.portlet.util.PropsValues;
 import org.gnenc.yams.service.internal.PasswordManager;
 import org.gnenc.yams.subsystem.ldap.LdapAccountHelper;
 import org.gnenc.yams.subsystem.ldap.LdapGroupHelper;
 import org.gnenc.yams.subsystem.ldap.LdapHelper;
-import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
+import org.gnenc.yams.subsystem.ldap.LdapSystemHelper;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
+import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
+import org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup;
 import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DistinguishedName;
@@ -45,7 +46,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 	private PasswordManager passwordEncoder;
 
 	@Override
-	public void validateNewAccount(final Account account, final Map<String, List<Group>> membershipGroups, final List<String> validationErrors) {
+	public void validateNewAccount(final Account account, final Map<String, List<EntityGroup>> membershipGroups, final List<String> validationErrors) {
 		LdapAccountHelper.validateSystemAccountCommon(account, validationErrors);
 		if(account.getPassword() == null || account.getPassword().trim().isEmpty()) {
 			validationErrors.add("Password cannot be empty for a new account.");
@@ -59,24 +60,79 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 
 	@Override
 	public void createNewAccount(Account account) {
-		final LdapAccount ldap = new LdapAccount();
+		String esuccAccountType = account.getAttribute("esuccAccountType");
+		String entity = account.getAttribute("esuccEntity");
 		
-		LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
+		System.out.println("Account type: " + esuccAccountType);
 		
-		ldap.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
-		
-		final List<LdapGroup> ldapGroups = manager.findAll(
-				LdapGroup.class, new DistinguishedName(
-						account.getAttribute(UserDisplayTerms.PRIMARY_GROUP)), 
-				LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
-		
-		if (ldapGroups.size() == 1) {
-			ldap.setDn(LdapAccountHelper.computeDn(account, ldapGroups.get(0)));
-		} else {
-			// Problem
-		}
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(
+				Filter.esuccEntity, entity, false));
+//		filters.add(new SearchFilter(
+//				Filter.esuccGroupType, "staff", false));
 
-		manager.create(ldap);
+		final String filter = SearchFilter.buildFilterString(filters, Operand.AND, false);
+		
+		System.out.println("Filter: " + filter);
+		
+		if (esuccAccountType.equals("Staff")) {
+			final LdapAccountEsuccStaff ldap = new LdapAccountEsuccStaff();
+			LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
+
+			ldap.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+			
+			final List<LdapGroup> ldapGroups = manager.search(LdapGroup.class,
+					new DistinguishedName(LdapGroupHelper.GROUP_BASE_DN),
+					filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+			
+			for (LdapGroup group : ldapGroups) {
+				if (group.getEsuccGroupType().equals(esuccAccountType)) {
+					ldap.setEsuccProvider(group.getEsuccProvider());
+					ldap.setEsuccSystem(group.getEsuccSystem());
+					ldap.setEsuccAccountEnabled("TRUE");
+					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
+					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
+					System.out.println("LDAP info: " + ldap.getUid() + " group: " + group.getSeeAlso());
+					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
+					System.out.println("Final dn: " + ldap.getDn().toString());
+				}
+			}
+//			
+//			if (ldapGroups.size() == 1) {
+//				
+//			} else {
+//				// Problem
+//			}
+
+			manager.create(ldap);
+		} else if (esuccAccountType.equals("Student")) {
+			final LdapAccountEsuccStudent ldap = new LdapAccountEsuccStudent();
+			LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
+
+			ldap.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
+			
+			final List<LdapGroup> ldapGroups = manager.search(LdapGroup.class,
+					new DistinguishedName(LdapGroupHelper.GROUP_BASE_DN),
+					filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+			
+			for (LdapGroup group : ldapGroups) {
+				if (group.getEsuccGroupType().equals(esuccAccountType)) {
+					ldap.setEsuccProvider(group.getEsuccProvider());
+					ldap.setEsuccSystem(group.getEsuccSystem());
+					ldap.setEsuccAccountEnabled("TRUE");
+					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
+					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
+					System.out.println("LDAP info: " + ldap.getUid() + " group: " + group.getSeeAlso());
+					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
+					System.out.println("Final dn: " + ldap.getDn().toString());
+				}
+			}
+
+			manager.create(ldap);
+		}
+		
+		
+		
 		
 //		switch (account.getAccountType()) {
 //		case EMPLOYEE:
@@ -93,15 +149,15 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 //		
 //		final Set<String> sanitizedGroupNames = new HashSet<String>();
 //		
-//		for(final List<Group> gl : membershipGroups.values()) {
+//		for(final List<EntityGroup> gl : membershipGroups.values()) {
 //			if(gl != null) {
-//				for(final Group g : gl)
+//				for(final EntityGroup g : gl)
 //					sanitizedGroupNames.add(g.getCn().toLowerCase());
 //			}
 //		}
 //		
-//		final List<LdapGroup> ldapGroups = manager.findAll(
-//				LdapGroup.class, DistinguishedName.EMPTY_PATH, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
+//		final List<LdapEntityGroup> ldapGroups = manager.findAll(
+//				LdapEntityGroup.class, DistinguishedName.EMPTY_PATH, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 //		
 //		final String accountDn = new DistinguishedName(ldap.getDn()).toUrl() + "," + LdapHelper.DEFAULT_BASE_DN;
 //		
@@ -112,7 +168,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 //		
 //		sanitizedGroupNames.addAll(additionalGroups);
 //		
-//		for(final LdapGroup group : ldapGroups) {
+//		for(final LdapEntityGroup group : ldapGroups) {
 //			
 //			final String cn = group.getCn().toLowerCase();
 //			
@@ -136,7 +192,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 //						group.getMembers().add(accountDn);
 //						
 //						manager.update(group);
-//						logger.info("Added LDAP Account: " + account.getUid() + " to Group: " + group.getCn());
+//						logger.info("Added LDAP Account: " + account.getUid() + " to EntityGroup: " + group.getCn());
 //					}
 //					
 //					break;

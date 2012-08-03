@@ -156,6 +156,8 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 	}
 	
 	function processStep1() {
+		var accountType = A.one("#<portlet:namespace /><%=UserDisplayTerms.ACCOUNT_TYPE %> option:selected");
+		var groupElement = A.one("#<portlet:namespace /><%=UserDisplayTerms.PRIMARY_GROUP %>");
 		var group = A.one("#<portlet:namespace /><%=UserDisplayTerms.PRIMARY_GROUP %> option:selected");
 		var firstName = A.one("#<portlet:namespace /><%=UserDisplayTerms.FIRST_NAME%>");
 		var lastName = A.one("#<portlet:namespace /><%=UserDisplayTerms.LAST_NAME%>");
@@ -170,6 +172,7 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 			data: {
 				'<%=UserDisplayTerms.CMD %>': '<%=AccountManagement.ADD_ACCOUNT_STEP_1_CMD %>',
 				'<%=UserDisplayTerms.PRIMARY_GROUP %>': <%=PropsValues.LDAP_ACCOUNT_DEFAULT_MODE.equals("simple") %> ? '<%=StringPool.BLANK %>' : group.val(),
+				'<%=UserDisplayTerms.ACCOUNT_TYPE %>': accountType.val(),
 				'<%=UserDisplayTerms.FIRST_NAME %>': firstName.val(),
 				'<%=UserDisplayTerms.LAST_NAME %>': lastName.val()
 			},
@@ -179,10 +182,16 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 					if (emailAddress.val() == "") {
 						emailAddress.val(message.<%=UserDisplayTerms.EMAIL_ADDRESS%>);
 					}
-					domain.val(message.<%=UserDisplayTerms.DOMAIN %>);
-					if (screenName.val() == "") {
-						screenName.val(message.<%=UserDisplayTerms.SCREEN_NAME%>);
+					var domains = message.domains.split(",");
+					if (domain.val() == "") {
+						for (i=0;i < domains.length;i++) {
+							domain.append("<option name='" + domains[i] + "' value='" + domains[i] + "'>" + domains[i] + "</option>");
+						}
 					}
+<!-- 					if (screenName.val() == "") { -->
+<%-- 						screenName.val(message.<%=UserDisplayTerms.SCREEN_NAME%>); --%>
+<!-- 					} -->
+					groupElement.html("<option name='" + group.val() + "' value='" + group.val() + "'>" + group.val() + "</option>");
 				},
 				failure: function() {
 					alert("failure");

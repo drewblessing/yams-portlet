@@ -28,7 +28,19 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 <h3><liferay-ui:message key="basic" /></h3>
 
 <aui:fieldset column="<%=true %>" cssClass="aui-w50">
+	
+	<aui:field-wrapper name="<%=UserDisplayTerms.SCREEN_NAME %>">
+		<%= selAccount.getUid() %>
 
+		<aui:input name="<%=UserDisplayTerms.SCREEN_NAME %>" type="hidden" value="<%= selAccount.getUid() %>" />
+	</aui:field-wrapper>
+
+	<aui:field-wrapper name="<%=UserDisplayTerms.EMAIL_ADDRESS %>">
+		<%= selAccount.getMailStringWithDelimiter(',', true) %>
+
+		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" type="hidden" value="<%= selAccount.getMail() %>" />
+	</aui:field-wrapper>
+	
 	<aui:select name="title" showEmptyOption="<%= true %>" first="<%=true %>" >
 		<aui:option selected='<%= selAccount.getAttribute("title").equals("Dr.") %>' value="Dr.">
 			<liferay-ui:message key="dr." />
@@ -55,16 +67,22 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 
 <aui:fieldset column="<%=true %>" cssClass="aui-w50">
 
-	<aui:field-wrapper name="<%=UserDisplayTerms.SCREEN_NAME %>">
-		<%= selAccount.getUid() %>
+	<aui:field-wrapper name="<%=UserDisplayTerms.ESUCC_SYSTEM %>">
+		<%= selAccount.getAttribute("esuccSystem") %>
 
-		<aui:input name="<%=UserDisplayTerms.SCREEN_NAME %>" type="hidden" value="<%= selAccount.getUid() %>" />
+		<aui:input name="<%=UserDisplayTerms.ESUCC_SYSTEM %>" type="hidden" value='<%= selAccount.getAttribute("esuccSystem") %>' />
 	</aui:field-wrapper>
+	
+	<aui:field-wrapper name="<%=UserDisplayTerms.ESUCC_PROVIDER %>">
+		<%= selAccount.getAttribute("esuccProvider") %>
 
-	<aui:field-wrapper name="<%=UserDisplayTerms.EMAIL_ADDRESS %>">
-		<%= selAccount.getMailStringWithDelimiter(',', true) %>
+		<aui:input name="<%=UserDisplayTerms.ESUCC_PROVIDER %>" type="hidden" value='<%= selAccount.getAttribute("esuccProvider") %>' />
+	</aui:field-wrapper>
+	
+	<aui:field-wrapper name="<%=UserDisplayTerms.ESUCC_ENTITY %>">
+		<%= selAccount.getAttribute("esuccEntity") %>
 
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" type="hidden" value="<%= selAccount.getMail() %>" />
+		<aui:input name="<%=UserDisplayTerms.ESUCC_ENTITY %>" type="hidden" value='<%= selAccount.getAttribute("esuccEntity") %>' />
 	</aui:field-wrapper>
 
 </aui:fieldset>

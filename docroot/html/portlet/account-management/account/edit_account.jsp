@@ -34,22 +34,32 @@ String[][] categorySections = {mainSections};
 
 %>
 
-<liferay-util:buffer var="htmlTop">
-	<c:if test="<%= selAccount != null %>">
-		<div class="user-info">
-			<div class="float-container">
-<%-- 					<img alt="<%= HtmlUtil.escape(selAccount.getDisplayName()) %>" class="user-logo" src="<%= selUser.getPortraitURL(themeDisplay) %>" /> --%>
+<portlet:actionURL name="editAccount" var="editAccountURL" >
+	<portlet:param name="backURL" value="<%=backURL %>" />
+</portlet:actionURL>
 
-<%-- 					<span class="user-name"><%= HtmlUtil.escape(selAccount.getDisplayName()) %></span> --%>
+<aui:form method="POST" action="<%=editAccountURL.toString() %>" name="yamsFm" id="yamsFm">
+<aui:input type="hidden" name="<%=UserDisplayTerms.CMD %>" value="<%=AccountManagement.EDIT_ACCOUNT_CMD %>" />
+<aui:input type="hidden" name="esuccMailPrimaryLocalPart" value='<%=selAccount.getAttribute("esuccMailPrimaryLocalPart") %>' />
+<aui:input type="hidden" name="esuccMailPrimaryDomain" value='<%=selAccount.getAttribute("esuccMailPrimaryDomain") %>' />
+<aui:input type="hidden" name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
+	
+	<liferay-util:buffer var="htmlTop">
+		<c:if test="<%= selAccount != null %>">
+			<div class="user-info">
+				<div class="float-container">
+	<%-- 					<img alt="<%= HtmlUtil.escape(selAccount.getDisplayName()) %>" class="user-logo" src="<%= selUser.getPortraitURL(themeDisplay) %>" /> --%>
+	
+	<%-- 					<span class="user-name"><%= HtmlUtil.escape(selAccount.getDisplayName()) %></span> --%>
+				</div>
 			</div>
-		</div>
-	</c:if>
-</liferay-util:buffer>
-
-<liferay-util:buffer var="htmlBottom">
-	<c:if test="<%= (selAccount != null) %>">
-	</c:if>
-</liferay-util:buffer>
+		</c:if>
+	</liferay-util:buffer>
+	
+	<liferay-util:buffer var="htmlBottom">
+		<c:if test="<%= (selAccount != null) %>">
+		</c:if>
+	</liferay-util:buffer>
 
 	<liferay-ui:form-navigator
 		backURL="<%= backURL %>"
@@ -57,8 +67,9 @@ String[][] categorySections = {mainSections};
 		categorySections="<%= categorySections %>"
 		htmlBottom="<%= htmlBottom %>"
 		htmlTop="<%= htmlTop %>"
-		jspPath="<%= PortletUtil.ACCT_MGMT_ACCOUNT_SECTIONS_DIRECTORY %>"
+		jspPath="<%= PortletUtil.PORTLET_ACCT_MGMT_ACCOUNT_SECTIONS_DIRECTORY %>"
 	/>
+</aui:form>
 
 <%!
 private static String[] _CATEGORY_NAMES = {"account-information"};

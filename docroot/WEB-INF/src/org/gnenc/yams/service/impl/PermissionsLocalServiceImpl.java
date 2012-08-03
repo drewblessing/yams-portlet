@@ -14,12 +14,16 @@
 
 package org.gnenc.yams.service.impl;
 
-import com.liferay.portal.kernel.exception.SystemException;
-
+import java.util.Date;
 import java.util.List;
 
 import org.gnenc.yams.model.Permissions;
 import org.gnenc.yams.service.base.PermissionsLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the permissions local service.
@@ -40,7 +44,20 @@ public class PermissionsLocalServiceImpl extends PermissionsLocalServiceBaseImpl
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsLocalServiceUtil} to access the permissions local service.
+	 * @throws SystemException 
 	 */
+	public long getPermissionsIdByEmailAddressAndFqgn(
+			String emailAddress, String fqgn) throws SystemException {
+		List<Permissions> permissions = permissionsPersistence.findByEmailAddressAndFqgn(emailAddress, fqgn);
+		if (permissions.size() > 1) {
+			throw new SystemException("Too many permissions found for email address and fqgn");
+		} else if (permissions.size() == 0) {
+			throw new SystemException("No permissions found");
+		}
+		
+		return permissions.get(0).getId();
+	}
+	
 	public List<Permissions> getByEmailAddressAndFqgnAndGroupPermission(
 			String email, String fqgn, boolean group) throws SystemException {
 		return permissionsPersistence.findByEmailAddressAndFqgnAndGroupPermission(email, fqgn, group);
@@ -53,5 +70,57 @@ public class PermissionsLocalServiceImpl extends PermissionsLocalServiceBaseImpl
 
 	public List<Permissions> getByEmailAddress(String email) throws SystemException {
 		return permissionsPersistence.findByEmailAddress(email);
+	}
+	
+	public Permissions addPermissions(
+				long userId, String emailAddress, String fqgn, boolean groupPermission,
+				long permissions, long permissionsGrantable) 
+			throws SystemException, PortalException {
+		
+		User user = UserLocalServiceUtil.fetchUser(userId);
+		
+		Date now = new Date();
+		
+		long permissionsId = counterLocalService.increment();
+		
+		Permissions permissionsEntry = permissionsPersistence.create(
+				permissionsId);
+		
+		permissionsEntry.setCompanyId(user.getCompanyId());
+		permissionsEntry.setUserId(user.getUserId());
+		permissionsEntry.setUserName(user.getFullName());
+		permissionsEntry.setCreateDate(now);
+		permissionsEntry.setModifiedDate(now);
+		permissionsEntry.setEmailAddress(emailAddress);
+		permissionsEntry.setFqgn(fqgn);
+		permissionsEntry.setGroupPermission(groupPermission);
+		permissionsEntry.setPermissions(permissions);
+		permissionsEntry.setPermissionsGrantable(permissionsGrantable);
+
+		permissionsPersistence.update(permissionsEntry, false);
+		
+		return permissionsEntry;
+	}
+	
+	public Permissions updatePermissions(
+				long permissionsId, long userId, 
+				long decimalPermissions, long permissionsGrantable) 
+			throws PortalException, SystemException {
+		User user = userPersistence.findByPrimaryKey(userId);
+		
+		Date now = new Date();
+		
+		Permissions permissionsEntry = permissionsPersistence.fetchByPrimaryKey(permissionsId);
+		
+		permissionsEntry.setModifiedDate(now);
+		permissionsEntry.setCompanyId(user.getCompanyId());
+		permissionsEntry.setUserId(user.getUserId());
+		permissionsEntry.setUserName(user.getFullName());
+		permissionsEntry.setPermissions(decimalPermissions);
+		permissionsEntry.setPermissionsGrantable(permissionsGrantable);
+		
+		permissionsPersistence.update(permissionsEntry, false);
+		
+		return permissionsEntry;
 	}
 }

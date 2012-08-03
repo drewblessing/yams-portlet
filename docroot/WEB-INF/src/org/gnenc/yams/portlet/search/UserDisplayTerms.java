@@ -33,9 +33,23 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
  */
 public class UserDisplayTerms extends YAMSDisplayTerms {
 
+	public static final String ACCOUNT_TYPE = "accountType";
+	
+	public static final String CLASS_OF = "classOf";
+	
 	public static final String DOMAIN = "domain";
 	
+	public static final String DN = "dn";
+	
 	public static final String EMAIL_ADDRESS = "emailAddress";
+	
+	public static final String ESUCC_ACCOUNT_TYPE = "esuccAccountType";
+	
+	public static final String ESUCC_ENTITY = "esuccEntity";
+	
+	public static final String ESUCC_PROVIDER = "esuccProvider";
+	
+	public static final String ESUCC_SYSTEM = "esuccSystem";
 
 	public static final String FIRST_NAME = "firstName";
 	
@@ -47,6 +61,8 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	
 	public static final String PASSWORD = "password";
 	
+	public static final String PERMISSIONS = "permissions";
+	
 	public static final String PRIMARY_GROUP = "primaryGroup";
 	
 	public static final String SCREEN_NAME = "screenName";
@@ -56,6 +72,8 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	public static final String TITLE = "title";
 
 	public static final String UID = "uid";
+	
+	public static final String UID_NUMBER = "uidNumber";
 	
 	public static final String VERIFY = "verify";
 
@@ -69,20 +87,35 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 		}
 
 		domain = ParamUtil.getString(portletRequest, DOMAIN);
+		dn = ParamUtil.getString(portletRequest, DN);
 		emailAddress = ParamUtil.getString(portletRequest, EMAIL_ADDRESS);
+		esuccAccountType = ParamUtil.getString(portletRequest, ESUCC_ACCOUNT_TYPE);
+		esuccEntity = ParamUtil.getString(portletRequest, ESUCC_ENTITY);
 		firstName = ParamUtil.getString(portletRequest, FIRST_NAME);
 		organization = ParamUtil.getString(portletRequest, ORGANIZATION);
 		lastName = ParamUtil.getString(portletRequest, LAST_NAME);
 		uid = ParamUtil.getString(portletRequest, UID);
+		uidNumber = ParamUtil.getString(portletRequest, UID_NUMBER);
 	}
 	
 	public String getDomain() {
 		return domain;
 	}
+	
+	public String getDn() {
+		return dn;
+	}
 
 	public String getEmailAddress() {
 		return emailAddress;
-
+	}
+	
+	public String getEsuccAccountType() {
+		return esuccAccountType;
+	}
+	
+	public String getEsuccEntity() {
+		return esuccEntity;
 	}
 
 	public String getFirstName() {
@@ -113,6 +146,10 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	public String getUid() {
 		return uid;
 	}
+	
+	public String getUidNumber() {
+		return uidNumber;
+	}
 
 	public boolean isActive() {
 		if (status == WorkflowConstants.STATUS_APPROVED) {
@@ -137,7 +174,10 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	}
 
 	protected String domain;
+	protected String dn;
 	protected String emailAddress;
+	protected String esuccAccountType;
+	protected String esuccEntity;
 	protected String firstName;
 	protected String organization;
 	protected String position;
@@ -145,5 +185,6 @@ public class UserDisplayTerms extends YAMSDisplayTerms {
 	protected String lastName;
 	protected int status;
 	protected String uid;
+	protected String uidNumber;
 
 }

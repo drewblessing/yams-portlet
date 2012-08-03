@@ -75,17 +75,23 @@ public class UserSearch extends SearchContainer<Account> {
 
 		UserDisplayTerms displayTerms = (UserDisplayTerms)getDisplayTerms();
 
+//		iteratorURL.setParameter(
+//			UserDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
 		iteratorURL.setParameter(
-			UserDisplayTerms.STATUS, String.valueOf(displayTerms.getStatus()));
+				UserDisplayTerms.ESUCC_ACCOUNT_TYPE, displayTerms.getEsuccAccountType());
+		iteratorURL.setParameter(
+				UserDisplayTerms.DOMAIN, displayTerms.getDomain());
+		iteratorURL.setParameter(
+				UserDisplayTerms.ESUCC_ENTITY, displayTerms.getEsuccEntity());
 		iteratorURL.setParameter(
 			UserDisplayTerms.EMAIL_ADDRESS, displayTerms.getEmailAddress());
 		iteratorURL.setParameter(
 			UserDisplayTerms.FIRST_NAME, displayTerms.getFirstName());
-		iteratorURL.setParameter(
-				UserDisplayTerms.ORGANIZATION, displayTerms.getOrganization());
+//		iteratorURL.setParameter(
+//				UserDisplayTerms.ORGANIZATION, displayTerms.getOrganization());
 		iteratorURL.setParameter(
 			UserDisplayTerms.LAST_NAME, displayTerms.getLastName());
-		iteratorURL.setParameter(UserDisplayTerms.UID, displayTerms.getUid());
+		iteratorURL.setParameter(UserDisplayTerms.DN, displayTerms.getDn());
 
 		try {
 			PortalPreferences preferences =

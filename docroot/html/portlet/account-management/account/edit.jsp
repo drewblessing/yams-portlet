@@ -28,6 +28,8 @@ String backURL = ParamUtil.getString(request, "backURL", redirect);
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 %>
 
+<liferay-ui:error key="this-account-already-exists" message="this-account-ready-exists" />
+
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include
 			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>"
@@ -38,30 +40,22 @@ Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (selAccount == null) ? "new-user" : selAccount.getDisplayName() %>'
+	title='<%= (selAccount == null) ? "new-account" : selAccount.getDisplayName() %>'
 />
-
-<portlet:actionURL name="editAccount" var="editAccountURL" />
-
-<aui:form method="POST" action="<%=editAccountURL.toString() %>" name="yamsFm" id="yamsFm">
-	<aui:input type="hidden" name="<%=UserDisplayTerms.CMD %>" 
-			value="<%= (selAccount != null) ? AccountManagement.EDIT_ACCOUNT_CMD : AccountManagement.ADD_ACCOUNT_CMD  %>" />
-<%-- 	<aui:input type="hidden" name="cmd" value='<%=(selAccount == null) ? AccountManagement.ADD_ACCOUNT_CMD : AccountManagement.EDIT_ACCOUNT_CMD %>' /> --%>
+	
 <c:choose>
 	<c:when test="<%=PropsValues.ACCOUNT_CREATE_WITH_WIZARD && selAccount == null %>">
 		<liferay-util:include
 				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP %>"
 				servletContext="<%=this.getServletContext() %>" >
-			<liferay-util:param name="step" value="1" />		
 		</liferay-util:include>
 	</c:when>
 	<c:otherwise>
 		<liferay-util:include
 				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP %>"
 				servletContext="<%=this.getServletContext() %>">
-			<liferay-util:param name="uid" value="<%=selAccount.getUid() %>" />
+			<liferay-util:param name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
 			<liferay-util:param name="backURL" value="<%= backURL %>" />
 		</liferay-util:include>
 	</c:otherwise>
 </c:choose>
-</aui:form>

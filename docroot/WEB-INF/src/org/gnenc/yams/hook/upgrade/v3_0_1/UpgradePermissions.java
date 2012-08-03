@@ -1,4 +1,4 @@
-package org.gnenc.yams.hook.upgrade.v0_0_2;
+package org.gnenc.yams.hook.upgrade.v3_0_1;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -64,6 +64,12 @@ public class UpgradePermissions extends UpgradeProcess {
 				PermissionsChecker.PERMISSION_ACCOUNT_EDIT, defaultUserId);
 		addPermissionsDefined(
 				PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_FORWARD, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_PERMISSIONS, defaultUserId);
+		addPermissionsDefined(
+				PermissionsChecker.PERMISSION_ACCOUNT_MOVE, defaultUserId);
 		addPermissionsDefined(
 				PermissionsChecker.PERMISSION_ACCOUNT_REMOVE, defaultUserId);
 		addPermissionsDefined(
