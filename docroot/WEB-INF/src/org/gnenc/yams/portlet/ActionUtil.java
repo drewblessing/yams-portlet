@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.portlet.ActionRequest;
@@ -22,6 +23,7 @@ import org.gnenc.yams.model.SearchFilter.Filter;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.util.PermissionsChecker;
 import org.gnenc.yams.portlet.util.PermissionsUtil;
+import org.gnenc.yams.portlet.util.PortletUtil;
 import org.gnenc.yams.portlet.util.UnknownImportAccountsHeaderException;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
@@ -43,9 +45,48 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class ActionUtil {
 	
-	private static Account accountFromCSVLine(String[] line) {
-		// TODO Auto-generated method stub
-		return null;
+	private static Account accountFromCSVLine(
+			TreeMap<String, Integer> headers, String[] line, List<String> responses) {
+		Account account = new Account();
+		
+		for (Map.Entry<String, Integer> entry : headers.entrySet()) {
+			if (entry.getKey().equalsIgnoreCase("First Name")) {
+				account.setGivenName(line[entry.getValue()]);
+			} else if (entry.getKey().equalsIgnoreCase("Last Name")) {
+				account.setSn(line[entry.getValue()]);
+			} else if (entry.getKey().equalsIgnoreCase("Email Address")) {
+				account.getMail().add(line[entry.getValue()]);
+			} else if (entry.getKey().equalsIgnoreCase("Account Type")) {
+				account.setAttribute("esuccAccountType", line[entry.getValue()]);
+			} else if (entry.getKey().equalsIgnoreCase("Password")) {
+				account.setPassword(line[entry.getValue()]);
+			} else if (entry.getKey().equalsIgnoreCase("Screen Name")) {
+				account.setAttribute("screenName", 
+						line[entry.getValue()] == null ? StringPool.BLANK : line[entry.getValue()]);
+			}
+		}
+		
+//		account.setAttribute("esuccAccountType", 
+//				ParamUtil.getString(request, UserDisplayTerms.ACCOUNT_TYPE));
+//		account.setCn(cnFromRequest(request));
+//		account.setDisplayName(account.getCn().get(0));
+
+//		account.setSn(ParamUtil.getString(request, UserDisplayTerms.LAST_NAME));
+//		account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS) + 
+//				StringPool.AT + ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
+//		account.setAttribute("esuccEntity", 
+//				ParamUtil.getString(request, UserDisplayTerms.PRIMARY_GROUP));
+//		account.setAttribute("esuccMailPrimaryLocalPart", 
+//				ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS));
+//		account.setAttribute("esuccMailPrimaryDomain", 
+//				ParamUtil.getString(request, UserDisplayTerms.DOMAIN));
+//		account.setAttribute(UserDisplayTerms.TITLE, 
+//				ParamUtil.getString(request, UserDisplayTerms.TITLE));
+//		account.setUid(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS));
+//		account.setAttribute(UserDisplayTerms.SCREEN_NAME, 
+//				ParamUtil.getString(request, UserDisplayTerms.SCREEN_NAME));
+		
+		return account;
 	}
 	
 	public static Account accountFromRequest(ActionRequest request) {
@@ -81,6 +122,7 @@ public class ActionUtil {
 				account.setGivenName(
 						ParamUtil.getString(request, UserDisplayTerms.FIRST_NAME));
 				account.setSn(ParamUtil.getString(request, UserDisplayTerms.LAST_NAME));
+				account.getMail().add(ParamUtil.getString(request, UserDisplayTerms.EMAIL_ADDRESS));
 				account.setAttribute("esuccEntity", 
 						ParamUtil.getString(request, UserDisplayTerms.ESUCC_ENTITY));
 				account.setAttribute(UserDisplayTerms.TITLE, 
@@ -266,28 +308,30 @@ public class ActionUtil {
 		return preview;
 	}
 
-	public static List<String[]> parseCSV(File file, MutableInt count) throws FileNotFoundException, 
+	public static List<String[]> parseCSV(ActionRequest actionRequest, 
+			File file, MutableInt count) 
+			throws FileNotFoundException, 
 			UnknownImportAccountsHeaderException {
 		CSVReader csvReader = new CSVReader(new FileReader(file));
+		String entity = ParamUtil.getString(actionRequest, UserDisplayTerms.ESUCC_ENTITY);
 		List<String[]> failedImports = new ArrayList<String[]>();
 		String[] line;
-		TreeMap<Integer, String> headers = new TreeMap<Integer, String>();
+		TreeMap<String, Integer> headers = new TreeMap<String, Integer>();
 		String[] possibleHeaderValues = AccountManagement.possibleCSVHeaderValues;
 		
 		try {
 			count.setValue(0);
 			while((line = csvReader.readNext()) != null) {
-
 				// Get the header values
 				
-				if (count.equals(0)) {					
+				if (count.intValue() == 0) {
 					int i = 0;
 					for (String headerValue : line) {
 						boolean matched = false;
 						for (String possibleHeaderValue : possibleHeaderValues) {
 							
 							if (headerValue.equalsIgnoreCase(possibleHeaderValue)) {
-								headers.put(i, possibleHeaderValue);
+								headers.put(possibleHeaderValue, i);
 								matched = true;
 							}
 						}
@@ -296,24 +340,30 @@ public class ActionUtil {
 						}
 						i++;
 					}
+					
+					// Add the headers to the failed imports
+					
+					failedImports.add(line);
+				} else {
+	
+					// Get the actual data now
+					
+					List<String> responses = new ArrayList<String>();
+					
+					Account account = ActionUtil.accountFromCSVLine(headers, line, responses);
+					account.setAttribute("esuccEntity", entity);
+					
+					System.out.println(account.getGivenName());
+					System.out.println(account.getSn());
+					System.out.println(account.getMail().get(0));
+					System.out.println(account.getPassword());
+					System.out.println(account.getAttribute("screenName"));
+					System.out.println("\n\n");
+					
+					
+	//				AccountManagement.importAccount(actionRequest, account, 
+	//						password, responses);
 				}
-				
-				// Get the actual data now
-				
-//				Account account = ActionUtil.accountFromCSVLine(line);
-//				Account newAccount = null;
-//				AccountManagementService ams = AccountManagementServiceImpl.getInstance();
-//				List<SubSystem> subsystems = new ArrayList<SubSystem>();
-//				
-//				subsystems.add(SubSystem.LDAP);
-//				try {
-//					newAccount = ams.createAccount(account, subsystems);
-//				} catch (ValidationException e) {
-//					e.printStackTrace();
-//				} catch (IllegalArgumentException e) {
-//					// That's Ok
-//				}
-		
 				count.increment(); 
 			}
 		} catch (IOException e) {

@@ -42,7 +42,8 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 			<liferay-ui:message key="step-2-instructions" />
 		</c:when>
 		<c:when test="<%=requestStep == 3 %>">
-			<liferay-ui:message key="step-3-instructions" />
+			Passwords must adhere to the following rules:
+			<jsp:include page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_PASSWORD_POLICY_TEXT_JSP %>" />
 		</c:when>
 	</c:choose>
 </div>
@@ -179,19 +180,18 @@ long requestStep = ParamUtil.getLong(request,"step", 1);
 			on: {
 				success: function() {
 					var message = this.get('responseData');
+					var domains = message.domains.split(",");
 					if (emailAddress.val() == "") {
 						emailAddress.val(message.<%=UserDisplayTerms.EMAIL_ADDRESS%>);
-					}
-					var domains = message.domains.split(",");
-					if (domain.val() == "") {
 						for (i=0;i < domains.length;i++) {
 							domain.append("<option name='" + domains[i] + "' value='" + domains[i] + "'>" + domains[i] + "</option>");
 						}
 					}
-<!-- 					if (screenName.val() == "") { -->
+					groupElement.empty();		
+					groupElement.append("<option name='" + group.val() + "' value='" + group.val() + "'>" + group.val() + "</option>");
+			<!--		if (screenName.val() == "") { -->
 <%-- 						screenName.val(message.<%=UserDisplayTerms.SCREEN_NAME%>); --%>
 <!-- 					} -->
-					groupElement.html("<option name='" + group.val() + "' value='" + group.val() + "'>" + group.val() + "</option>");
 				},
 				failure: function() {
 					alert("failure");

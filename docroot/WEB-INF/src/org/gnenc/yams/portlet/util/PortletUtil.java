@@ -18,6 +18,7 @@
  **/
 package org.gnenc.yams.portlet.util;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.portlet.ActionRequest;
@@ -36,13 +38,11 @@ import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.AccountType;
-import org.gnenc.yams.model.Domain;
 import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.model.Group;
 import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
-import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
@@ -67,6 +67,8 @@ import edu.vt.middleware.password.DictionarySubstringRule;
 import edu.vt.middleware.password.DigitCharacterRule;
 import edu.vt.middleware.password.LengthRule;
 import edu.vt.middleware.password.LowercaseCharacterRule;
+import edu.vt.middleware.password.MessageResolver;
+import edu.vt.middleware.password.NonAlphanumericCharacterRule;
 import edu.vt.middleware.password.NumericalSequenceRule;
 import edu.vt.middleware.password.Password;
 import edu.vt.middleware.password.PasswordData;
@@ -74,6 +76,7 @@ import edu.vt.middleware.password.PasswordValidator;
 import edu.vt.middleware.password.QwertySequenceRule;
 import edu.vt.middleware.password.Rule;
 import edu.vt.middleware.password.RuleResult;
+import edu.vt.middleware.password.UppercaseCharacterRule;
 import edu.vt.middleware.password.UsernameRule;
 import edu.vt.middleware.password.WhitespaceRule;
 public class PortletUtil {
@@ -158,8 +161,6 @@ public class PortletUtil {
 				Filter.esuccEntity, account.getAttribute("esuccEntity"), false));
 
 		groups = Search.getGroups(filters, null, StringPool.BLANK, StringPool.BLANK, false);
-		
-		System.out.println("Groups: " + groups.size());
 
 		return groups;
 	}
@@ -195,15 +196,10 @@ public class PortletUtil {
 	public static void processAccountName(String firstName,
 			String lastName, String entity, String accountType, 
 			TreeMap<String, String> responses) {
-		System.out.println("Processing account name!");
 		
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
 				Filter.esuccEntity, entity, false));
-//		filters.add(new SearchFilter(
-//				Filter.esuccGroupType, accountType, false));
-
-		System.out.println("Filter: " + SearchFilter.buildFilterString(filters, Operand.AND, false));
 		
 		List<Group> groups = Search.getGroupsForAccountType(filters, null, 
 				StringPool.BLANK, StringPool.BLANK, false);
@@ -216,13 +212,11 @@ public class PortletUtil {
 		
 		for (Group group : groups) {
 			if (group.getAttribute("esuccGroupType").equals(accountType)) {
-				List<String> seeAlsos = groups.get(0).getSeeAlso();
+				List<String> seeAlsos = group.getSeeAlso();
 			
 				for (String seeAlso : seeAlsos) {
 					String domain = seeAlso.substring(seeAlso.indexOf("o="));
 					domain = domain.substring(2, domain.indexOf(","));
-					
-					System.out.println("Domain: " + domain);
 					
 					domains.append(domain).append(StringPool.COMMA);
 				}
@@ -261,6 +255,21 @@ public class PortletUtil {
 					group.getAttribute("esuccGroupType"));
 		}
 	}
+	
+	public static boolean validateEmailAddressField(
+			String emailAddress, List<String> responses) {
+		boolean result = false;
+		
+		System.out.println("Email: " + emailAddress);
+		
+		if (Validator.isEmailAddress(emailAddress)) {
+			result = true;
+		} else {
+			responses.add("Invalid email address");
+		}
+			
+		return result;
+	}
 
 	public static boolean validatePasswordFields(
 			String password, String verify, 
@@ -287,28 +296,28 @@ public class PortletUtil {
 		// Virginia Tech Password checking library - http://code.google.com/p/vt-middleware/
 		
 		LengthRule lengthRule = new LengthRule(8,64);
-		
 		WhitespaceRule whitespaceRule = new WhitespaceRule();
 		
-		AlphabeticalSequenceRule alphaRule = new AlphabeticalSequenceRule();
-		
 		// Restrict numerical sequences - like 1234.  False means do not wrap sequences - 8901 is OK
-		NumericalSequenceRule numRule = new NumericalSequenceRule(3, false);
-		
-		QwertySequenceRule qwertyRule = new QwertySequenceRule();
+		NumericalSequenceRule numRule = new NumericalSequenceRule(4, false);
+		AlphabeticalSequenceRule alphaRule = new AlphabeticalSequenceRule(4, false);
+		QwertySequenceRule qwertyRule = new QwertySequenceRule(4, false);
 		
 		// Restrict usernames - true and true say match backwards and ignore case
 		UsernameRule usernameRule = new UsernameRule(true, true);
 		
 		// Add minimum requirements for number of digits and lower case chars
 		CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
-		charRule.getRules().add(new DigitCharacterRule());
-		charRule.getRules().add(new LowercaseCharacterRule());
+		charRule.getRules().add(new DigitCharacterRule(1));
+		charRule.getRules().add(new LowercaseCharacterRule(1));
+		charRule.getRules().add(new UppercaseCharacterRule(1));
+		charRule.getRules().add(new NonAlphanumericCharacterRule(1));
 		charRule.setNumberOfCharacteristics(2);
 		
 		WordListDictionary dict1 = null;
 		WordListDictionary dict2 = null;
 		
+		MessageResolver resolver = null;
 		try {
 			ArrayWordList awl1 = WordLists.createFromReader(
 					new FileReader[] {
@@ -323,6 +332,10 @@ public class PortletUtil {
 					}, 
 					false, new ArraysSort());
 			dict2 = new WordListDictionary(awl2);
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(PropsValues.JVM_DIR + "/webapps/yams-portlet/WEB-INF/classes/vtpassword-messages.properties"));
+			resolver = new MessageResolver(props);
 		} catch (FileNotFoundException e) {
 			responses.add("could-not-find-dictionary");
 			result = false;
@@ -338,8 +351,8 @@ public class PortletUtil {
 		dictRule1.setMatchBackwards(true);
 		
 		DictionarySubstringRule dictRule2 = new DictionarySubstringRule(dict2);
-		dictRule2.setWordLength(4);
-		dictRule2.setMatchBackwards(true);
+		dictRule2.setWordLength(5);
+		dictRule2.setMatchBackwards(false);
 		
 		List<Rule> ruleList1 = new ArrayList<Rule>();
 		ruleList1.add(lengthRule);
@@ -351,7 +364,7 @@ public class PortletUtil {
 		ruleList1.add(charRule);
 		ruleList1.add(dictRule1);
 		
-		PasswordValidator validator = new PasswordValidator(ruleList1);
+		PasswordValidator validator = new PasswordValidator(resolver, ruleList1);
 		PasswordData passwordData = new PasswordData(new Password(password));
 		passwordData.setUsername(firstName);
 		
@@ -443,6 +456,9 @@ public class PortletUtil {
 	
 	public static final String ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_SUMMARY_JSP = 
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/import_accounts/summary.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_PASSWORD_POLICY_TEXT_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/password_policy_text.jsp";
 	
 	public final static String ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_GROUP_JSP =
 			PORTLET_ACCT_MGMT_PERMISSIONS_DIRECTORY + "/choose_group.jsp";

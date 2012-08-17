@@ -25,7 +25,7 @@
 String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL", redirect);
 
-List<Group> groups = AccountManagement.getAllGroups();
+List<EntityGroup> groups = AccountManagement.getAllGroups();
 String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 %>
 
@@ -69,7 +69,7 @@ String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 						showEmptyOption="<%= true %>" >
 					<%
 					// Yes, this should probably be a JSTL <c:forEach> tag but I don't have time right now
-					for (Group group : groups) {
+					for (EntityGroup group : groups) {
 					%>
 						<c:if test="<%= PermissionsChecker.hasGroupPermission(callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
 							<aui:option name='<%=group.getAttribute("dn") %>' value='<%=group.getAttribute("dn") %>'>

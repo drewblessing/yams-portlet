@@ -20,9 +20,19 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
-	long step = ParamUtil.getLong(request, "step", 1);
+long step = ParamUtil.getLong(request, "step", 1);
 List<EntityGroup> groups = AccountManagement.getAllGroups();
+Set<String> errors = SessionErrors.keySet(renderRequest);
+
+Account selAccount = (Account)request.getAttribute("selAccount");
 %>
+
+<c:if test="<%=errors.size() > 0 %>" >
+	<c:forEach var="error" items="<%=errors %>">
+		<div class="portlet-msg-error">${error}</div>
+	</c:forEach>
+</c:if>
+
 <portlet:actionURL name="addAccount" var="addAccountURL" />
 
 <aui:form method="POST" action="<%=addAccountURL.toString()%>" name="yamsFm" id="yamsFm">
@@ -40,7 +50,8 @@ List<EntityGroup> groups = AccountManagement.getAllGroups();
 						%>
 							<c:if test="<%=PermissionsChecker.hasGroupPermission(
 									callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
-								<aui:option name='<%=group.getEsuccEntity() %>' value='<%=group.getEsuccEntity()%>'>
+								<aui:option name='<%=group.getEsuccEntity() %>' value='<%=group.getEsuccEntity()%>' 
+										selected='<%=selAccount != null ? selAccount.getAttribute("esuccEntity").equals(group.getEsuccEntity()) : false %>'>
 									<%=group.getEsuccEntity() %>
 								</aui:option>
 							</c:if>
@@ -50,28 +61,41 @@ List<EntityGroup> groups = AccountManagement.getAllGroups();
 					</aui:select>
 					<aui:select name="<%=UserDisplayTerms.ACCOUNT_TYPE %>" label="account-type" 
 							cssClass="step1-input" >
-						<aui:option value="select-an-entity-first">
-							<liferay-ui:message key="select-an-entity-first" />
-						</aui:option>
+						<c:choose>
+						<c:when test='<%=selAccount == null %>' >
+							<aui:option value="select-an-entity-first">
+								<liferay-ui:message key="select-an-entity-first" />
+							</aui:option>
+						</c:when>
+						<c:otherwise>
+							<aui:option value='<%=selAccount.getAttribute("esuccAccountType") %>' selected='<%=true %>' >
+								<%=selAccount.getAttribute("esuccAccountType") %>
+							</aui:option>
+						</c:otherwise>
+						</c:choose>
 					</aui:select>
 					<aui:select name="title" showEmptyOption="<%= true %>" cssClass="step1-input" first="<%=true %>" >
-						<aui:option value="Dr.">
+						<aui:option value="Dr." 
+								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Dr.") : false %>'>
 							<liferay-ui:message key="dr." />
 						</aui:option>
-						<aui:option value="Mr.">
+						<aui:option value="Mr." 
+								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mr.") : false %>'>
 							<liferay-ui:message key="mr." />
 						</aui:option>
-						<aui:option value="Mrs.">
+						<aui:option value="Mrs." 
+								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mrs.") : false %>'>
 							<liferay-ui:message key="mrs." />
 						</aui:option>
-						<aui:option value="Ms.">
+						<aui:option value="Ms." 
+								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Ms.") : false %>'>
 							<liferay-ui:message key="ms." />
 						</aui:option>
 					</aui:select>
-					<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" >
+					<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" value='<%=selAccount != null ? selAccount.getGivenName() : StringPool.BLANK %>' >
 						<aui:validator name="required" />
 					</aui:input>
-					<aui:input name="<%=UserDisplayTerms.LAST_NAME %>" cssClass="step1-input"  >
+					<aui:input name="<%=UserDisplayTerms.LAST_NAME %>" cssClass="step1-input" value="<%=selAccount != null ? selAccount.getSn() : StringPool.BLANK %>">
 						<aui:validator name="required" />
 					</aui:input>
 				</aui:fieldset>
@@ -89,12 +113,12 @@ List<EntityGroup> groups = AccountManagement.getAllGroups();
 				<h3>Step 2</h3>
 				<aui:fieldset>
 					<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" cssClass="step2-input" 
-							inlineField="<%=true %>"  >
+							inlineField="<%=true %>" >
 						<aui:validator name="required" />
 					</aui:input>
 					<span class="domain"><%=StringPool.AT %></span>
 					<aui:select name="<%=UserDisplayTerms.DOMAIN %>" label="<%=StringPool.BLANK %>" 
-							cssClass="step2-input domain" inlineField="<%=true %>">
+							cssClass="step2-input domain" inlineField="<%=true %>" showEmptyOption="<%=true %>" >
 					</aui:select>
 <%-- 					<aui:input name="<%=UserDisplayTerms.SCREEN_NAME %>" cssClass="step2-input" > --%>
 <%-- 						<aui:validator name="required" /> --%>
@@ -120,8 +144,8 @@ List<EntityGroup> groups = AccountManagement.getAllGroups();
 						<aui:validator name="required" />
 					</aui:input>
 				</aui:fieldset>
-				</div>
-				<div class="add-account-instructions aui-column aui-w50 aui-column-last">
+			</div>
+			<div class="add-account-instructions aui-column aui-w50 aui-column-last">
 				<!-- Placeholder -->
 			</div>
 		</div>
@@ -140,7 +164,7 @@ List<EntityGroup> groups = AccountManagement.getAllGroups();
 						A.Plugin.IO, {uri: '<%=formNavigationURL %>'});
 		
 		A.one('#<portlet:namespace /><%=UserDisplayTerms.PRIMARY_GROUP %>').on(
-			'click',
+			'change',
 			function() {
 				var group = A.one('#<portlet:namespace /><%=UserDisplayTerms.PRIMARY_GROUP %> option:selected');
 				var accountType = A.one('#<portlet:namespace /><%=UserDisplayTerms.ACCOUNT_TYPE %>');

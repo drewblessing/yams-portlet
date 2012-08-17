@@ -38,7 +38,7 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 	<aui:field-wrapper name="<%=UserDisplayTerms.EMAIL_ADDRESS %>">
 		<%= selAccount.getMailStringWithDelimiter(',', true) %>
 
-		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" type="hidden" value="<%= selAccount.getMail() %>" />
+		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" type="hidden" value="<%= selAccount.getMail().get(0) %>" />
 	</aui:field-wrapper>
 	
 	<aui:select name="title" showEmptyOption="<%= true %>" first="<%=true %>" >

@@ -110,7 +110,6 @@ public class SearchFilter implements Serializable {
 
 		final String r = result.toString();
 		logger.debug("Search Filter: " + r);
-		System.out.println("Search filter: " + r);
 		return r;
 	}
 

@@ -68,16 +68,7 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 		</div>
 		<div class="section edit-password aui-column aui-w25">
 			Passwords must adhere to the following rules:
-			<ul>
-			<li>Minimum of 8 characters</li>
-			<li>Must have a mix of characters and digits</li>
-			<li>Must not contain a dictionary word, either forward or backward</li>
-			<li>Must not contain a common proper name</li>
-			<li>Must not contain the user's first or last name, either forward or backward</li>
-			<li>Must not contain a space </li>
-			<li>Must not contain a character or digit sequence - abc, 123</li>
-			<li>Must not contain a keyboard sequence - qwerty, asdf</li>
-			</ul>
+			<jsp:include page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_PASSWORD_POLICY_TEXT_JSP %>" />
 			<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match" />
 			<c:if test="<%=errors.size() > 0 %>" >
 				<c:forEach var="error" items="<%=errors %>">

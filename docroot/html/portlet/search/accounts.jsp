@@ -124,6 +124,11 @@ String jspPage = "";
 	      		value="<%=yamsAccount.getMailStringWithDelimiter(
 	      				Account.DELIMITER_COMMA, true) %>"
 	    />
+	    
+	    <liferay-ui:search-container-column-text
+	    		name="entity"
+	    		value='<%=yamsAccount.getAttribute("esuccEntity") %>'
+	    />
 
 	    <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	    	<liferay-ui:search-container-column-jsp

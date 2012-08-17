@@ -36,7 +36,8 @@
 	}
 	.add-account-instructions-text {
 		font-size: 1.2em;
-		max-width: 175px;
+		padding-left: 10px;
+/* 		max-width: 175px; */
 	}
 	
 	.step2-input .aui-field-content .aui-field-label {
@@ -60,6 +61,7 @@
 	
 	.aui-button-holder {
 		padding-top: 15px;
+		padding-left: 15px;
 	
 		.step {
 			padding-top: 10px;

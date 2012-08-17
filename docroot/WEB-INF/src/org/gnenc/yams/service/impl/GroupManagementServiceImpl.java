@@ -165,7 +165,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 		final Map<String, List<EntityGroup>> results =
 				Collections.synchronizedMap(new HashMap<String, List<EntityGroup>>());
 		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
-		System.out.println(searchFilter);
+		
 		try {
 			executor.execute(GetAllGroups.class,
 					subsystems, new ExecutionCallback<GetAllGroups>() {
@@ -193,7 +193,7 @@ public class GroupManagementServiceImpl implements GroupManagementService {
 		final Map<String, List<Group>> results =
 				Collections.synchronizedMap(new HashMap<String, List<Group>>());
 		final String searchFilter = SearchFilter.buildFilterString(filters, operand, like);
-		System.out.println(searchFilter);
+		
 		try {
 			executor.execute(GetGroups.class,
 					subsystems, new ExecutionCallback<GetGroups>() {

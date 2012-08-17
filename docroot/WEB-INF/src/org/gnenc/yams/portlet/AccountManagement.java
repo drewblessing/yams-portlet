@@ -81,11 +81,18 @@ public class AccountManagement extends MVCPortlet {
 		List<String> responses = new ArrayList<String>(); 
 		String password = DAOParamUtil.getString(actionRequest, "password");
 		String verify = DAOParamUtil.getString(actionRequest, "verify");
+		String emailAddress = DAOParamUtil.getString(actionRequest, "emailAddress") + 
+				StringPool.AT + DAOParamUtil.getString(actionRequest, "domain");
+		
+		actionRequest.setAttribute("selAccount", account);
+		actionResponse.setRenderParameter("backURL", backURL);
 		
 		boolean valid = PortletUtil.validatePasswordFields(password, verify, 
 				account.getGivenName(), account.getSn(), responses);
 		
-		actionResponse.setRenderParameter("backURL", backURL);
+		if (valid) {
+			valid = PortletUtil.validateEmailAddressField(emailAddress, responses);
+		}
 		
 		if (!valid && responses.size() > 0) {
 			for(String response : responses) {
@@ -101,8 +108,8 @@ public class AccountManagement extends MVCPortlet {
 						newAccount = ams.createAccount(account, subsystems);
 						jspPage = PortletUtil.SEARCH_VIEW_JSP;
 					} else {
-						SessionErrors.add(actionRequest, "this-account-already-exists");
-						jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_JSP;
+						SessionErrors.add(actionRequest, "This account already exists");
+						jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_ADD_WIZARD_JSP;
 					}
 				} catch (ValidationException e) {
 					// TODO Auto-generated catch block
@@ -110,7 +117,9 @@ public class AccountManagement extends MVCPortlet {
 				}
 		}
 		
-//		writeActionLog(actionRequest, account, "Add account");
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Add account");
 		actionResponse.setRenderParameter("jspPage", jspPage);
 	}
 	
@@ -160,7 +169,9 @@ public class AccountManagement extends MVCPortlet {
 			jspPage = PortletUtil.SEARCH_VIEW_JSP;
 		}
 		
-		writeActionLog(actionRequest, account, "Edit account");
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Edit account");
 		actionResponse.setRenderParameter("jspPage", jspPage);
 	}
 	
@@ -201,7 +212,9 @@ public class AccountManagement extends MVCPortlet {
 			jspPage = PortletUtil.SEARCH_VIEW_JSP;
 		}
 		
-		writeActionLog(actionRequest, account, "Edit password");
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Edit password");
 		actionResponse.setRenderParameter("jspPage", jspPage);
 	}
 	
@@ -241,7 +254,9 @@ public class AccountManagement extends MVCPortlet {
 					decimalPermissionsGrantable);
 		}
 		
-		writeActionLog(actionRequest, account, "Edit permissions");
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Edit permissions");
 	}
 	
 	public void editPermissionsChooseGroup(
@@ -282,6 +297,45 @@ public class AccountManagement extends MVCPortlet {
 		actionResponse.setRenderParameter("jspPage", 
 				PortletUtil.ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_PERMISSIONS_JSP);
 		
+	}
+	
+	public static boolean importAccount(ActionRequest actionRequest, Account account, 
+			String password, List<String> responses) {
+		String emailAddress = account.getMail().get(0);
+		Account newAccount = null;
+		
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		List<SubSystem> subsystems = new ArrayList<SubSystem>();	
+		
+		boolean valid = PortletUtil.validatePasswordFields(password, password, 
+				account.getGivenName(), account.getSn(), responses);
+		
+		if (valid) {
+			valid = PortletUtil.validateEmailAddressField(emailAddress, responses);
+		}
+		
+		if (!valid && responses.size() > 0) {
+			return false;
+		} else {	
+			account.setPassword(password);
+			subsystems.add(SubSystem.LDAP);
+				try {
+					if (ams.checkAccountExists(account.getMail().get(0)).isEmpty()) {
+						newAccount = ams.createAccount(account, subsystems);
+					} else {
+						return false;
+					}
+				} catch (ValidationException e) {
+					e.printStackTrace();
+					return false;
+				}
+		}
+		
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Add account (Import)");
+		
+		return true;
 	}
 	
 	public void importAccountsUploadCSV(
@@ -339,7 +393,7 @@ public class AccountManagement extends MVCPortlet {
 	    		 SessionErrors.add(actionRequest, "could-not-find-file-please-try-again");
 	    	 }
 	    	    	 
-	    	 failedImports = ActionUtil.parseCSV(file, importCount); 
+	    	 failedImports = ActionUtil.parseCSV(actionRequest, file, importCount); 
 	    	 filePath = file.getAbsolutePath();
 	    	 
 	     } catch (FileNotFoundException e) {
@@ -354,12 +408,15 @@ public class AccountManagement extends MVCPortlet {
 		     actionResponse.setRenderParameter("jspPage", 
 		    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP);
 	     }
-	     System.out.println("Test2");
+	     
 	     actionRequest.setAttribute("failedImports", failedImports);
 	     actionRequest.setAttribute("importCount", importCount.toInteger());
 	     actionRequest.setAttribute("group", group);
 	     actionRequest.setAttribute("doneURL", doneURL);
 	     
+//	     writeActionLog(actionRequest, account.getMail().get(0), 
+//					account.getDisplayName(), account.getAttribute("esuccEntity"), 
+//					"Add account");
 	     actionResponse.setRenderParameter("jspPage", 
 	    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_SUMMARY_JSP);	     
 	}
@@ -455,7 +512,8 @@ public class AccountManagement extends MVCPortlet {
 	}
 	
 	private static void writeActionLog(
-			PortletRequest request, Account account, String description) {
+			PortletRequest request, String emailAddress, String fullName, 
+			String entity, String description) {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 	            WebKeys.THEME_DISPLAY);
 		
@@ -477,7 +535,7 @@ public class AccountManagement extends MVCPortlet {
 		
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
-				Filter.esuccEntity, account.getAttribute("esuccEntity"), false));
+				Filter.esuccEntity, entity, false));
 		
 		List<EntityGroup> group = Search.getGroups(
 				filters, Operand.AND, StringPool.BLANK, StringPool.BLANK, false);
@@ -491,7 +549,7 @@ public class AccountManagement extends MVCPortlet {
 		
 		try {
 			ActionLogLocalServiceUtil.addAction(
-					userId, account.getMail().get(0), account.getDisplayName(), fqgn, description);
+					userId, emailAddress, fullName, fqgn, description);
 		} catch (SystemException e) {
 			// It's just the log, life goes on
 			System.out.println("Unabled to write to YAMS Action Log");
@@ -508,5 +566,5 @@ public class AccountManagement extends MVCPortlet {
 	public static final int GET_ENTITY_ACCOUNT_TYPES = 8;
 	
 	public static String[] possibleCSVHeaderValues = new String[] {"First Name","Last Name", 
-		"Email Address", "Screen Name", "Class Of", "Account Type", "Password"};
+		"Email Address", "Password", "Screen Name", "Account Type" };
 }

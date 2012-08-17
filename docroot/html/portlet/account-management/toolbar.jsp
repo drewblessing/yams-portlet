@@ -77,9 +77,9 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "search");
 		</c:if>
 	</liferay-ui:icon-menu>
 	
-	<c:if test="<%=false %>" >
-<%-- 	<c:if test="<%= PermissionsChecker.hasGroupPermission( --%>
-<%-- 				callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_PERMISSIONS, StringPool.NULL) %>"> --%>
+	<c:if test="<%=false %>">
+<%-- 	<c:if test="<%= PermissionsChecker.hasGroupPermission( 				 --%>
+<%-- 			callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_PERMISSIONS, StringPool.NULL) %>"> --%>
 		<portlet:renderURL var="importURL">
 			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP %>" />
 			<portlet:param name="redirect" value="<%= redirect %>" />

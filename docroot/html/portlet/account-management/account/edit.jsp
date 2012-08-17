@@ -28,8 +28,6 @@ String backURL = ParamUtil.getString(request, "backURL", redirect);
 Account selAccount = PortletUtil.getAccountFromRequest(renderRequest);
 %>
 
-<liferay-ui:error key="this-account-already-exists" message="this-account-ready-exists" />
-
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include
 			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>"
