@@ -41,20 +41,20 @@ Account selAccount = (Account)request.getAttribute("account.selAccount");
 		<aui:input name="<%=UserDisplayTerms.EMAIL_ADDRESS %>" type="hidden" value="<%= selAccount.getMail().get(0) %>" />
 	</aui:field-wrapper>
 	
-	<aui:select name="title" showEmptyOption="<%= true %>" first="<%=true %>" >
-		<aui:option selected='<%= selAccount.getAttribute("title").equals("Dr.") %>' value="Dr.">
-			<liferay-ui:message key="dr." />
-		</aui:option>
-		<aui:option selected='<%= selAccount.getAttribute("title").equals("Mr.") %>' value="Mr.">
-			<liferay-ui:message key="mr." />
-		</aui:option>
-		<aui:option selected='<%= selAccount.getAttribute("title").equals("Mrs.") %>' value="Mrs.">
-			<liferay-ui:message key="mrs." />
-		</aui:option>
-		<aui:option selected='<%= selAccount.getAttribute("title").equals("Ms.") %>' value="Ms.">
-			<liferay-ui:message key="ms." />
-		</aui:option>
-	</aui:select>
+<%-- 	<aui:select name="title" showEmptyOption="<%= true %>" first="<%=true %>" > --%>
+<%-- 		<aui:option selected='<%= selAccount.getAttribute("title").equals("Dr.") %>' value="Dr."> --%>
+<%-- 			<liferay-ui:message key="dr." /> --%>
+<%-- 		</aui:option> --%>
+<%-- 		<aui:option selected='<%= selAccount.getAttribute("title").equals("Mr.") %>' value="Mr."> --%>
+<%-- 			<liferay-ui:message key="mr." /> --%>
+<%-- 		</aui:option> --%>
+<%-- 		<aui:option selected='<%= selAccount.getAttribute("title").equals("Mrs.") %>' value="Mrs."> --%>
+<%-- 			<liferay-ui:message key="mrs." /> --%>
+<%-- 		</aui:option> --%>
+<%-- 		<aui:option selected='<%= selAccount.getAttribute("title").equals("Ms.") %>' value="Ms."> --%>
+<%-- 			<liferay-ui:message key="ms." /> --%>
+<%-- 		</aui:option> --%>
+<%-- 	</aui:select> --%>
 	
 	<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>"	value="<%= selAccount.getGivenName() %>">
 		<aui:validator name="required" />

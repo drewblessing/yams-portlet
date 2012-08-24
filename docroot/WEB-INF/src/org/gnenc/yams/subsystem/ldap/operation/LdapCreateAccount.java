@@ -75,7 +75,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 		
 		System.out.println("Filter: " + filter);
 		
-		if (esuccAccountType.equals("Staff")) {
+		if (esuccAccountType.equalsIgnoreCase("Staff")) {
 			final LdapAccountEsuccStaff ldap = new LdapAccountEsuccStaff();
 			LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
 
@@ -86,15 +86,13 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 					filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
 			for (LdapGroup group : ldapGroups) {
-				if (group.getEsuccGroupType().equals(esuccAccountType)) {
+				if (group.getEsuccGroupType().equalsIgnoreCase(esuccAccountType)) {
 					ldap.setEsuccProvider(group.getEsuccProvider());
 					ldap.setEsuccSystem(group.getEsuccSystem());
 					ldap.setEsuccAccountEnabled("TRUE");
 					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
 					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
-					System.out.println("LDAP info: " + ldap.getUid() + " group: " + group.getSeeAlso());
 					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
-					System.out.println("Final dn: " + ldap.getDn().toString());
 				}
 			}
 //			
@@ -105,7 +103,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 //			}
 
 			manager.create(ldap);
-		} else if (esuccAccountType.equals("Student")) {
+		} else if (esuccAccountType.equalsIgnoreCase("Student")) {
 			final LdapAccountEsuccStudent ldap = new LdapAccountEsuccStudent();
 			LdapAccountHelper.convertSystemAccountToLdapAccount(account, ldap);
 
@@ -116,15 +114,14 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 					filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
 			for (LdapGroup group : ldapGroups) {
-				if (group.getEsuccGroupType().equals(esuccAccountType)) {
+				if (group.getEsuccGroupType().equalsIgnoreCase(esuccAccountType)) {
 					ldap.setEsuccProvider(group.getEsuccProvider());
 					ldap.setEsuccSystem(group.getEsuccSystem());
 					ldap.setEsuccAccountEnabled("TRUE");
 					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
 					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
-					System.out.println("LDAP info: " + ldap.getUid() + " group: " + group.getSeeAlso());
 					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
-					System.out.println("Final dn: " + ldap.getDn().toString());
+					System.out.println("Title: " + account.getAttribute("title")); 
 				}
 			}
 

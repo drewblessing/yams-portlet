@@ -134,7 +134,7 @@ public class AccountManagement extends MVCPortlet {
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();	
 		
 		List<String> responses = new ArrayList<String>(); 
-		String password = DAOParamUtil.getString(actionRequest, "password");
+		String password = DAOParamUtil.getString(actionRequest, "password_field");
 		String verify = DAOParamUtil.getString(actionRequest, "verify");
 		boolean valid = false;
 		
@@ -300,24 +300,48 @@ public class AccountManagement extends MVCPortlet {
 	}
 	
 	public static boolean importAccount(ActionRequest actionRequest, Account account, 
-			String password, List<String> responses) {
+			List<String> responses) {
 		String emailAddress = account.getMail().get(0);
 		Account newAccount = null;
 		
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		List<SubSystem> subsystems = new ArrayList<SubSystem>();	
 		
-		boolean valid = PortletUtil.validatePasswordFields(password, password, 
-				account.getGivenName(), account.getSn(), responses);
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(Filter.esuccEntity,
+				account.getAttribute("esuccEntity"),false));
+		
+		List<Domain> domains = Search.getDomains(filters, null, 
+				StringPool.BLANK, StringPool.BLANK, false);
+		
+		System.out.println("Domains: " + domains.size());
+		
+		boolean valid = PortletUtil.validatePasswordFields(account.getPassword(), 
+				account.getPassword(), account.getGivenName(), 
+				account.getSn(), responses);
 		
 		if (valid) {
 			valid = PortletUtil.validateEmailAddressField(emailAddress, responses);
 		}
 		
+		if (valid) {
+			boolean matched = false;
+			for (Domain domain : domains) {
+				System.out.println("Domain 1: " + domain.getOrganization());
+				if (domain.getOrganization().equals(account.getAttribute("esuccMailPrimaryDomain"))) {
+					matched = true;
+					break;
+				}
+			}
+			if (!matched) {
+				valid = false;
+				responses.add("Invalid domain");
+			}
+		}
+		
 		if (!valid && responses.size() > 0) {
 			return false;
-		} else {	
-			account.setPassword(password);
+		} else {
 			subsystems.add(SubSystem.LDAP);
 				try {
 					if (ams.checkAccountExists(account.getMail().get(0)).isEmpty()) {
@@ -342,11 +366,11 @@ public class AccountManagement extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse) {
 		 List<String[]> preview = new ArrayList<String[]>();
 	     String filePath = null;
-	     String cancelURL = ParamUtil.getString(actionRequest, "cancelURL");
-	     String group = ParamUtil.getString(actionRequest, "group");
+	     String jspPage = null;
+	     UploadPortletRequest uploadRequest = null;
 	     
 	     try {
-	    	 UploadPortletRequest uploadRequest = PortalUtil
+	    	 uploadRequest = PortalUtil
 	    			 .getUploadPortletRequest(actionRequest);
 	    	 
 	    	 File file = uploadRequest.getFile("csvFile");
@@ -356,27 +380,29 @@ public class AccountManagement extends MVCPortlet {
 	    	    	 
 	    	 preview = ActionUtil.parseCSVForPreview(file); 
 	    	 filePath = file.getAbsolutePath();
+		     
+		     String group = uploadRequest.getParameter(UserDisplayTerms.GROUP);
+		     String cancelURL = uploadRequest.getParameter("cancelURL");
+
+		     actionRequest.setAttribute("preview", preview);
+		     actionRequest.setAttribute("filePath", filePath);
+		     actionRequest.setAttribute("group", group);
+		     actionRequest.setAttribute("cancelURL", cancelURL);
+		     
+    		 jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_PREVIEW_JSP;
 	    	 
 	     } catch (FileNotFoundException e) {
 	    	 SessionErrors.add(actionRequest, "could-not-upload-file-please-try-again");
 
-		     actionResponse.setRenderParameter("jspPage", 
-		    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP);
+	    	 jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP;
 		     
 	     } catch (UnknownImportAccountsHeaderException e) {
 	    	 SessionErrors.add(actionRequest, "invalid-header");
 
-		     actionResponse.setRenderParameter("jspPage", 
-		    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP);
+	    	 jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_VIEW_JSP;
 	     }
-
-	     actionRequest.setAttribute("preview", preview);
-	     actionRequest.setAttribute("filePath", filePath);
-	     actionRequest.setAttribute("group", group);
-	     actionRequest.setAttribute("cancelURL", cancelURL);
 	     
-	     actionResponse.setRenderParameter("jspPage", 
-	    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_PREVIEW_JSP);	     
+	     actionResponse.setRenderParameter("jspPage", jspPage);	     
 	}
 	
 	public void importAccountsProcessCSV(
@@ -386,6 +412,8 @@ public class AccountManagement extends MVCPortlet {
 	     String doneURL = ParamUtil.getString(actionRequest, "doneURL");
 	     String group = ParamUtil.getString(actionRequest, "group");
 	     MutableInt importCount = new MutableInt();
+	     
+	     System.out.println("Entity/group: " + group);
 	     
 	     try {	    	 
 	    	 File file = new File(filePath);
@@ -414,9 +442,11 @@ public class AccountManagement extends MVCPortlet {
 	     actionRequest.setAttribute("group", group);
 	     actionRequest.setAttribute("doneURL", doneURL);
 	     
-//	     writeActionLog(actionRequest, account.getMail().get(0), 
-//					account.getDisplayName(), account.getAttribute("esuccEntity"), 
-//					"Add account");
+//	     if (failedImports.size() > 1) {
+//	    	 String outputFilePath = ActionUtil.writeCSV(failedImports);
+//		     actionRequest.setAttribute("filePath", outputFilePath);
+//	     }
+	     
 	     actionResponse.setRenderParameter("jspPage", 
 	    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_SUMMARY_JSP);	     
 	}

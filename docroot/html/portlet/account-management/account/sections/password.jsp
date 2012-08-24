@@ -30,12 +30,15 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 <aui:fieldset column="<%=true %>" cssClass="aui-w100">
 
 	<div class="section edit-password aui-column aui-w50">
-			<aui:input type="password" name="password" size="25">
+			<aui:input type="password" name="password_field" label="password" size="25">
 				<aui:validator name="rangeLength">
 					[8,64]
 				</aui:validator>
 			</aui:input>
 			<aui:input type="password" name="verify" size="25">
+				<aui:validator name="equalTo" >
+					'#<portlet:namespace />password_field'
+				</aui:validator>
 				<aui:validator name="rangeLength">
 					[8,64]
 				</aui:validator>

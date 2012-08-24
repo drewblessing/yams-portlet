@@ -30,7 +30,7 @@ String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 %>
 
 <liferay-ui:error key="could-not-upload-file-please-try-again" message="could-not-upload-file-please-try-again" />
-<liferay-ui:error key="invalid-header-x" message="invalid-header-x" />
+<liferay-ui:error key="invalid-header" message="invalid-header" />
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include
@@ -53,6 +53,10 @@ String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 	<div class="instructions">
 		<liferay-ui:message key="account-import-instructions" />
 	</div>
+	<div>
+		Passwords must adhere to the following rules:
+		<jsp:include page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_PASSWORD_POLICY_TEXT_JSP %>" />
+	</div>
 	<div class="header-values bold">
 		<c:forEach var="headerValue" items="<%=AccountManagement.possibleCSVHeaderValues %>" varStatus="status">
 			${headerValue}${not status.last ? ',' : ''}<%=StringPool.SPACE %>
@@ -65,15 +69,15 @@ String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 		<c:choose>
 		<c:when test="<%= PermissionsChecker.hasGroupPermission(callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, StringPool.NULL) %>">
 		
-				<aui:select name="<%=UserDisplayTerms.GROUP %>"
+				<aui:select name="<%=UserDisplayTerms.GROUP %>" label="entity" 
 						showEmptyOption="<%= true %>" >
 					<%
 					// Yes, this should probably be a JSTL <c:forEach> tag but I don't have time right now
 					for (EntityGroup group : groups) {
 					%>
 						<c:if test="<%= PermissionsChecker.hasGroupPermission(callingAccount, PermissionsChecker.PERMISSION_ACCOUNT_ADD, group) %>">
-							<aui:option name='<%=group.getAttribute("dn") %>' value='<%=group.getAttribute("dn") %>'>
-								<%=group.getDisplayName() %>
+							<aui:option name='<%=group.getEsuccEntity() %>' value='<%=group.getEsuccEntity()%>'>
+								<%=group.getEsuccEntity() %>
 							</aui:option>
 						</c:if>
 					<%

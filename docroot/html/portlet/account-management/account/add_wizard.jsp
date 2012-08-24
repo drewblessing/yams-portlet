@@ -74,24 +74,24 @@ Account selAccount = (Account)request.getAttribute("selAccount");
 						</c:otherwise>
 						</c:choose>
 					</aui:select>
-					<aui:select name="title" showEmptyOption="<%= true %>" cssClass="step1-input" first="<%=true %>" >
-						<aui:option value="Dr." 
-								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Dr.") : false %>'>
-							<liferay-ui:message key="dr." />
-						</aui:option>
-						<aui:option value="Mr." 
-								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mr.") : false %>'>
-							<liferay-ui:message key="mr." />
-						</aui:option>
-						<aui:option value="Mrs." 
-								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mrs.") : false %>'>
-							<liferay-ui:message key="mrs." />
-						</aui:option>
-						<aui:option value="Ms." 
-								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Ms.") : false %>'>
-							<liferay-ui:message key="ms." />
-						</aui:option>
-					</aui:select>
+<%-- 					<aui:select name="title" showEmptyOption="<%= true %>" cssClass="step1-input" first="<%=true %>" > --%>
+<%-- 						<aui:option value="Dr."  --%>
+<%-- 								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Dr.") : false %>'> --%>
+<%-- 							<liferay-ui:message key="dr." /> --%>
+<%-- 						</aui:option> --%>
+<%-- 						<aui:option value="Mr."  --%>
+<%-- 								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mr.") : false %>'> --%>
+<%-- 							<liferay-ui:message key="mr." /> --%>
+<%-- 						</aui:option> --%>
+<%-- 						<aui:option value="Mrs."  --%>
+<%-- 								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Mrs.") : false %>'> --%>
+<%-- 							<liferay-ui:message key="mrs." /> --%>
+<%-- 						</aui:option> --%>
+<%-- 						<aui:option value="Ms."  --%>
+<%-- 								selected='<%=selAccount != null ? selAccount.getAttribute("title").equals("Ms.") : false %>'> --%>
+<%-- 							<liferay-ui:message key="ms." /> --%>
+<%-- 						</aui:option> --%>
+<%-- 					</aui:select> --%>
 					<aui:input name="<%=UserDisplayTerms.FIRST_NAME %>" cssClass="step1-input" value='<%=selAccount != null ? selAccount.getGivenName() : StringPool.BLANK %>' >
 						<aui:validator name="required" />
 					</aui:input>
@@ -142,6 +142,9 @@ Account selAccount = (Account)request.getAttribute("selAccount");
 					</aui:input>
 					<aui:input type="password" name="<%=UserDisplayTerms.VERIFY %>" cssClass="step3-input" >
 						<aui:validator name="required" />
+						<aui:validator name="equalTo" >
+							'#<portlet:namespace />password'
+						</aui:validator>
 					</aui:input>
 				</aui:fieldset>
 			</div>

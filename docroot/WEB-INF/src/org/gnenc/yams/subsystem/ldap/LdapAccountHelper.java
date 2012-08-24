@@ -29,7 +29,7 @@ public class LdapAccountHelper {
 		private static final Logger logger = Logger.getLogger(LdapAccountHelper.class);
 
 		private static final boolean DEFAULT_MODE_SIMPLE = PropsValues.LDAP_ACCOUNT_DEFAULT_MODE == "simple" ? true : false;
-		private static final String EMPTY_FIELD = StringPool.NULL;
+		private static final String EMPTY_FIELD = StringPool.BLANK;
 		private static final List<String> EMPTY_FIELD_LIST = getSingleValuedList(EMPTY_FIELD);
 		private static final String EMPTY_DOB = PropsValues.LDAP_ACCOUNT_EMPTY_DOB;
 		private static final String DEFAULT_PREFERRED_LANGUAGE = 
@@ -117,7 +117,7 @@ public class LdapAccountHelper {
 			account.setEmployeeNumber(
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
-			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
+//			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 		}
 
 		public static final void convertLdapAccountToSystemAccount(final LdapAccountEsuccStaff ldap, final Account account) {
@@ -149,7 +149,7 @@ public class LdapAccountHelper {
 			account.setEmployeeNumber(
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
-			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
+//			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 //			account.setDepartmentName(ldap.getDepartmentName());
 
 //			account.setEmployeeType(EmployeeType.valueOf(ldap.getEmployeeType()));
@@ -206,7 +206,7 @@ public class LdapAccountHelper {
 					account.getDescription() == null ? StringPool.BLANK : ldap.getDescription());
 			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
 							account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
-			ldap.setTitle(parseAccountField(account.getAttribute("title")));
+//			ldap.setTitle(account.getAttribute("title") == null ? StringPool.NULL : parseAccountField(account.getAttribute("title")));
 		}
 
 		public static final void convertSystemAccountToLdapAccount(Account account, LdapAccountEsuccStaff ldap) {
@@ -226,7 +226,7 @@ public class LdapAccountHelper {
 			//Optional attributes
 			ldap.setDisplayName(account.getDisplayName().isEmpty() ? 
 							account.getGivenName() + StringPool.SPACE + account.getSn() : account.getDisplayName());
-			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+//			ldap.setTitle(account.getAttribute("title") == null ? StringPool.NULL : parseAccountField(account.getAttribute("title")));
 			
 		}
 		
@@ -235,7 +235,7 @@ public class LdapAccountHelper {
 			ldap.setDisplayName(account.getDisplayName());
 			ldap.setGivenName(account.getGivenName());
 			ldap.setSn(account.getSn());
-			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+//			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
 			ldap.setEsuccScreenName(account.getAttribute("screenName"));
 		}
 		
@@ -244,7 +244,7 @@ public class LdapAccountHelper {
 			ldap.setDisplayName(account.getDisplayName());
 			ldap.setGivenName(account.getGivenName());
 			ldap.setSn(account.getSn());
-			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
+//			ldap.setTitle(account.getAttribute("title") == null ? StringPool.BLANK : parseAccountField(account.getAttribute("title")));
 			ldap.setEsuccScreenName(account.getAttribute("screenName"));
 		}
 		

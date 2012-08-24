@@ -42,60 +42,42 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 	title='<%= selAccount.getDisplayName() %>'
 />
 
-<portlet:actionURL name="editPassword" var="editPasswordURL" >
+<portlet:actionURL name="editForward" var="editForwardURL" >
 	<portlet:param name="backURL" value="<%=backURL %>" />
 </portlet:actionURL>
 
-<aui:form method="POST" name="editPasswordFm" id="editPasswordFm" action="<%=editPasswordURL %>">
+<aui:form method="POST" name="editForwardFm" id="editForwardFm" action="<%=editForwardURL %>">
 <aui:input type="hidden" name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
 
+<div><liferay-ui:message key="email-forward-instructions" /></div>
+<div class="portlet-msg-info"><liferay-ui:message key="email-forward-info" /></div>
+
 	<c:choose>
-		<c:when test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>" >
-		<div class="section edit-password aui-column aui-w25">
-			<aui:input type="hidden" name="uid" value='<%=selAccount.getUid() %>' />
-			<aui:input type="password" name="password" size="25">
+		<c:when test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
+		<div class="section edit-forward aui-column aui-w25">
+			<aui:input name="forward" size="25">
 				<aui:validator name="required" />
-				<aui:validator name="rangeLength">
-					[8,64]
-				</aui:validator>
+				<aui:validator name="email" />
 			</aui:input>
-			<aui:input type="password" name="verify" size="25">
+			<aui:input name="verify_forward" label="verify" size="25">
 				<aui:validator name="required" />
-				<aui:validator name="rangeLength">
-					[8,64]
-				</aui:validator>
+				<aui:validator name="email" />
 				<aui:validator name="equalTo" >
-					'#<portlet:namespace />password'
+					'#<portlet:namespace />forward'
 				</aui:validator>
 			</aui:input>
-		</div>
-		<div class="section edit-password aui-column aui-w25">
-			Passwords must adhere to the following rules:
-			<jsp:include page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_PASSWORD_POLICY_TEXT_JSP %>" />
-			<liferay-ui:error key="password-fields-must-match" message="password-fields-must-match" />
-			<c:if test="<%=errors.size() > 0 %>" >
-				<c:forEach var="error" items="<%=errors %>">
-					<div class="portlet-msg-error">${error}</div>
-				</c:forEach>
-			</c:if>
 		</div>
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-error"><liferay-ui:message key="you-do-not-have-sufficient-privileges-to-edit-this-account-password" /></div>
+		<div class="portlet-msg-error"><liferay-ui:message key="you-do-not-have-sufficient-privileges-to-edit-this-account-forward" /></div>
 	</c:otherwise>
 	</c:choose>
 	<aui:button-row cssClass="dialog-footer">
 		<div class="buttons-left">			
 			<aui:button id="cancel" onClick='<%=backURL %>' value="cancel"/>
-			<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_EDIT_PASSWORD) %>" >
+			<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
 				<aui:button type="submit" value="submit" />
 			</c:if>
-		</div>
-
-		<div class="step" id="<portlet:namespace />step">
-			<span>
-				<liferay-ui:message arguments="<%= new Integer[] {1, 1}%>" key="step-x-of-x" />
-			</span>
 		</div>
 	</aui:button-row>
 </aui:form>

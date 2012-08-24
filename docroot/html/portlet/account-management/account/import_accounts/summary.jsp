@@ -25,6 +25,7 @@
 String doneURL = (String)request.getAttribute("doneURL");
 List<String[]> failedImports = (List<String[]>)request.getAttribute("failedImports");
 Integer importCount = (Integer)request.getAttribute("importCount");
+String filePath = (String)request.getAttribute("filePath");
 
 %>
 
@@ -48,13 +49,64 @@ Integer importCount = (Integer)request.getAttribute("importCount");
 			<liferay-ui:message key="successful-x" arguments="<%=importCount - failedImports.size() %>" />
 		</aui:column>
 		<aui:column column="<%=true %>" cssClass="aui-w10" >
-			<liferay-ui:message key="failed-x" arguments="<%=failedImports.size() %>" />
+			<liferay-ui:message key="failed-x" arguments="<%=failedImports.size() != 0 ? failedImports.size()-1 : 0 %>" />
 			
-			<c:if test="<%=failedImports.size() > 0 %>" >
-				<aui:button id="download-csv" value="download-csv"/>
+			<c:if test="<%=false %>">
+<%-- 			<c:if test="<%=failedImports.size() > 0 %>" > --%>
+				<aui:button id="download-csv" value="download-csv" onClick='<%=filePath %>' />
 			</c:if>
 		</aui:column>
 	</div>
+	<c:if test="<%=failedImports.size() > 1 %>">
+		<liferay-ui:search-container>
+			<liferay-ui:search-container-results>
+				<%					
+				
+				// Add one to start count to eliminate the header names
+				
+				results = ListUtil.subList(failedImports, searchContainer.getStart()+1, searchContainer.getEnd());
+				total = results.size();
+		
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+				%>
+			</liferay-ui:search-container-results>
+			<liferay-ui:search-container-row
+					className="java.lang.String[]"
+					modelVar="line"
+			>
+			
+				<liferay-ui:search-container-column-text
+			    		name="<%=failedImports.get(0)[0] %>"
+			    		value="<%=line[0] %>"
+			    />
+			    
+			    <liferay-ui:search-container-column-text
+			    		name="<%=failedImports.get(0)[1] %>"
+			    		value="<%=line[1] %>"
+			    />
+			
+			    <liferay-ui:search-container-column-text
+			    		name="<%=failedImports.get(0)[2] %>"
+			    		value="<%=line[2] %>"
+			    />
+			
+			    <liferay-ui:search-container-column-text
+			    		name="<%=failedImports.get(0)[3] %>"
+			    		value="<%=line[3] %>"
+			    />
+			    
+			    <liferay-ui:search-container-column-text
+			    		name="<%=failedImports.get(0)[4] %>"
+			    		value="<%=line[4] %>"
+			    />
+			
+			</liferay-ui:search-container-row>
+			
+			<liferay-ui:search-iterator paginate="<%=false %>" />
+
+		</liferay-ui:search-container>
+	</c:if>
 	<aui:button-row>
 		<div class="buttons-left">			
 			<aui:button id="done" onClick='<%=doneURL %>' value="done"/>

@@ -444,6 +444,9 @@ public class PortletUtil {
 
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_ACCOUNT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_account.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_EDIT_FORWARD_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_forward.jsp";
 
 	public static final String ACCT_MGMT_ACCOUNT_EDIT_PASSWORD_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_password.jsp";
