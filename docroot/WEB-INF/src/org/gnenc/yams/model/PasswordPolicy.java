@@ -3,25 +3,24 @@ package org.gnenc.yams.model;
 import java.io.Serializable;
 
 /**
- * 
+ *
  * @author Jeshurun Daniel
  *
  */
 public final class PasswordPolicy implements Serializable {
-	
+
 	private static final long serialVersionUID = 1436224656501528819L;
 
 	private Integer pwdExpireWarning;
-	
+
 	private Integer pwdInHistory;
-	
+
 	private Integer pwdMaxAge;
-	
-	private Integer pwdMaxFailure; 
-	
+
+	private Integer pwdMaxFailure;
+
 	private Integer pwdMinLength;
-	
-	
+
 
 	public Integer getPwdExpireWarning() {
 		return pwdExpireWarning;
@@ -62,6 +61,5 @@ public final class PasswordPolicy implements Serializable {
 	public void setPwdMinLength(Integer pwdMinLength) {
 		this.pwdMinLength = pwdMinLength;
 	}
-	
-}
 
+}

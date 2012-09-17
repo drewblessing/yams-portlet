@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="org.gnenc.yams.model.ActionLog">
+		<field name="id" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="modifiedDate" type="Date" />
+		<field name="userEmailAddress" type="String" />
+		<field name="modifiedUserId" type="long" />
+		<field name="modifiedUserName" type="String" />
+		<field name="modifiedUserEmailAddress" type="String" />
+		<field name="modifiedDescription" type="String" />
+		<field name="modifiedFqgn" type="String" />
+	</model>
 	<model name="org.gnenc.yams.model.Permissions">
 		<field name="id" type="long" />
 		<field name="companyId" type="long" />

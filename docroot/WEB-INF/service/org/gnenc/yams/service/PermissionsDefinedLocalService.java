@@ -237,6 +237,11 @@ public interface PermissionsDefinedLocalService
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil} to access the permissions defined local service.
+	*/
 	public org.gnenc.yams.model.PermissionsDefined addPermissionsDefined(
 		long userId, java.lang.String permissionKey)
 		throws com.liferay.portal.kernel.exception.SystemException;

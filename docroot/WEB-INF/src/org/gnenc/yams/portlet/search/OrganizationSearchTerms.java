@@ -1,13 +1,13 @@
 package org.gnenc.yams.portlet.search;
 
-import javax.portlet.PortletRequest;
-
 import com.liferay.portal.kernel.dao.search.DAOParamUtil;
+
+import javax.portlet.PortletRequest;
 
 /**
  * Modeled after {@link com.liferay.portlet.usersadmin.search.AccountSearchTerms}
  * written by Brian Wing Shun Chan
- * 
+ *
  * @author Drew A. Blessing
  */
 public class OrganizationSearchTerms extends OrganizationDisplayTerms {

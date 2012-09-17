@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
 <service-builder package-path="org.gnenc.yams">
 	<author>Drew A. Blessing</author>
 	<namespace>yams</namespace>
@@ -31,6 +31,10 @@
 		<order by="asc">
 			<order-column name="emailAddress" />
 		</order>
+		<finder name="EmailAddressAndFqgn" return-type="Collection">
+			<finder-column name="emailAddress" />
+            <finder-column name="fqgn" />
+		</finder>
         <finder name="EmailAddressAndFqgnAndGroupPermission" return-type="Collection">
             <finder-column name="emailAddress" />
             <finder-column name="fqgn" />
@@ -71,4 +75,65 @@
             <finder-column name="bitLocation" />
         </finder>
 	</entity>
+	<entity name="ActionLog" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="id" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="userEmailAddress" type="String" />
+		<column name="modifiedUserId" type="long" />
+		<column name="modifiedUserName" type="String" />
+		<column name="modifiedUserEmailAddress" type="String" />
+		<column name="modifiedDescription" type="String" />
+		<column name="modifiedFqgn" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="modifiedDate" />
+		</order>
+		<finder name="userEmailAddress" return-type="Collection">
+			<finder-column name="userEmailAddress" />
+		</finder>
+        <finder name="modifiedDate" return-type="Collection" >
+        	<finder-column name="modifiedDate" />
+        </finder>
+        <finder name="modifiedDescription" return-type="Collection" >
+        	<finder-column name="modifiedDescription" />
+        </finder>
+        <finder name="modifiedFqgn" return-type="Collection" >
+        	<finder-column name="modifiedFqgn" />
+        </finder>
+        <finder name="modifiedUserEmailAddress" return-type="Collection">
+            <finder-column name="modifiedUserEmailAddress" />
+        </finder>
+        <finder name="modifiedFqgnAndModifiedDate" return-type="Collection">
+        	<finder-column name="modifiedFqgn" />
+        	<finder-column name="modifiedDate" />
+        </finder>
+        <finder name="userEmailAddressAndModifiedUserEmailAddress" return-type="Collection">
+        	<finder-column name="userEmailAddress" />
+        	<finder-column name="modifiedUserEmailAddress" />
+        </finder>
+        <finder name="modifiedDateAndUserEmailAddressAndModifiedUserEmailAddress" return-type="Collection">
+        	<finder-column name="modifiedDate" />
+        	<finder-column name="userEmailAddress" />
+        	<finder-column name="modifiedUserEmailAddress" />
+        </finder>
+        <finder name="modifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress" return-type="Collection">
+        	<finder-column name="modifiedDescription" />
+        	<finder-column name="userEmailAddress" />
+        	<finder-column name="modifiedUserEmailAddress" />
+        </finder>
+	</entity>	
 </service-builder>

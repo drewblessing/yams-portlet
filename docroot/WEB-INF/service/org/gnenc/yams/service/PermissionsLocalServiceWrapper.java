@@ -250,6 +250,20 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 		_permissionsLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsLocalServiceUtil} to access the permissions local service.
+	*
+	* @throws SystemException
+	*/
+	public long getPermissionsIdByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.getPermissionsIdByEmailAddressAndFqgn(emailAddress,
+			fqgn);
+	}
+
 	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
 		java.lang.String email, java.lang.String fqgn, boolean group)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -267,6 +281,24 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 		java.lang.String email)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _permissionsLocalService.getByEmailAddress(email);
+	}
+
+	public org.gnenc.yams.model.Permissions addPermissions(long userId,
+		java.lang.String emailAddress, java.lang.String fqgn,
+		boolean groupPermission, long permissions, long permissionsGrantable)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.addPermissions(userId, emailAddress,
+			fqgn, groupPermission, permissions, permissionsGrantable);
+	}
+
+	public org.gnenc.yams.model.Permissions updatePermissions(
+		long permissionsId, long userId, long decimalPermissions,
+		long permissionsGrantable)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _permissionsLocalService.updatePermissions(permissionsId,
+			userId, decimalPermissions, permissionsGrantable);
 	}
 
 	/**

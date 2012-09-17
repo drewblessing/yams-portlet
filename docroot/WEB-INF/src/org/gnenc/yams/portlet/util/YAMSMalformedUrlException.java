@@ -6,12 +6,12 @@ public class YAMSMalformedUrlException extends Exception {
 
 	public YAMSMalformedUrlException() {
 		super();
-		
+
 	}
-	
+
 	public YAMSMalformedUrlException(String msg) {
 		super(msg);
-		
+
 	}
 
 }

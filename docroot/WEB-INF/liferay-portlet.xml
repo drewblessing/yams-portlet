@@ -13,12 +13,15 @@
 	<portlet>
 		<portlet-name>account-management</portlet-name>
 		<icon>/icon.png</icon>
+		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
+		<friendly-url-mapping>yams</friendly-url-mapping>
+		<friendly-url-routes>org/gnenc/yams/yams-friendly-url-routes.xml</friendly-url-routes>
 		<control-panel-entry-category>portal</control-panel-entry-category>
 		<control-panel-entry-weight>3.6</control-panel-entry-weight>
 		<control-panel-entry-class>org.gnenc.yams.portlet.util.YAMSControlPanelEntry</control-panel-entry-class>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
 		<css-class-wrapper>yams-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>

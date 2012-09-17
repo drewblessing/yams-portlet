@@ -14,14 +14,14 @@
 
 package org.gnenc.yams.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
+
 import java.util.Date;
 
 import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.service.base.PermissionsDefinedLocalServiceBaseImpl;
-
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the permissions defined local service.
@@ -39,21 +39,21 @@ import com.liferay.portal.service.UserLocalServiceUtil;
  */
 public class PermissionsDefinedLocalServiceImpl
 	extends PermissionsDefinedLocalServiceBaseImpl {
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil} to access the permissions defined local service.
 	 */
-	
-	public PermissionsDefined addPermissionsDefined(long userId, String permissionKey) 
+
+	public PermissionsDefined addPermissionsDefined(long userId, String permissionKey)
 			throws SystemException {
 		User user = UserLocalServiceUtil.fetchUserById(userId);
-		
+
 		Date now = new Date();
-		
+
 		//Get next bit location.  No need to increment total count (starts at zero anyway)
-		int bitLocation = permissionsDefinedPersistence.countAll(); 
-		
+		int bitLocation = permissionsDefinedPersistence.countAll();
+
 		PermissionsDefined permissionsDefined =
 				permissionsDefinedPersistence.create(permissionKey);
 		permissionsDefined.setBitLocation(bitLocation);
@@ -62,7 +62,7 @@ public class PermissionsDefinedLocalServiceImpl
 		permissionsDefined.setModifiedDate(now);
 		permissionsDefined.setUserId(userId);
 		permissionsDefined.setUserName(user.getFullName());
-		
+
 		return permissionsDefinedPersistence.update(permissionsDefined, false);
 	}
 }

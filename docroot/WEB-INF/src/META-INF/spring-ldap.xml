@@ -5,7 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util">
 	
@@ -42,12 +43,14 @@
 	</bean>
 	
 	<bean id="contextSourceTarget" class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url" value="${ldap.providerUrl}" />
-		<property name="userDn" value="${ldap.managerDn}" />
-		<property name="password" value="${ldap.managerPassword}" />
+		<property name="url" value="${ldap.provider.url}" />
+		<property name="userDn" value="${ldap.security.principal}" />
+		<property name="password" value="${ldap.security.password}" />
 		<property name="pooled" value="${ldap.pooledConnections}" />
-		<property name="base" value="${ldap.baseDn}" />
+		<property name="base" value="${ldap.base.dn}" />
 	</bean>
+	
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.LdapShaPasswordEncoder" />
 	
 	<bean id="dircontextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator"/>
 	
@@ -112,9 +115,12 @@
 		<property name="contextSource" ref="contextSource" />
 		<property name="managedClasses">
 			<set>
-				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccount</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapDomain</value>
 				<value>org.gnenc.yams.subsystem.ldap.model.LdapGroup</value>
-				<value>org.gnenc.yams.subsystem.ldap.model.LdapPasswordPolicy</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup</value>
+				<value>org.gnenc.yams.subsystem.ldap.model.LdapSystem</value>
 			</set>
 		</property>
 	</bean>

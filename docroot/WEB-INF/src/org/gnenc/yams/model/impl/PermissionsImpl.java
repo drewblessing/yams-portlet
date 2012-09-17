@@ -24,7 +24,7 @@ package org.gnenc.yams.model.impl;
  * @author Drew A. Blessing
  */
 public class PermissionsImpl extends PermissionsBaseImpl {
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a permissions model instance should use the {@link org.gnenc.yams.model.Permissions} interface instead.

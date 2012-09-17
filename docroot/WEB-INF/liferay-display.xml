@@ -3,6 +3,7 @@
 
 <display>
 	<category name="category.directory">
+		<portlet id="account-management"></portlet>
         <portlet id="search"></portlet>
 	</category>
 	<category name="category.hidden">

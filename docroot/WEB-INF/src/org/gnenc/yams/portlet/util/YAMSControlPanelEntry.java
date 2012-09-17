@@ -3,22 +3,29 @@ package org.gnenc.yams.portlet.util;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.ControlPanelEntry;
+import com.liferay.portlet.BaseControlPanelEntry;
 
-public class YAMSControlPanelEntry implements ControlPanelEntry {
+public class YAMSControlPanelEntry extends BaseControlPanelEntry {
 
 	@Override
-	public boolean isVisible(PermissionChecker arg0, Portlet arg1)
+	public boolean isVisible(PermissionChecker permissionChecker, Portlet portlet)
 			throws Exception {
-		// TODO Auto-generated method stub
+		if (portlet.getPortletId().equals(PortletKeys.ACCOUNT_MANAGEMENT_PORTLET_ID) &&
+				(!PropsValues.PORTLETS_ACTIVE_ACCOUNTMANAGEMENT)) {
+				return false;
+		}
 		return true;
 	}
 
 	@Override
-	public boolean isVisible(Portlet arg0, String arg1, ThemeDisplay arg2)
+	public boolean isVisible(Portlet portlet, String category, ThemeDisplay themeDisplay)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return true;
+		if (portlet.getPortletId().equals(PortletKeys.ACCOUNT_MANAGEMENT_PORTLET_ID) &&
+				(!PropsValues.PORTLETS_ACTIVE_ACCOUNTMANAGEMENT)) {
+				return false;
+		}
+		
+		return true; 
 	}
 
 }

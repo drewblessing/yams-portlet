@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 
+import org.gnenc.yams.model.ActionLogClp;
 import org.gnenc.yams.model.PermissionsClp;
 import org.gnenc.yams.model.PermissionsDefinedClp;
 
@@ -100,6 +101,10 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
+		if (oldModelClassName.equals(ActionLogClp.class.getName())) {
+			return translateInputActionLog(oldModel);
+		}
+
 		if (oldModelClassName.equals(PermissionsClp.class.getName())) {
 			return translateInputPermissions(oldModel);
 		}
@@ -121,6 +126,112 @@ public class ClpSerializer {
 		}
 
 		return newList;
+	}
+
+	public static Object translateInputActionLog(BaseModel<?> oldModel) {
+		ActionLogClp oldCplModel = (ActionLogClp)oldModel;
+
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			currentThread.setContextClassLoader(_classLoader);
+
+			try {
+				Class<?> newModelClass = Class.forName("org.gnenc.yams.model.impl.ActionLogImpl",
+						true, _classLoader);
+
+				Object newModel = newModelClass.newInstance();
+
+				Method method0 = newModelClass.getMethod("setId",
+						new Class[] { Long.TYPE });
+
+				Long value0 = new Long(oldCplModel.getId());
+
+				method0.invoke(newModel, value0);
+
+				Method method1 = newModelClass.getMethod("setCompanyId",
+						new Class[] { Long.TYPE });
+
+				Long value1 = new Long(oldCplModel.getCompanyId());
+
+				method1.invoke(newModel, value1);
+
+				Method method2 = newModelClass.getMethod("setUserId",
+						new Class[] { Long.TYPE });
+
+				Long value2 = new Long(oldCplModel.getUserId());
+
+				method2.invoke(newModel, value2);
+
+				Method method3 = newModelClass.getMethod("setUserName",
+						new Class[] { String.class });
+
+				String value3 = oldCplModel.getUserName();
+
+				method3.invoke(newModel, value3);
+
+				Method method4 = newModelClass.getMethod("setModifiedDate",
+						new Class[] { Date.class });
+
+				Date value4 = oldCplModel.getModifiedDate();
+
+				method4.invoke(newModel, value4);
+
+				Method method5 = newModelClass.getMethod("setUserEmailAddress",
+						new Class[] { String.class });
+
+				String value5 = oldCplModel.getUserEmailAddress();
+
+				method5.invoke(newModel, value5);
+
+				Method method6 = newModelClass.getMethod("setModifiedUserId",
+						new Class[] { Long.TYPE });
+
+				Long value6 = new Long(oldCplModel.getModifiedUserId());
+
+				method6.invoke(newModel, value6);
+
+				Method method7 = newModelClass.getMethod("setModifiedUserName",
+						new Class[] { String.class });
+
+				String value7 = oldCplModel.getModifiedUserName();
+
+				method7.invoke(newModel, value7);
+
+				Method method8 = newModelClass.getMethod("setModifiedUserEmailAddress",
+						new Class[] { String.class });
+
+				String value8 = oldCplModel.getModifiedUserEmailAddress();
+
+				method8.invoke(newModel, value8);
+
+				Method method9 = newModelClass.getMethod("setModifiedDescription",
+						new Class[] { String.class });
+
+				String value9 = oldCplModel.getModifiedDescription();
+
+				method9.invoke(newModel, value9);
+
+				Method method10 = newModelClass.getMethod("setModifiedFqgn",
+						new Class[] { String.class });
+
+				String value10 = oldCplModel.getModifiedFqgn();
+
+				method10.invoke(newModel, value10);
+
+				return newModel;
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
+
+		return oldModel;
 	}
 
 	public static Object translateInputPermissions(BaseModel<?> oldModel) {
@@ -324,6 +435,10 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
+		if (oldModelClassName.equals("org.gnenc.yams.model.impl.ActionLogImpl")) {
+			return translateOutputActionLog(oldModel);
+		}
+
 		if (oldModelClassName.equals(
 					"org.gnenc.yams.model.impl.PermissionsImpl")) {
 			return translateOutputPermissions(oldModel);
@@ -359,6 +474,101 @@ public class ClpSerializer {
 		else {
 			return obj;
 		}
+	}
+
+	public static Object translateOutputActionLog(BaseModel<?> oldModel) {
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			currentThread.setContextClassLoader(_classLoader);
+
+			try {
+				ActionLogClp newModel = new ActionLogClp();
+
+				Class<?> oldModelClass = oldModel.getClass();
+
+				Method method0 = oldModelClass.getMethod("getId");
+
+				Long value0 = (Long)method0.invoke(oldModel, (Object[])null);
+
+				newModel.setId(value0);
+
+				Method method1 = oldModelClass.getMethod("getCompanyId");
+
+				Long value1 = (Long)method1.invoke(oldModel, (Object[])null);
+
+				newModel.setCompanyId(value1);
+
+				Method method2 = oldModelClass.getMethod("getUserId");
+
+				Long value2 = (Long)method2.invoke(oldModel, (Object[])null);
+
+				newModel.setUserId(value2);
+
+				Method method3 = oldModelClass.getMethod("getUserName");
+
+				String value3 = (String)method3.invoke(oldModel, (Object[])null);
+
+				newModel.setUserName(value3);
+
+				Method method4 = oldModelClass.getMethod("getModifiedDate");
+
+				Date value4 = (Date)method4.invoke(oldModel, (Object[])null);
+
+				newModel.setModifiedDate(value4);
+
+				Method method5 = oldModelClass.getMethod("getUserEmailAddress");
+
+				String value5 = (String)method5.invoke(oldModel, (Object[])null);
+
+				newModel.setUserEmailAddress(value5);
+
+				Method method6 = oldModelClass.getMethod("getModifiedUserId");
+
+				Long value6 = (Long)method6.invoke(oldModel, (Object[])null);
+
+				newModel.setModifiedUserId(value6);
+
+				Method method7 = oldModelClass.getMethod("getModifiedUserName");
+
+				String value7 = (String)method7.invoke(oldModel, (Object[])null);
+
+				newModel.setModifiedUserName(value7);
+
+				Method method8 = oldModelClass.getMethod(
+						"getModifiedUserEmailAddress");
+
+				String value8 = (String)method8.invoke(oldModel, (Object[])null);
+
+				newModel.setModifiedUserEmailAddress(value8);
+
+				Method method9 = oldModelClass.getMethod(
+						"getModifiedDescription");
+
+				String value9 = (String)method9.invoke(oldModel, (Object[])null);
+
+				newModel.setModifiedDescription(value9);
+
+				Method method10 = oldModelClass.getMethod("getModifiedFqgn");
+
+				String value10 = (String)method10.invoke(oldModel,
+						(Object[])null);
+
+				newModel.setModifiedFqgn(value10);
+
+				return newModel;
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
+
+		return oldModel;
 	}
 
 	public static Object translateOutputPermissions(BaseModel<?> oldModel) {

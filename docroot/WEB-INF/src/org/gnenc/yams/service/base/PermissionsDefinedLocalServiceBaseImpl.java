@@ -39,8 +39,10 @@ import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 
 import org.gnenc.yams.model.PermissionsDefined;
+import org.gnenc.yams.service.ActionLogLocalService;
 import org.gnenc.yams.service.PermissionsDefinedLocalService;
 import org.gnenc.yams.service.PermissionsLocalService;
+import org.gnenc.yams.service.persistence.ActionLogPersistence;
 import org.gnenc.yams.service.persistence.PermissionsDefinedPersistence;
 import org.gnenc.yams.service.persistence.PermissionsPersistence;
 
@@ -320,6 +322,44 @@ public abstract class PermissionsDefinedLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the action log local service.
+	 *
+	 * @return the action log local service
+	 */
+	public ActionLogLocalService getActionLogLocalService() {
+		return actionLogLocalService;
+	}
+
+	/**
+	 * Sets the action log local service.
+	 *
+	 * @param actionLogLocalService the action log local service
+	 */
+	public void setActionLogLocalService(
+		ActionLogLocalService actionLogLocalService) {
+		this.actionLogLocalService = actionLogLocalService;
+	}
+
+	/**
+	 * Returns the action log persistence.
+	 *
+	 * @return the action log persistence
+	 */
+	public ActionLogPersistence getActionLogPersistence() {
+		return actionLogPersistence;
+	}
+
+	/**
+	 * Sets the action log persistence.
+	 *
+	 * @param actionLogPersistence the action log persistence
+	 */
+	public void setActionLogPersistence(
+		ActionLogPersistence actionLogPersistence) {
+		this.actionLogPersistence = actionLogPersistence;
+	}
+
+	/**
 	 * Returns the permissions local service.
 	 *
 	 * @return the permissions local service
@@ -577,6 +617,10 @@ public abstract class PermissionsDefinedLocalServiceBaseImpl
 		}
 	}
 
+	@BeanReference(type = ActionLogLocalService.class)
+	protected ActionLogLocalService actionLogLocalService;
+	@BeanReference(type = ActionLogPersistence.class)
+	protected ActionLogPersistence actionLogPersistence;
 	@BeanReference(type = PermissionsLocalService.class)
 	protected PermissionsLocalService permissionsLocalService;
 	@BeanReference(type = PermissionsPersistence.class)

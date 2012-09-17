@@ -1077,6 +1077,8 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
+	@BeanReference(type = ActionLogPersistence.class)
+	protected ActionLogPersistence actionLogPersistence;
 	@BeanReference(type = PermissionsPersistence.class)
 	protected PermissionsPersistence permissionsPersistence;
 	@BeanReference(type = PermissionsDefinedPersistence.class)

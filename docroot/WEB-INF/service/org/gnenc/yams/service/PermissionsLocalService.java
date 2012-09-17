@@ -231,6 +231,18 @@ public interface PermissionsLocalService extends PersistedModelLocalService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link org.gnenc.yams.service.PermissionsLocalServiceUtil} to access the permissions local service.
+	*
+	* @throws SystemException
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public long getPermissionsIdByEmailAddressAndFqgn(
+		java.lang.String emailAddress, java.lang.String fqgn)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddressAndFqgnAndGroupPermission(
 		java.lang.String email, java.lang.String fqgn, boolean group)
@@ -245,4 +257,16 @@ public interface PermissionsLocalService extends PersistedModelLocalService {
 	public java.util.List<org.gnenc.yams.model.Permissions> getByEmailAddress(
 		java.lang.String email)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.gnenc.yams.model.Permissions addPermissions(long userId,
+		java.lang.String emailAddress, java.lang.String fqgn,
+		boolean groupPermission, long permissions, long permissionsGrantable)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.gnenc.yams.model.Permissions updatePermissions(
+		long permissionsId, long userId, long decimalPermissions,
+		long permissionsGrantable)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

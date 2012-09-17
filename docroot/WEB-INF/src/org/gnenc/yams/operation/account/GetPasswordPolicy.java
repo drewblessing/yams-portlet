@@ -4,7 +4,7 @@ import org.gnenc.yams.model.PasswordPolicy;
 import org.gnenc.yams.operation.Operation;
 
 /**
- * 
+ *
  * @author Jeshurun Daniel
  *
  */
