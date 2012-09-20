@@ -30,7 +30,6 @@ public class LdapGetGNENCSystem extends AbstractLdapOperation implements
 	private static final Logger logger = Logger.getLogger(LdapGetGNENCSystem.class);
 	private static final boolean debug = logger.isDebugEnabled();
 
-	@Override
 	public void getGNENCSystem(final Map<String, GNENCSystem> systems, final String filter) {
 
 		long start = System.currentTimeMillis();

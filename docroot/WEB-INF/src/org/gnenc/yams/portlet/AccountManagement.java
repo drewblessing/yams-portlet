@@ -30,6 +30,8 @@ import java.util.TreeMap;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.xml.bind.ValidationException;
@@ -44,6 +46,7 @@ import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.search.util.SearchUtil;
+import org.gnenc.yams.portlet.util.PermissionsChecker;
 import org.gnenc.yams.portlet.util.PermissionsUtil;
 import org.gnenc.yams.portlet.util.PortletUtil;
 import org.gnenc.yams.portlet.util.UnknownImportAccountsHeaderException;
@@ -175,6 +178,52 @@ public class AccountManagement extends MVCPortlet {
 		actionResponse.setRenderParameter("jspPage", jspPage);
 	}
 	
+	public static void editForward(
+			ActionRequest actionRequest, ActionResponse actionResponse) {
+		Account callingAccount =  null;
+		try {
+			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			
+		}
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		String jspPage = null;
+		boolean valid = false; 
+	    String backURL = DAOParamUtil.getString(actionRequest, "backURL");
+	    boolean delete = DAOParamUtil.getBoolean(actionRequest, "delete");
+	    System.out.println("Delete? " + delete);
+		String forward = DAOParamUtil.getString(actionRequest, "forward");
+		String verify = DAOParamUtil.getString(actionRequest, "verify_forward");
+		Account account = ActionUtil.accountFromUidNumber(
+				DAOParamUtil.getString(actionRequest, "uidNumber"));
+		
+		actionResponse.setRenderParameter("uidNumber", account.getAttribute("uidNumber"));
+		actionResponse.setRenderParameter("backURL", backURL);
+		
+		if (PermissionsChecker.hasPermission(
+				callingAccount, account, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD)) {
+			try {
+				ams.modifyEmailForward(account, forward, delete);
+			} catch (ValidationException e) {
+				SessionErrors.add(actionRequest, "password-change-failed");
+				
+				jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_FORWARD_JSP;
+			}
+
+			jspPage = PortletUtil.SEARCH_VIEW_JSP;
+		} else {
+			SessionErrors.add(actionRequest, "insufficient-privileges");
+			
+			jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_FORWARD_JSP;
+		}
+			
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Edit forward");
+		actionResponse.setRenderParameter("jspPage", jspPage);
+	}
+	
 	public static void editPassword(
 			ActionRequest actionRequest, ActionResponse actionResponse) {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
@@ -188,8 +237,6 @@ public class AccountManagement extends MVCPortlet {
 		
 		boolean valid = PortletUtil.validatePasswordFields(password, verify, 
 				account.getGivenName(), account.getSn(), responses);
-		
-		System.out.println("Valid: " + valid + " and response size: " + responses.size());
 		
 		actionResponse.setRenderParameter("uidNumber", account.getAttribute("uidNumber"));
 		actionResponse.setRenderParameter("backURL", backURL);
@@ -297,6 +344,24 @@ public class AccountManagement extends MVCPortlet {
 		actionResponse.setRenderParameter("jspPage", 
 				PortletUtil.ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_PERMISSIONS_JSP);
 		
+	}
+	
+	public static String getEmailProvider(Account account) {
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(Filter.esuccEntity,
+				account.getAttribute("esuccEntity"),false));
+		
+		List<Domain> domains = Search.getDomains(filters, null, 
+				StringPool.BLANK, StringPool.BLANK, false);
+		
+		String result = StringPool.BLANK;
+		for (Domain domain : domains) {
+			if (domain.getOrganization().equals(account.getAttribute("esuccMailPrimaryDomain"))) {
+				result = domain.getEsuccMailProvider();
+				break;
+			}
+		}
+		return result;
 	}
 	
 	public static boolean importAccount(ActionRequest actionRequest, Account account, 

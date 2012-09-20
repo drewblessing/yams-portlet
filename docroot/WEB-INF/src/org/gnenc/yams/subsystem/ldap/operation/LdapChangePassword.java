@@ -46,7 +46,6 @@ public class LdapChangePassword extends AbstractLdapOperation implements ChangeP
 //	@Autowired
 //	private LdapGetPasswordPolicy pwdPolicyService;
 	
-	@Override
 	public void validateChangePassword(final Account account, final String oldPassword,
 			final String newPassword, final List<String> validationErrors) {
 		
@@ -69,7 +68,6 @@ public class LdapChangePassword extends AbstractLdapOperation implements ChangeP
 		pwdManager.validatePassword(newPassword, validationErrors);	
 	}
 
-	@Override
 	public void changePassword(final Account account, final String newPassword) {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(

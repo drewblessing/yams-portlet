@@ -27,6 +27,20 @@
 			servletContext="<%=this.getServletContext() %>" />
 </c:if>
 
-<liferay-util:include
-		page="<%=PortletUtil.TABS_JSP %>"
-		servletContext="<%=this.getServletContext() %>" />
+<%
+PortletURL portletURL = renderResponse.createRenderURL();
+request.setAttribute("view.jsp-portletURL", portletURL);
+
+pageContext.setAttribute("portletURL",portletURL);
+String portletURLString = portletURL.toString();
+
+String backURL = ParamUtil.getString(request, "backURL");
+%>
+
+<aui:form method="get" name="fm">
+	<liferay-portlet:renderURLParams varImpl="portletURL" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" />
+	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
+
+	<jsp:include page="<%=PortletUtil.SEARCH_TABS_ACCOUNTS_JSP %>" />
+</aui:form>

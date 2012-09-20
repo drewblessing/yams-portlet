@@ -58,7 +58,6 @@ public class PasswordManager {
 	private static final Logger logger = Logger.getLogger(PasswordManager.class);
 
 	private static ThreadLocal<MessageDigest> md = new ThreadLocal<MessageDigest>() {
-		@Override
 		public MessageDigest get() {
 			try {
 				MessageDigest digest = MessageDigest.getInstance("SHA");

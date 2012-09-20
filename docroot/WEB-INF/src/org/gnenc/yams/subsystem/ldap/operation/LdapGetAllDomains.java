@@ -30,7 +30,7 @@ public class LdapGetAllDomains extends AbstractLdapOperation implements
 	private static final Logger logger = Logger.getLogger(LdapGetAllDomains.class);
 	private static final boolean debug = logger.isDebugEnabled();
 
-	@Override
+	
 	public void getAllDomains(final Map<String, Domain> domains, final String filter) {
 
 		long start = System.currentTimeMillis();

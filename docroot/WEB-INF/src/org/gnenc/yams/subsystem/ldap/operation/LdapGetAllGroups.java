@@ -31,7 +31,7 @@ public class LdapGetAllGroups extends AbstractLdapOperation implements GetAllGro
 	private static final Logger logger = Logger.getLogger(LdapGetAllGroups.class);
 	private static final boolean debug = logger.isDebugEnabled();
 
-	@Override
+	
 	public void getAllGroups(final Map<String, List<EntityGroup>> groupsMap, final String filter) {
 
 		long start = System.currentTimeMillis();

@@ -17,7 +17,7 @@ import java.util.Map;
 public class EntityGroup {
 	public static final Comparator<EntityGroup> NAME_COMPARATOR_ASC =
 			new Comparator<EntityGroup>() {
-		@Override
+		
 		public int compare(EntityGroup g1, EntityGroup g2) {
 			int value = g1.getCn().toLowerCase().compareTo(
 					g2.getCn().toLowerCase());
@@ -28,7 +28,7 @@ public class EntityGroup {
 
 	public static final Comparator<EntityGroup> NAME_COMPARATOR_DESC =
 			new Comparator<EntityGroup>() {
-		@Override
+		
 		public int compare(EntityGroup g1, EntityGroup g2) {
 			int value = EntityGroup.NAME_COMPARATOR_ASC.compare(g1, g2);
 

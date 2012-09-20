@@ -16,6 +16,10 @@
   			/WEB-INF/tld/liferay-portlet.tld
   		</taglib-location>
   	</taglib>
+  	<taglib>
+  		<taglib-uri>http://liferay.com/tld/aui</taglib-uri>
+  		<taglib-location>/WEB-INF/tld/aui.tld</taglib-location>
+  	</taglib>
   </jsp-config>
   <listener>
   	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -24,4 +28,5 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/classes/META-INF/spring-ldap.xml</param-value>
   </context-param>
+
 </web-app>

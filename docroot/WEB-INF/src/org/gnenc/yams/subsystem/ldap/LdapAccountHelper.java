@@ -117,6 +117,7 @@ public class LdapAccountHelper {
 			account.setEmployeeNumber(
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
+			account.setAttribute("esuccMailForward", ldap.getEsuccMailForward());
 //			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 		}
 
@@ -149,6 +150,7 @@ public class LdapAccountHelper {
 			account.setEmployeeNumber(
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
+			account.setAttribute("esuccMailForward", ldap.getEsuccMailForward());
 //			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 //			account.setDepartmentName(ldap.getDepartmentName());
 

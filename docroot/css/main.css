@@ -49,6 +49,10 @@
 		top: 7px;
 	}
 	
+	.padded-div {
+		padding: 5px 0;
+	}
+	
 	.permissions {
 		
 		.aui-fieldset {
@@ -70,8 +74,13 @@
 	
 	.lfr-portlet-toolbar {
 	
+		margin-bottom: 20px;
+	
 		.import-button a {
-			background-image: url(/html/themes/control_panel/images/arrows/01_up.png);
+			background-image: url(/html/themes/control_panel/images/common/maximize.png);
+		}
+		.add-user-button a {
+			background-image: url(/html/themes/control_panel/images/common/add_user.png);
 		}
 	}
 	

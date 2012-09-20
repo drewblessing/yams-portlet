@@ -36,7 +36,6 @@ import java.util.Set;
 public class Account {
 	public static final Comparator<Account> FIRST_NAME_COMPARATOR_ASC =
 			new Comparator<Account>() {
-		@Override
 		public int compare(Account a1, Account a2) {
 			int value = a1.getGivenName().toLowerCase().compareTo(
 					a2.getGivenName().toLowerCase());
@@ -47,7 +46,6 @@ public class Account {
 
 	public static final Comparator<Account> FIRST_NAME_COMPARATOR_DESC =
 			new Comparator<Account>() {
-		@Override
 		public int compare(Account a1, Account a2) {
 			int value = a1.getGivenName().toLowerCase().compareTo(
 					a2.getGivenName().toLowerCase());
@@ -58,7 +56,6 @@ public class Account {
 
 	public static final Comparator<Account> LAST_NAME_COMPARATOR_ASC =
 			new Comparator<Account>() {
-		@Override
 		public int compare(Account a1, Account a2) {
 			int value = a1.getSn().toLowerCase().compareTo(
 					a2.getSn().toLowerCase());
@@ -69,7 +66,6 @@ public class Account {
 
 	public static final Comparator<Account> LAST_NAME_COMPARATOR_DESC =
 			new Comparator<Account>() {
-		@Override
 		public int compare(Account a1, Account a2) {
 			int value = a1.getSn().toLowerCase().compareTo(
 					a2.getSn().toLowerCase());

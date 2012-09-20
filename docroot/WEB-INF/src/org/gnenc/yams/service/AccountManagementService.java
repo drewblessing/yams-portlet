@@ -5,8 +5,6 @@ import java.util.List;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Domain;
-import org.gnenc.yams.model.EntityGroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
@@ -43,6 +41,9 @@ public interface AccountManagementService {
 			throws ValidationException;
 
 	public Account modifyAccount(Account account, List<SubSystem> subsystems) 
+			throws ValidationException;
+	
+	public void modifyEmailForward(Account account, String emailForward, boolean delete) 
 			throws ValidationException;
 
 
