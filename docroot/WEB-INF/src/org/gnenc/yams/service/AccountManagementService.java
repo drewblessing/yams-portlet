@@ -5,8 +5,6 @@ import java.util.List;
 import javax.xml.bind.ValidationException;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.Domain;
-import org.gnenc.yams.model.EntityGroupMap;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Operand;
 import org.gnenc.yams.model.SubSystem;
