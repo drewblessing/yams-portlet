@@ -17,6 +17,7 @@ import org.gnenc.yams.operation.account.CheckAccountExists;
 import org.gnenc.yams.operation.account.CreateAccount;
 import org.gnenc.yams.operation.account.GetAllAccounts;
 import org.gnenc.yams.operation.account.ModifyAccount;
+import org.gnenc.yams.operation.account.ModifyEmailForward;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.internal.ExecutionCallback;
 import org.gnenc.yams.service.internal.ExecutionManager;
@@ -217,5 +218,27 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		
 		return account;
 	}
+	
+	public void modifyEmailForward(final Account account, final String emailForward)
+			throws ValidationException {
+	
+		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
+		
+		executor.execute(ModifyEmailForward.class, SubSystem.ALL_SUBSYSTEMS,
+				new ValidatedExecutionCallback<ModifyEmailForward>() {
+					
+					public void validateAction(ModifyEmailForward operation)
+							throws ValidationException {
+						operation.validateEmailForward(account, emailForward);
+//							if (!validationErrors.isEmpty()) {
+//								throw new ValidationException(validationErrors.toArray(new String[validationErrors.size()]));
+//							}
+					}
 
+					
+					public void executeAction(ModifyEmailForward operation) {
+						operation.modifyEmailForward(account, emailForward);
+					}
+				}, false);
+	}
 }

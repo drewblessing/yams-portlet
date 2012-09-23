@@ -31,7 +31,6 @@ public class LdapCheckAccountExists extends AbstractLdapOperation implements
 		}
 	};
 
-	@Override
 	public boolean checkAccountExists(String mail) {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(Filter.mail, mail, false));

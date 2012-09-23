@@ -149,6 +149,9 @@ final public class LdapAccountEsuccStudent {
 	
 	@Attribute(type=Type.STRING, name="esucc-mailPrimaryDomain")
 	private String esuccMailPrimaryDomain;
+	
+	@Attribute(type=Type.STRING, name="esucc-mailForward")
+	private String esuccMailForward;
 
 	@Attribute(type=Type.STRING, name="esucc-accountEnabled")
 	private String esuccAccountEnabled;
@@ -497,6 +500,14 @@ final public class LdapAccountEsuccStudent {
 	
 	public String getEsuccMailPrimaryDomain() {
 		return esuccMailPrimaryDomain;
+	}
+	
+	public void setEsuccMailForward(String esuccMailForward) {
+		this.esuccMailForward = esuccMailForward;
+	}
+	
+	public String getEsuccMailForward() {
+		return esuccMailForward;
 	}
 	
 	public void setEsuccUidNumber(String esuccUidNumber) {

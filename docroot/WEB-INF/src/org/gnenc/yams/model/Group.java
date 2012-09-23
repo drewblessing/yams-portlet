@@ -17,7 +17,6 @@ import java.util.Map;
 public class Group {
 	public static final Comparator<Group> NAME_COMPARATOR_ASC =
 			new Comparator<Group>() {
-		@Override
 		public int compare(Group g1, Group g2) {
 			int value = g1.getCn().toLowerCase().compareTo(
 					g2.getCn().toLowerCase());
@@ -28,7 +27,6 @@ public class Group {
 
 	public static final Comparator<Group> NAME_COMPARATOR_DESC =
 			new Comparator<Group>() {
-		@Override
 		public int compare(Group g1, Group g2) {
 			int value = Group.NAME_COMPARATOR_ASC.compare(g1, g2);
 

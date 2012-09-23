@@ -7,7 +7,6 @@ import com.liferay.portlet.BaseControlPanelEntry;
 
 public class YAMSControlPanelEntry extends BaseControlPanelEntry {
 
-	@Override
 	public boolean isVisible(PermissionChecker permissionChecker, Portlet portlet)
 			throws Exception {
 		if (portlet.getPortletId().equals(PortletKeys.ACCOUNT_MANAGEMENT_PORTLET_ID) &&

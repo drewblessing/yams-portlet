@@ -1,18 +1,16 @@
 package org.gnenc.yams.subsystem.ldap.operation;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.AccountType;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
-import org.gnenc.yams.operation.account.ChangePassword;
-import org.gnenc.yams.operation.account.ResetPassword;
+import org.gnenc.yams.operation.account.ModifyEmailForward;
 import org.gnenc.yams.service.internal.PasswordManager;
 import org.gnenc.yams.subsystem.ldap.LdapAccountHelper;
 import org.gnenc.yams.subsystem.ldap.LdapHelper;
-import org.gnenc.yams.subsystem.ldap.model.LdapAccount;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,72 +18,42 @@ import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.odm.core.OdmManager;
 import org.springframework.stereotype.Service;
-
 /**
  * 
- * @author Jeshurun Daniel
+ * @author Drew A. Blessing
  *
  */
-@Service("ldapChangePassword")
-public class LdapChangePassword extends AbstractLdapOperation implements ChangePassword, ResetPassword {
-	
-//	private static final Logger logger = Logger.getLogger(LdapModifyPassword.class);
-	
+@Service("l")
+public class LdapModifyEmailForward extends AbstractLdapOperation implements ModifyEmailForward {
+
 	@Autowired
 	private OdmManager manager;
 	
-	@Autowired
-	private PasswordManager pwdManager;
-	
-//	@Autowired
-//	private MessageService messages;
-	
-	@Autowired
-	private LdapTemplate template;
-	
-//	@Autowired
-//	private LdapGetPasswordPolicy pwdPolicyService;
-	
-	public void validateChangePassword(final Account account, final String oldPassword,
-			final String newPassword, final List<String> validationErrors) {
+	public void validateEmailForward(Account account, String emailForward) {
 		
-		if(!template.authenticate("", "(uid=" + account.getUid() + ")", oldPassword)) {
-//			validationErrors.add(messages.getMessage(13));
-			return;
-		}
-		
-		if(oldPassword.equals(newPassword)) {
-//			validationErrors.add(messages.getMessage(20));
-			return;
-		}
-		
-		validateChangePassword(account, newPassword, validationErrors);
 	}
 	
-	public void validateChangePassword(final Account account, final String newPassword,
-			final List<String> validationErrors) {
-		
-		pwdManager.validatePassword(newPassword, validationErrors);	
-	}
-
-	public void changePassword(final Account account, final String newPassword) {
+	public void modifyEmailForward(Account account, String emailForward) {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
 				Filter.uidNumber, account.getAttribute("uidNumber"), false));
 		
-		String filter = SearchFilter.buildFilterString(filters, null);
+		String filter = SearchFilter.buildFilterString(filters, null, false);
 		
-		
-		try{
+		try {
 			final List<LdapAccountEsuccStaff> staffs = manager.search(LdapAccountEsuccStaff.class,
 					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
-			if(staffs.size() == 1) {
+			if (staffs.size() == 1) {
 				LdapAccountEsuccStaff staff = staffs.get(0);
+				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, staff);
 				
 				staff.setDn(LdapAccountHelper.parseDn(staff.getDn().toString()));
 				
-				staff.setUserPassword(pwdManager.encryptSha1(newPassword));
+				if (!account.getAttribute("esuccEmailForward").isEmpty()) {
+					staff.setEsuccMailForward(account.getAttribute("esuccEmailForward"));
+				}
+				
 				manager.update(staff);
 			} else {
 				throw new IndexOutOfBoundsException();
@@ -94,13 +62,17 @@ public class LdapChangePassword extends AbstractLdapOperation implements ChangeP
 			final List<LdapAccountEsuccStudent> students = manager.search(LdapAccountEsuccStudent.class,
 					DistinguishedName.EMPTY_PATH, filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
 			
-			if(students.size() == 1) {
+			if (students.size() == 1) {
 				LdapAccountEsuccStudent student = students.get(0);
-				
+				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, student);
+			
 				student.setDn(LdapAccountHelper.parseDn(student.getDn().toString()));
 				
-				student.setUserPassword(pwdManager.encryptSha1(newPassword));
-				manager.update(student);
+				if (!account.getAttribute("esuccEmailForward").isEmpty()) {
+					student.setEsuccMailForward(account.getAttribute("esuccEmailForward"));
+				}
+				
+				manager.update(students);
 			}
 		}
 

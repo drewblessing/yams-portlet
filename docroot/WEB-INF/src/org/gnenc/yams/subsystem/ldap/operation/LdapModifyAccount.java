@@ -41,7 +41,6 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 	@Autowired
 	private PasswordManager passwordEncoder;
 
-	@Override
 	public void validateAccount(final Account account,
 			final Map<String, List<EntityGroup>> membershipGroups, final List<String> validationErrors) {		
 		LdapAccountHelper.validateSystemAccountCommon(account, validationErrors);
@@ -51,7 +50,6 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 		}
 	}
 
-	@Override
 	public void modifyAccount(final Account account) {
 		
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();

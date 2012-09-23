@@ -16,7 +16,6 @@ final public class Domain {
 	
 	public static final Comparator<Domain> ORGANIZATION_COMPARATOR_ASC =
 			new Comparator<Domain>() {
-		@Override
 		public int compare(Domain a1, Domain a2) {
 			int value = a1.getOrganization().toLowerCase().compareTo(
 					a2.getOrganization().toLowerCase());
@@ -27,7 +26,6 @@ final public class Domain {
 
 	public static final Comparator<Domain> ORGANIZATION_COMPARATOR_DESC =
 			new Comparator<Domain>() {
-		@Override
 		public int compare(Domain a1, Domain a2) {
 			int value = a1.getOrganization().toLowerCase().compareTo(
 					a2.getOrganization().toLowerCase());
