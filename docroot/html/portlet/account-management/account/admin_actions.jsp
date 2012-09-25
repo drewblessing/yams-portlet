@@ -48,9 +48,8 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 		</span>
 	</c:if>
 	
-	<c:if test="<%=false %>" >
-<%-- 	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission( --%>
-<%--  				callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>"> --%>
+	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(
+  				callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>">
 		<portlet:renderURL var="editAccountForwardRenderURL">
 			<portlet:param name="jspPage" value="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_FORWARD_JSP %>" />
 			<portlet:param name="redirect" value="<%= redirect %>" />

@@ -43,7 +43,7 @@ public interface AccountManagementService {
 	public Account modifyAccount(Account account, List<SubSystem> subsystems) 
 			throws ValidationException;
 	
-	public void modifyEmailForward(Account account, String emailForward) 
+	public void modifyEmailForward(Account account, String emailForward, boolean delete) 
 			throws ValidationException;
 
 

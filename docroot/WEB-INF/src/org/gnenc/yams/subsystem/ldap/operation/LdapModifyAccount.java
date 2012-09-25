@@ -90,7 +90,7 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 					student.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
 				}
 				
-				manager.update(students);
+				manager.update(student);
 			}
 		}
 		

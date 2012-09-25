@@ -11,6 +11,6 @@ import org.gnenc.yams.operation.Operation;
 public interface ModifyEmailForward extends Operation {
 	
 	public void validateEmailForward(final Account account, final String emailForward);
-	public void modifyEmailForward(final Account account, final String emailForward);
+	public void modifyEmailForward(final Account account, final String emailForward, final boolean delete);
 
 }

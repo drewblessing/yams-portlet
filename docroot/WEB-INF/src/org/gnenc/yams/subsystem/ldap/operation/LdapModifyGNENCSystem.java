@@ -53,10 +53,7 @@ public class LdapModifyGNENCSystem extends AbstractLdapOperation implements
 		final List<LdapSystem> ldapSystems = manager.search(LdapSystem.class,
 				new DistinguishedName(), 
 				filter, LdapHelper.SEARCH_CONTROL_ALL_SUBTREE_SCOPE);
-		System.out.println("LDAP SYSTEM: " + ldapSystems.get(0).getEsuccSystemUIDNext());
-		System.out.println("LDAP SYSTEM: " + ldapSystems.get(0).getOrganization());
-
-		System.out.println("LDAP SYSTEM: " + ldapSystems.get(0).getEsuccSystemPadding());
+		
 		try {
 			LdapSystem ldap = ldapSystems.get(0);
 			long uidNext = Long.valueOf(ldap.getEsuccSystemUIDNext());

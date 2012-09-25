@@ -219,7 +219,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		return account;
 	}
 	
-	public void modifyEmailForward(final Account account, final String emailForward)
+	public void modifyEmailForward(final Account account, final String emailForward, final boolean delete)
 			throws ValidationException {
 	
 		final List<String> validationErrors = Collections.synchronizedList(new ArrayList<String>());
@@ -236,8 +236,8 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 					}
 
 					
-					public void executeAction(ModifyEmailForward operation) {
-						operation.modifyEmailForward(account, emailForward);
+				public void executeAction(ModifyEmailForward operation) {
+						operation.modifyEmailForward(account, emailForward, delete);
 					}
 				}, false);
 	}

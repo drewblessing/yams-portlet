@@ -49,6 +49,10 @@
 		top: 7px;
 	}
 	
+	.padded-div {
+		padding: 5px 0;
+	}
+	
 	.permissions {
 		
 		.aui-fieldset {

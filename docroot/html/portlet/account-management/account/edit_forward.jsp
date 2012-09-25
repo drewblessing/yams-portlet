@@ -46,20 +46,29 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 	<portlet:param name="backURL" value="<%=backURL %>" />
 </portlet:actionURL>
 
-<aui:form method="POST" name="editForwardFm" id="editForwardFm" action="<%=editForwardURL %>">
+<aui:form method="POST" name="fm" id="fm" action="<%=editForwardURL %>">
 <aui:input type="hidden" name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
 
-<div><liferay-ui:message key="email-forward-instructions" /></div>
 <div class="portlet-msg-info"><liferay-ui:message key="email-forward-info" /></div>
+<div class="padded-div"><liferay-ui:message key="email-forward-instructions" /></div>
 
 	<c:choose>
 		<c:when test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
+		<c:if test='<%=Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) %>'>
+			<div class="padded-div"><liferay-ui:message key="email-forward-is-currently-set" /></div>
+			<aui:fieldset>
+				<aui:input type="hidden" name="delete" />
+				<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
+					<aui:button name="deleteButton" value="delete" onClick='<%= renderResponse.getNamespace() + "deleteForward()" %>' />
+				</c:if>
+			</aui:fieldset>
+		</c:if>
 		<div class="section edit-forward aui-column aui-w25">
-			<aui:input name="forward" size="25">
+			<aui:input name="forward" size="25" value='<%=Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) ? selAccount.getAttribute("esuccMailForward") : StringPool.BLANK %>'>
 				<aui:validator name="required" />
 				<aui:validator name="email" />
 			</aui:input>
-			<aui:input name="verify_forward" label="verify" size="25">
+			<aui:input name="verify_forward" label="verify" size="25" value='<%=Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) ? selAccount.getAttribute("esuccMailForward") : StringPool.BLANK %>'>
 				<aui:validator name="required" />
 				<aui:validator name="email" />
 				<aui:validator name="equalTo" >
@@ -73,7 +82,7 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 	</c:otherwise>
 	</c:choose>
 	<aui:button-row cssClass="dialog-footer">
-		<div class="buttons-left">			
+		<div class="buttons-left">	
 			<aui:button id="cancel" onClick='<%=backURL %>' value="cancel"/>
 			<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
 				<aui:button type="submit" value="submit" />
@@ -81,3 +90,12 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 		</div>
 	</aui:button-row>
 </aui:form>
+
+<aui:script>	
+	var <portlet:namespace />deleteForward = function() {
+		var A = AUI();
+		
+		A.one('#<portlet:namespace />delete').val("true");
+		A.one('#<portlet:namespace />fm').submit();
+	}
+</aui:script>
