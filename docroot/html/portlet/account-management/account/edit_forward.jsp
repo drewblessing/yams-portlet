@@ -40,7 +40,7 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title='<%= selAccount.getDisplayName() %>'
-/>
+/> 
 
 <portlet:actionURL name="editForward" var="editForwardURL" >
 	<portlet:param name="backURL" value="<%=backURL %>" />
@@ -48,6 +48,7 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 
 <aui:form method="POST" name="fm" id="fm" action="<%=editForwardURL %>">
 <aui:input type="hidden" name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
+<aui:input type="hidden" name="delete" />
 
 <div class="portlet-msg-info"><liferay-ui:message key="email-forward-info" /></div>
 <div class="padded-div"><liferay-ui:message key="email-forward-instructions" /></div>
@@ -56,12 +57,6 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 		<c:when test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
 		<c:if test='<%=Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) %>'>
 			<div class="padded-div"><liferay-ui:message key="email-forward-is-currently-set" /></div>
-			<aui:fieldset>
-				<aui:input type="hidden" name="delete" />
-				<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
-					<aui:button name="deleteButton" value="delete" onClick='<%= renderResponse.getNamespace() + "deleteForward()" %>' />
-				</c:if>
-			</aui:fieldset>
 		</c:if>
 		<div class="section edit-forward aui-column aui-w25">
 			<aui:input name="forward" size="25" value='<%=Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) ? selAccount.getAttribute("esuccMailForward") : StringPool.BLANK %>'>
@@ -83,6 +78,9 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 	</c:choose>
 	<aui:button-row cssClass="dialog-footer">
 		<div class="buttons-left">	
+			<c:if test='<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) && Validator.isNotNull(selAccount.getAttribute("esuccMailForward")) %>' >
+				<aui:button name="deleteButton" value="delete" onClick='<%= renderResponse.getNamespace() + "deleteForward()" %>' />
+			</c:if>
 			<aui:button id="cancel" onClick='<%=backURL %>' value="cancel"/>
 			<c:if test="<%=PermissionsChecker.hasPermission(callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_FORWARD) %>" >
 				<aui:button type="submit" value="submit" />
@@ -95,7 +93,9 @@ Set<String> errors = SessionErrors.keySet(renderRequest);
 	var <portlet:namespace />deleteForward = function() {
 		var A = AUI();
 		
-		A.one('#<portlet:namespace />delete').val("true");
-		A.one('#<portlet:namespace />fm').submit();
+		if (confirm("You are about to remove the current email forward. Click OK to continue.\n")) {
+			A.one('#<portlet:namespace />delete').val("true");
+			A.one('#<portlet:namespace />fm').submit();
+		}
 	}
 </aui:script>

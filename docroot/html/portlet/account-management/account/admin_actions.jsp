@@ -57,7 +57,7 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 		</portlet:renderURL>
 	
 		<span id="edit-account-<%=uidStripped %>">
-			<liferay-ui:icon image="forward" message="edit-email-forward" url="<%=editAccountForwardRenderURL %>" />
+			<liferay-ui:icon src="/html/themes/control_panel/images/mail/forward.png" message="edit-email-forward" url="<%=editAccountForwardRenderURL %>" />
 		</span>
 	</c:if>
 	
