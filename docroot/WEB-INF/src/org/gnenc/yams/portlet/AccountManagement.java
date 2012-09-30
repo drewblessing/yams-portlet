@@ -30,6 +30,8 @@ import java.util.TreeMap;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.xml.bind.ValidationException;
@@ -342,6 +344,24 @@ public class AccountManagement extends MVCPortlet {
 		actionResponse.setRenderParameter("jspPage", 
 				PortletUtil.ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_PERMISSIONS_JSP);
 		
+	}
+	
+	public static String getEmailProvider(Account account) {
+		List<SearchFilter> filters = new ArrayList<SearchFilter>();
+		filters.add(new SearchFilter(Filter.esuccEntity,
+				account.getAttribute("esuccEntity"),false));
+		
+		List<Domain> domains = Search.getDomains(filters, null, 
+				StringPool.BLANK, StringPool.BLANK, false);
+		
+		String result = StringPool.BLANK;
+		for (Domain domain : domains) {
+			if (domain.getOrganization().equals(account.getAttribute("esuccMailPrimaryDomain"))) {
+				result = domain.getEsuccMailProvider();
+				break;
+			}
+		}
+		return result;
 	}
 	
 	public static boolean importAccount(ActionRequest actionRequest, Account account, 

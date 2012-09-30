@@ -447,7 +447,13 @@ public class PortletUtil {
 	
 	public final static String ACCT_MGMT_ACCOUNT_EDIT_FORWARD_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_forward.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_EDIT_FORWARD_FORM_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_forward_form.jsp";
 
+	public final static String ACCT_MGMT_ACCOUNT_EDIT_FORWARD_OTHER_PROVIDER_JSP =
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_forward_other_provider.jsp";
+	
 	public static final String ACCT_MGMT_ACCOUNT_EDIT_PASSWORD_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/account/edit_password.jsp";
 	

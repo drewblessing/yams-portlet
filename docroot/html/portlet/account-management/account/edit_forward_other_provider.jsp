@@ -24,36 +24,12 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL", redirect);
-
-Account selAccount = ActionUtil.accountFromUidNumber(ParamUtil.getString(request, "uidNumber"));
-String mailProvider = AccountManagement.getEmailProvider(selAccount);
 %>
 
-<c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
-	<liferay-util:include
-			page="<%=PortletUtil.ACCT_MGMT_TOOLBAR_JSP %>"
-			servletContext="<%=this.getServletContext() %>">
-		<liferay-util:param name="toolbarItem" value="edit" />
-	</liferay-util:include>
-</c:if>
+<div class='portlet-msg-info'><liferay-ui:message key="account-not-hosted-by-gnenc" /></div>
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title='<%= selAccount.getDisplayName() %>'
-/> 
+<liferay-ui:message key="email-forward-other-provider" /><a href="http://support.google.com/mail/bin/answer.py?hl=en&answer=10957" target="_blank">http://support.google.com/mail/bin/answer.py?hl=en&answer=10957</a>
 
-<c:choose>
-	<c:when test='<%=mailProvider.equals("GNENC") %>'>
-		<liferay-util:include
-				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_FORWARD_FORM_JSP %>"
-				servletContext="<%=this.getServletContext() %>" >
-		</liferay-util:include>
-	</c:when>
-	<c:otherwise>
-		<liferay-util:include
-				page="<%=PortletUtil.ACCT_MGMT_ACCOUNT_EDIT_FORWARD_OTHER_PROVIDER_JSP %>"
-				servletContext="<%=this.getServletContext() %>" >
-		</liferay-util:include>	
-	</c:otherwise>
-</c:choose>
-
+<aui:button-row cssClass="dialog-footer">
+	<aui:button value="Back" onClick="<%=backURL %>"></aui:button>
+</aui:button-row>
