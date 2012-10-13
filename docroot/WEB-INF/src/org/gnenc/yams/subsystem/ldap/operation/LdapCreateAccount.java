@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.gnenc.yams.model.Account;
-import org.gnenc.yams.model.AccountType;
 import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
@@ -18,12 +17,13 @@ import org.gnenc.yams.subsystem.ldap.LdapHelper;
 import org.gnenc.yams.subsystem.ldap.LdapSystemHelper;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStaff;
 import org.gnenc.yams.subsystem.ldap.model.LdapAccountEsuccStudent;
-import org.gnenc.yams.subsystem.ldap.model.LdapEntityGroup;
 import org.gnenc.yams.subsystem.ldap.model.LdapGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.odm.core.OdmManager;
 import org.springframework.stereotype.Service;
+
+import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * 
@@ -60,14 +60,20 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 	public void createNewAccount(Account account) {
 		String esuccAccountType = account.getAttribute("esuccAccountType");
 		String entity = account.getAttribute("esuccEntity");
+		String esuccScreenName = StringPool.BLANK;
 		
-		System.out.println("Account type: " + esuccAccountType);
-		
+		try {
+			if (!account.getAttribute("esuccScreenName").isEmpty()) {
+				esuccScreenName = account.getAttribute("esuccScreenName");
+			} else {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			esuccScreenName = account.getMail().get(0).replace(StringPool.AT, StringPool.PERIOD);
+		}
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
 				Filter.esuccEntity, entity, false));
-//		filters.add(new SearchFilter(
-//				Filter.esuccGroupType, "staff", false));
 
 		final String filter = SearchFilter.buildFilterString(filters, Operand.AND, false);
 		
@@ -89,6 +95,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 					ldap.setEsuccSystem(group.getEsuccSystem());
 					ldap.setEsuccAccountEnabled("TRUE");
 					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
+					ldap.setEsuccScreenName(esuccScreenName);
 					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
 					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
 				}
@@ -118,6 +125,7 @@ public class LdapCreateAccount extends AbstractLdapOperation implements
 					ldap.setEsuccAccountEnabled("TRUE");
 					ldap.setEsuccUidNumber(LdapSystemHelper.computeEsuccUidNumber());
 					ldap.setUidNumber(LdapSystemHelper.computeUidNumber(ldap.getEsuccUidNumber()));
+					ldap.setEsuccScreenName(esuccScreenName);
 					ldap.setDn(LdapAccountHelper.computeDn(ldap, group));
 					System.out.println("Title: " + account.getAttribute("title")); 
 				}
