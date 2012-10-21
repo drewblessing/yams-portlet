@@ -348,18 +348,15 @@ public class AccountManagement extends MVCPortlet {
 	
 	public static String getEmailProvider(Account account) {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
-		filters.add(new SearchFilter(Filter.esuccEntity,
-				account.getAttribute("esuccEntity"),false));
+		filters.add(new SearchFilter(Filter.o,
+				account.getAttribute("esuccMailPrimaryDomain"),false));
 		
 		List<Domain> domains = Search.getDomains(filters, null, 
 				StringPool.BLANK, StringPool.BLANK, false);
 		
 		String result = StringPool.BLANK;
-		for (Domain domain : domains) {
-			if (domain.getOrganization().equals(account.getAttribute("esuccMailPrimaryDomain"))) {
-				result = domain.getEsuccMailProvider();
-				break;
-			}
+		if (domains.size() == 1) {
+			result = domains.get(0).getEsuccMailProvider();
 		}
 		return result;
 	}
