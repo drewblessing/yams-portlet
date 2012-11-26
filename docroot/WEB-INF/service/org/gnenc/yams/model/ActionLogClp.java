@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
@@ -28,6 +29,8 @@ import java.io.Serializable;
 import java.lang.reflect.Proxy;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Drew A. Blessing
@@ -58,6 +61,96 @@ public class ActionLogClp extends BaseModelImpl<ActionLog> implements ActionLog 
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("id", getId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("userEmailAddress", getUserEmailAddress());
+		attributes.put("modifiedUserId", getModifiedUserId());
+		attributes.put("modifiedUserName", getModifiedUserName());
+		attributes.put("modifiedUserEmailAddress", getModifiedUserEmailAddress());
+		attributes.put("modifiedDescription", getModifiedDescription());
+		attributes.put("modifiedFqgn", getModifiedFqgn());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String userEmailAddress = (String)attributes.get("userEmailAddress");
+
+		if (userEmailAddress != null) {
+			setUserEmailAddress(userEmailAddress);
+		}
+
+		Long modifiedUserId = (Long)attributes.get("modifiedUserId");
+
+		if (modifiedUserId != null) {
+			setModifiedUserId(modifiedUserId);
+		}
+
+		String modifiedUserName = (String)attributes.get("modifiedUserName");
+
+		if (modifiedUserName != null) {
+			setModifiedUserName(modifiedUserName);
+		}
+
+		String modifiedUserEmailAddress = (String)attributes.get(
+				"modifiedUserEmailAddress");
+
+		if (modifiedUserEmailAddress != null) {
+			setModifiedUserEmailAddress(modifiedUserEmailAddress);
+		}
+
+		String modifiedDescription = (String)attributes.get(
+				"modifiedDescription");
+
+		if (modifiedDescription != null) {
+			setModifiedDescription(modifiedDescription);
+		}
+
+		String modifiedFqgn = (String)attributes.get("modifiedFqgn");
+
+		if (modifiedFqgn != null) {
+			setModifiedFqgn(modifiedFqgn);
+		}
 	}
 
 	public long getId() {
@@ -163,6 +256,14 @@ public class ActionLogClp extends BaseModelImpl<ActionLog> implements ActionLog 
 
 	public void setModifiedFqgn(String modifiedFqgn) {
 		_modifiedFqgn = modifiedFqgn;
+	}
+
+	public BaseModel<?> getActionLogRemoteModel() {
+		return _actionLogRemoteModel;
+	}
+
+	public void setActionLogRemoteModel(BaseModel<?> actionLogRemoteModel) {
+		_actionLogRemoteModel = actionLogRemoteModel;
 	}
 
 	public void persist() throws SystemException {
@@ -343,4 +444,5 @@ public class ActionLogClp extends BaseModelImpl<ActionLog> implements ActionLog 
 	private String _modifiedUserEmailAddress;
 	private String _modifiedDescription;
 	private String _modifiedFqgn;
+	private BaseModel<?> _actionLogRemoteModel;
 }

@@ -156,6 +156,9 @@ final public class LdapAccountEsuccStaff {
 	@Attribute(type=Type.STRING, name="esucc-accountEnabled")
 	private String esuccAccountEnabled;
 	
+	@Attribute(type=Type.STRING, name="esucc-accountDisabledReason")
+	private String esuccAccountDisabledReason;
+	
 	@Attribute(type=Type.STRING, name="esucc-uidNumber")
 	private String esuccUidNumber;
 	
@@ -460,6 +463,14 @@ final public class LdapAccountEsuccStaff {
 	
 	public void setEsuccAccountEnabled(String esuccAccountEnabled) {
 		this.esuccAccountEnabled = esuccAccountEnabled;
+	}
+	
+	public String getEsuccAccountDisabledReason() {
+		return esuccAccountDisabledReason;
+	}
+	
+	public void setEsuccAccountDisabledReason(String esuccAccountDisabledReason) {
+		this.esuccAccountDisabledReason = esuccAccountDisabledReason;
 	}
 	
 	public void setEsuccEntity(String esuccEntity) {

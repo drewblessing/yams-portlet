@@ -152,10 +152,6 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 	/**
 	* Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param emailAddress the email address
 	* @param fqgn the fqgn
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -170,11 +166,21 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	* Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddressAndFqgn_First(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	*
 	* @param emailAddress the email address
 	* @param fqgn the fqgn
@@ -190,11 +196,21 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddressAndFqgn_Last(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	*
 	* @param id the primary key of the current permissions
 	* @param emailAddress the email address
@@ -269,10 +285,6 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 	/**
 	* Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param emailAddress the email address
 	* @param fqgn the fqgn
 	* @param groupPermission the group permission
@@ -289,11 +301,23 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	* Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param groupPermission the group permission
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddressAndFqgnAndGroupPermission_First(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		boolean groupPermission,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
 	* @param emailAddress the email address
 	* @param fqgn the fqgn
@@ -311,11 +335,23 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	* Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param fqgn the fqgn
+	* @param groupPermission the group permission
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddressAndFqgnAndGroupPermission_Last(
+		java.lang.String emailAddress, java.lang.String fqgn,
+		boolean groupPermission,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	*
 	* @param id the primary key of the current permissions
 	* @param emailAddress the email address
@@ -386,10 +422,6 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 	/**
 	* Returns the first permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param fqgn the fqgn
 	* @param groupPermission the group permission
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -404,11 +436,21 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	* Returns the first permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param fqgn the fqgn
+	* @param groupPermission the group permission
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByFqgnAndGroupPermission_First(
+		java.lang.String fqgn, boolean groupPermission,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	*
 	* @param fqgn the fqgn
 	* @param groupPermission the group permission
@@ -424,11 +466,21 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the permissionses before and after the current permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	* Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param fqgn the fqgn
+	* @param groupPermission the group permission
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByFqgnAndGroupPermission_Last(
+		java.lang.String fqgn, boolean groupPermission,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	*
 	* @param id the primary key of the current permissions
 	* @param fqgn the fqgn
@@ -494,10 +546,6 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 	/**
 	* Returns the first permissions in the ordered set where emailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param emailAddress the email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching permissions
@@ -511,11 +559,20 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the last permissions in the ordered set where emailAddress = &#63;.
+	* Returns the first permissions in the ordered set where emailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddress_First(
+		java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last permissions in the ordered set where emailAddress = &#63;.
 	*
 	* @param emailAddress the email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -530,11 +587,20 @@ public interface PermissionsPersistence extends BasePersistence<Permissions> {
 			org.gnenc.yams.NoSuchPermissionsException;
 
 	/**
-	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63;.
+	* Returns the last permissions in the ordered set where emailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.Permissions fetchByEmailAddress_Last(
+		java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63;.
 	*
 	* @param id the primary key of the current permissions
 	* @param emailAddress the email address

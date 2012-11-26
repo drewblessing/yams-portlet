@@ -16,6 +16,10 @@ package org.gnenc.yams.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link Permissions}.
@@ -37,6 +41,92 @@ public class PermissionsWrapper implements Permissions,
 
 	public String getModelClassName() {
 		return Permissions.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("id", getId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("emailAddress", getEmailAddress());
+		attributes.put("fqgn", getFqgn());
+		attributes.put("permissions", getPermissions());
+		attributes.put("permissionsGrantable", getPermissionsGrantable());
+		attributes.put("groupPermission", getGroupPermission());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String emailAddress = (String)attributes.get("emailAddress");
+
+		if (emailAddress != null) {
+			setEmailAddress(emailAddress);
+		}
+
+		String fqgn = (String)attributes.get("fqgn");
+
+		if (fqgn != null) {
+			setFqgn(fqgn);
+		}
+
+		Long permissions = (Long)attributes.get("permissions");
+
+		if (permissions != null) {
+			setPermissions(permissions);
+		}
+
+		Long permissionsGrantable = (Long)attributes.get("permissionsGrantable");
+
+		if (permissionsGrantable != null) {
+			setPermissionsGrantable(permissionsGrantable);
+		}
+
+		Boolean groupPermission = (Boolean)attributes.get("groupPermission");
+
+		if (groupPermission != null) {
+			setGroupPermission(groupPermission);
+		}
 	}
 
 	/**

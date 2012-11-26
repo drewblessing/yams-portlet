@@ -59,24 +59,31 @@ public class ActionLogLocalServiceWrapper implements ActionLogLocalService,
 	* Deletes the action log with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param id the primary key of the action log
+	* @return the action log that was removed
 	* @throws PortalException if a action log with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteActionLog(long id)
+	public org.gnenc.yams.model.ActionLog deleteActionLog(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_actionLogLocalService.deleteActionLog(id);
+		return _actionLogLocalService.deleteActionLog(id);
 	}
 
 	/**
 	* Deletes the action log from the database. Also notifies the appropriate model listeners.
 	*
 	* @param actionLog the action log
+	* @return the action log that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteActionLog(org.gnenc.yams.model.ActionLog actionLog)
+	public org.gnenc.yams.model.ActionLog deleteActionLog(
+		org.gnenc.yams.model.ActionLog actionLog)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		_actionLogLocalService.deleteActionLog(actionLog);
+		return _actionLogLocalService.deleteActionLog(actionLog);
+	}
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _actionLogLocalService.dynamicQuery();
 	}
 
 	/**
@@ -250,12 +257,19 @@ public class ActionLogLocalServiceWrapper implements ActionLogLocalService,
 		_actionLogLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _actionLogLocalService.invokeMethod(name, parameterTypes,
+			arguments);
+	}
+
 	public org.gnenc.yams.model.ActionLog addAction(long userId,
-		java.lang.String email, java.lang.String fullName,
+		long modifiedUserId, java.lang.String email, java.lang.String fullName,
 		java.lang.String modifiedFqgn, java.lang.String modifiedDescription)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _actionLogLocalService.addAction(userId, email, fullName,
-			modifiedFqgn, modifiedDescription);
+		return _actionLogLocalService.addAction(userId, modifiedUserId, email,
+			fullName, modifiedFqgn, modifiedDescription);
 	}
 
 	/**

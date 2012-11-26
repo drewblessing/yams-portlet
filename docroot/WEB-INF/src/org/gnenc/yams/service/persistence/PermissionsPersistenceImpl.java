@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -180,10 +181,10 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsModelImpl.FINDER_CACHE_ENABLED, PermissionsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PermissionsModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -686,6 +687,18 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Permissions permissions : list) {
+				if (!Validator.equals(emailAddress,
+							permissions.getEmailAddress()) ||
+						!Validator.equals(fqgn, permissions.getFqgn())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -777,10 +790,6 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	/**
 	 * Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param emailAddress the email address
 	 * @param fqgn the fqgn
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -791,35 +800,52 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByEmailAddressAndFqgn_First(String emailAddress,
 		String fqgn, OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddressAndFqgn_First(emailAddress,
+				fqgn, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(", fqgn=");
+		msg.append(fqgn);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddressAndFqgn_First(String emailAddress,
+		String fqgn, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<Permissions> list = findByEmailAddressAndFqgn(emailAddress, fqgn,
 				0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(", fqgn=");
-			msg.append(fqgn);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param emailAddress the email address
 	 * @param fqgn the fqgn
@@ -831,37 +857,54 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByEmailAddressAndFqgn_Last(String emailAddress,
 		String fqgn, OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddressAndFqgn_Last(emailAddress,
+				fqgn, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(", fqgn=");
+		msg.append(fqgn);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddressAndFqgn_Last(String emailAddress,
+		String fqgn, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countByEmailAddressAndFqgn(emailAddress, fqgn);
 
 		List<Permissions> list = findByEmailAddressAndFqgn(emailAddress, fqgn,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(", fqgn=");
-			msg.append(fqgn);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current permissions
 	 * @param emailAddress the email address
@@ -1112,6 +1155,19 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Permissions permissions : list) {
+				if (!Validator.equals(emailAddress,
+							permissions.getEmailAddress()) ||
+						!Validator.equals(fqgn, permissions.getFqgn()) ||
+						(groupPermission != permissions.getGroupPermission())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1207,10 +1263,6 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	/**
 	 * Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param emailAddress the email address
 	 * @param fqgn the fqgn
 	 * @param groupPermission the group permission
@@ -1223,38 +1275,56 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		String emailAddress, String fqgn, boolean groupPermission,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddressAndFqgnAndGroupPermission_First(emailAddress,
+				fqgn, groupPermission, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(", fqgn=");
+		msg.append(fqgn);
+
+		msg.append(", groupPermission=");
+		msg.append(groupPermission);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddressAndFqgnAndGroupPermission_First(
+		String emailAddress, String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<Permissions> list = findByEmailAddressAndFqgnAndGroupPermission(emailAddress,
 				fqgn, groupPermission, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(", fqgn=");
-			msg.append(fqgn);
-
-			msg.append(", groupPermission=");
-			msg.append(groupPermission);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param emailAddress the email address
 	 * @param fqgn the fqgn
@@ -1268,41 +1338,59 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		String emailAddress, String fqgn, boolean groupPermission,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddressAndFqgnAndGroupPermission_Last(emailAddress,
+				fqgn, groupPermission, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(", fqgn=");
+		msg.append(fqgn);
+
+		msg.append(", groupPermission=");
+		msg.append(groupPermission);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddressAndFqgnAndGroupPermission_Last(
+		String emailAddress, String fqgn, boolean groupPermission,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByEmailAddressAndFqgnAndGroupPermission(emailAddress,
 				fqgn, groupPermission);
 
 		List<Permissions> list = findByEmailAddressAndFqgnAndGroupPermission(emailAddress,
 				fqgn, groupPermission, count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(", fqgn=");
-			msg.append(fqgn);
-
-			msg.append(", groupPermission=");
-			msg.append(groupPermission);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63; and fqgn = &#63; and groupPermission = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current permissions
 	 * @param emailAddress the email address
@@ -1557,6 +1645,17 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Permissions permissions : list) {
+				if (!Validator.equals(fqgn, permissions.getFqgn()) ||
+						(groupPermission != permissions.getGroupPermission())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1636,10 +1735,6 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	/**
 	 * Returns the first permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param fqgn the fqgn
 	 * @param groupPermission the group permission
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1650,35 +1745,52 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByFqgnAndGroupPermission_First(String fqgn,
 		boolean groupPermission, OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByFqgnAndGroupPermission_First(fqgn,
+				groupPermission, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("fqgn=");
+		msg.append(fqgn);
+
+		msg.append(", groupPermission=");
+		msg.append(groupPermission);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByFqgnAndGroupPermission_First(String fqgn,
+		boolean groupPermission, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<Permissions> list = findByFqgnAndGroupPermission(fqgn,
 				groupPermission, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("fqgn=");
-			msg.append(fqgn);
-
-			msg.append(", groupPermission=");
-			msg.append(groupPermission);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param fqgn the fqgn
 	 * @param groupPermission the group permission
@@ -1690,37 +1802,54 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByFqgnAndGroupPermission_Last(String fqgn,
 		boolean groupPermission, OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByFqgnAndGroupPermission_Last(fqgn,
+				groupPermission, orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("fqgn=");
+		msg.append(fqgn);
+
+		msg.append(", groupPermission=");
+		msg.append(groupPermission);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
+	 *
+	 * @param fqgn the fqgn
+	 * @param groupPermission the group permission
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByFqgnAndGroupPermission_Last(String fqgn,
+		boolean groupPermission, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countByFqgnAndGroupPermission(fqgn, groupPermission);
 
 		List<Permissions> list = findByFqgnAndGroupPermission(fqgn,
 				groupPermission, count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("fqgn=");
-			msg.append(fqgn);
-
-			msg.append(", groupPermission=");
-			msg.append(groupPermission);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissionses before and after the current permissions in the ordered set where fqgn = &#63; and groupPermission = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current permissions
 	 * @param fqgn the fqgn
@@ -1951,6 +2080,17 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 		List<Permissions> list = (List<Permissions>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Permissions permissions : list) {
+				if (!Validator.equals(emailAddress,
+							permissions.getEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2026,10 +2166,6 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	/**
 	 * Returns the first permissions in the ordered set where emailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param emailAddress the email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching permissions
@@ -2039,32 +2175,47 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByEmailAddress_First(String emailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddress_First(emailAddress,
+				orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permissions in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddress_First(String emailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<Permissions> list = findByEmailAddress(emailAddress, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permissions in the ordered set where emailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param emailAddress the email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2075,34 +2226,49 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 	public Permissions findByEmailAddress_Last(String emailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsException, SystemException {
+		Permissions permissions = fetchByEmailAddress_Last(emailAddress,
+				orderByComparator);
+
+		if (permissions != null) {
+			return permissions;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permissions in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions, or <code>null</code> if a matching permissions could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permissions fetchByEmailAddress_Last(String emailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByEmailAddress(emailAddress);
 
 		List<Permissions> list = findByEmailAddress(emailAddress, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("emailAddress=");
-			msg.append(emailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissionses before and after the current permissions in the ordered set where emailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current permissions
 	 * @param emailAddress the email address
@@ -2306,11 +2472,11 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 
@@ -2825,6 +2991,8 @@ public class PermissionsPersistenceImpl extends BasePersistenceImpl<Permissions>
 
 	@BeanReference(type = ActionLogPersistence.class)
 	protected ActionLogPersistence actionLogPersistence;
+	@BeanReference(type = JobQueuePersistence.class)
+	protected JobQueuePersistence jobQueuePersistence;
 	@BeanReference(type = PermissionsPersistence.class)
 	protected PermissionsPersistence permissionsPersistence;
 	@BeanReference(type = PermissionsDefinedPersistence.class)

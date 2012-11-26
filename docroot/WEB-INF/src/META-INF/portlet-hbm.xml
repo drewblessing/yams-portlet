@@ -3,6 +3,7 @@
 
 <hibernate-mapping default-lazy="false" auto-import="false">
 	<import class="org.gnenc.yams.model.ActionLog" />
+	<import class="org.gnenc.yams.model.JobQueue" />
 	<import class="org.gnenc.yams.model.Permissions" />
 	<import class="org.gnenc.yams.model.PermissionsDefined" />
 	<class name="org.gnenc.yams.model.impl.ActionLogImpl" table="yams_ActionLog">
@@ -20,6 +21,23 @@
 		<property name="modifiedUserEmailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="modifiedDescription" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="modifiedFqgn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.gnenc.yams.model.impl.JobQueueImpl" table="yams_JobQueue">
+		<cache usage="read-write" />
+		<id name="id" column="id_" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="userEmailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobUserEmailAddress" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobDescription" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobAction" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobDate" type="org.hibernate.type.TimestampType" />
 	</class>
 	<class name="org.gnenc.yams.model.impl.PermissionsImpl" table="yams_Permissions">
 		<cache usage="read-write" />

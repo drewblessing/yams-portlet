@@ -102,6 +102,7 @@
 		<order by="asc">
 			<order-column name="modifiedDate" />
 		</order>
+		
 		<finder name="userEmailAddress" return-type="Collection">
 			<finder-column name="userEmailAddress" />
 		</finder>
@@ -135,5 +136,48 @@
         	<finder-column name="userEmailAddress" />
         	<finder-column name="modifiedUserEmailAddress" />
         </finder>
-	</entity>	
+	</entity>
+    <entity name="JobQueue" local-service="true" remote-service="false">
+    	<!-- PK fields -->
+
+		<column name="id" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+		<column name="userEmailAddress" type="String" />
+		<column name="jobUserId" type="long" />
+		<column name="jobUserName" type="String" />
+		<column name="jobUserEmailAddress" type="String" />
+		<column name="jobDescription" type="String" />
+		<column name="jobAction" type="String" />
+		<column name="jobDate" type="Date" />
+		
+		<!-- Order -->
+		
+		<order by="asc">
+			<order-column name="modifiedDate" />
+		</order>
+		
+		<finder name="JobAction" return-type="Collection">
+			<finder-column name="jobAction" />
+		</finder>
+		<finder name="JobDateAndJobAction" return-type="Collection">
+			<finder-column name="jobDate" />
+			<finder-column name="jobAction" />
+		</finder>
+		<finder name="JobUserEmailAddress" return-type="Collection">
+			<finder-column name="jobUserEmailAddress" />
+		</finder>		
+		<finder name="JobUserEmailAddressAndJobAction" return-type="Collection">
+			<finder-column name="jobUserEmailAddress" />
+			<finder-column name="jobAction" />
+		</finder>
+    </entity>	
 </service-builder>

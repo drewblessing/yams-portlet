@@ -32,6 +32,11 @@ Account selAccount = (Account)row.getObject();
 String name = Account.class.getName();
 List<String> mail = selAccount.getMail();
 String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
+boolean accountEnabled = selAccount.getAttribute("esuccAccountEnabled").equalsIgnoreCase("true") ? true : false;
+String accountDisabledReason = StringPool.BLANK;
+if (!accountEnabled) {
+	accountDisabledReason = selAccount.getAttribute("esuccAccountDisabledReason");
+}
 %>
 
 <liferay-ui:icon-menu showWhenSingleIcon="<%= true %>">
@@ -88,6 +93,22 @@ String uidStripped = selAccount.getUid().replaceAll("[^a-zA-Z0-9]+","");
 		<span id="edit-permissions">
 			<liferay-ui:icon cssClass="<%=uidStripped %>" image="permissions" message="edit-permissions" 
 				url="<%=editPermissionsRenderURL %>" />
+		</span>
+	</c:if>
+	
+	<c:if test="<%= user.isDefaultUser() || PermissionsChecker.hasPermission(callingAccount, selAccount,
+				PermissionsChecker.PERMISSION_ACCOUNT_REMOVE) || PermissionsChecker.hasPermission(
+				callingAccount, selAccount, PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE) %>">
+				
+		<portlet:renderURL var="removeAccountURL">
+			<portlet:param name="jspPage" value='<%=PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP %>' />
+			<portlet:param name="redirect" value="<%= redirect %>" />
+			<portlet:param name="uidNumber" value='<%=selAccount.getAttribute("uidNumber") %>' />
+		</portlet:renderURL>
+			
+		<span id="remove-account">
+			<liferay-ui:icon cssClass="<%=uidStripped %>" image="delete" message="remove" 
+				url="<%=removeAccountURL %>" />
 		</span>
 	</c:if>
 

@@ -21,15 +21,14 @@ import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
@@ -40,9 +39,11 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import org.gnenc.yams.model.ActionLog;
 import org.gnenc.yams.service.ActionLogLocalService;
+import org.gnenc.yams.service.JobQueueLocalService;
 import org.gnenc.yams.service.PermissionsDefinedLocalService;
 import org.gnenc.yams.service.PermissionsLocalService;
 import org.gnenc.yams.service.persistence.ActionLogPersistence;
+import org.gnenc.yams.service.persistence.JobQueuePersistence;
 import org.gnenc.yams.service.persistence.PermissionsDefinedPersistence;
 import org.gnenc.yams.service.persistence.PermissionsPersistence;
 
@@ -64,7 +65,7 @@ import javax.sql.DataSource;
  * @see org.gnenc.yams.service.ActionLogLocalServiceUtil
  * @generated
  */
-public abstract class ActionLogLocalServiceBaseImpl
+public abstract class ActionLogLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements ActionLogLocalService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -79,26 +80,12 @@ public abstract class ActionLogLocalServiceBaseImpl
 	 * @return the action log that was added
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Indexable(type = IndexableType.REINDEX)
 	public ActionLog addActionLog(ActionLog actionLog)
 		throws SystemException {
 		actionLog.setNew(true);
 
-		actionLog = actionLogPersistence.update(actionLog, false);
-
-		Indexer indexer = IndexerRegistryUtil.getIndexer(getModelClassName());
-
-		if (indexer != null) {
-			try {
-				indexer.reindex(actionLog);
-			}
-			catch (SearchException se) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(se, se);
-				}
-			}
-		}
-
-		return actionLog;
+		return actionLogPersistence.update(actionLog, false);
 	}
 
 	/**
@@ -115,48 +102,34 @@ public abstract class ActionLogLocalServiceBaseImpl
 	 * Deletes the action log with the primary key from the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param id the primary key of the action log
+	 * @return the action log that was removed
 	 * @throws PortalException if a action log with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void deleteActionLog(long id)
+	@Indexable(type = IndexableType.DELETE)
+	public ActionLog deleteActionLog(long id)
 		throws PortalException, SystemException {
-		ActionLog actionLog = actionLogPersistence.remove(id);
-
-		Indexer indexer = IndexerRegistryUtil.getIndexer(getModelClassName());
-
-		if (indexer != null) {
-			try {
-				indexer.delete(actionLog);
-			}
-			catch (SearchException se) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(se, se);
-				}
-			}
-		}
+		return actionLogPersistence.remove(id);
 	}
 
 	/**
 	 * Deletes the action log from the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param actionLog the action log
+	 * @return the action log that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void deleteActionLog(ActionLog actionLog) throws SystemException {
-		actionLogPersistence.remove(actionLog);
+	@Indexable(type = IndexableType.DELETE)
+	public ActionLog deleteActionLog(ActionLog actionLog)
+		throws SystemException {
+		return actionLogPersistence.remove(actionLog);
+	}
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(getModelClassName());
+	public DynamicQuery dynamicQuery() {
+		Class<?> clazz = getClass();
 
-		if (indexer != null) {
-			try {
-				indexer.delete(actionLog);
-			}
-			catch (SearchException se) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(se, se);
-				}
-			}
-		}
+		return DynamicQueryFactoryUtil.forClass(ActionLog.class,
+			clazz.getClassLoader());
 	}
 
 	/**
@@ -281,6 +254,7 @@ public abstract class ActionLogLocalServiceBaseImpl
 	 * @return the action log that was updated
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Indexable(type = IndexableType.REINDEX)
 	public ActionLog updateActionLog(ActionLog actionLog)
 		throws SystemException {
 		return updateActionLog(actionLog, true);
@@ -294,26 +268,12 @@ public abstract class ActionLogLocalServiceBaseImpl
 	 * @return the action log that was updated
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Indexable(type = IndexableType.REINDEX)
 	public ActionLog updateActionLog(ActionLog actionLog, boolean merge)
 		throws SystemException {
 		actionLog.setNew(false);
 
-		actionLog = actionLogPersistence.update(actionLog, merge);
-
-		Indexer indexer = IndexerRegistryUtil.getIndexer(getModelClassName());
-
-		if (indexer != null) {
-			try {
-				indexer.reindex(actionLog);
-			}
-			catch (SearchException se) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(se, se);
-				}
-			}
-		}
-
-		return actionLog;
+		return actionLogPersistence.update(actionLog, merge);
 	}
 
 	/**
@@ -352,6 +312,43 @@ public abstract class ActionLogLocalServiceBaseImpl
 	public void setActionLogPersistence(
 		ActionLogPersistence actionLogPersistence) {
 		this.actionLogPersistence = actionLogPersistence;
+	}
+
+	/**
+	 * Returns the job queue local service.
+	 *
+	 * @return the job queue local service
+	 */
+	public JobQueueLocalService getJobQueueLocalService() {
+		return jobQueueLocalService;
+	}
+
+	/**
+	 * Sets the job queue local service.
+	 *
+	 * @param jobQueueLocalService the job queue local service
+	 */
+	public void setJobQueueLocalService(
+		JobQueueLocalService jobQueueLocalService) {
+		this.jobQueueLocalService = jobQueueLocalService;
+	}
+
+	/**
+	 * Returns the job queue persistence.
+	 *
+	 * @return the job queue persistence
+	 */
+	public JobQueuePersistence getJobQueuePersistence() {
+		return jobQueuePersistence;
+	}
+
+	/**
+	 * Sets the job queue persistence.
+	 *
+	 * @param jobQueuePersistence the job queue persistence
+	 */
+	public void setJobQueuePersistence(JobQueuePersistence jobQueuePersistence) {
+		this.jobQueuePersistence = jobQueuePersistence;
 	}
 
 	/**
@@ -585,6 +582,11 @@ public abstract class ActionLogLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	public Object invokeMethod(String name, String[] parameterTypes,
+		Object[] arguments) throws Throwable {
+		return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+	}
+
 	protected Class<?> getModelClass() {
 		return ActionLog.class;
 	}
@@ -616,6 +618,10 @@ public abstract class ActionLogLocalServiceBaseImpl
 	protected ActionLogLocalService actionLogLocalService;
 	@BeanReference(type = ActionLogPersistence.class)
 	protected ActionLogPersistence actionLogPersistence;
+	@BeanReference(type = JobQueueLocalService.class)
+	protected JobQueueLocalService jobQueueLocalService;
+	@BeanReference(type = JobQueuePersistence.class)
+	protected JobQueuePersistence jobQueuePersistence;
 	@BeanReference(type = PermissionsLocalService.class)
 	protected PermissionsLocalService permissionsLocalService;
 	@BeanReference(type = PermissionsPersistence.class)
@@ -638,6 +644,6 @@ public abstract class ActionLogLocalServiceBaseImpl
 	protected UserService userService;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
-	private static Log _log = LogFactoryUtil.getLog(ActionLogLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
+	private ActionLogLocalServiceClpInvoker _clpInvoker = new ActionLogLocalServiceClpInvoker();
 }

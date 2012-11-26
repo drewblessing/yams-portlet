@@ -15,9 +15,8 @@
 package org.gnenc.yams.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the action log local service. This utility wraps {@link org.gnenc.yams.service.impl.ActionLogLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -66,24 +65,31 @@ public class ActionLogLocalServiceUtil {
 	* Deletes the action log with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param id the primary key of the action log
+	* @return the action log that was removed
 	* @throws PortalException if a action log with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteActionLog(long id)
+	public static org.gnenc.yams.model.ActionLog deleteActionLog(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteActionLog(id);
+		return getService().deleteActionLog(id);
 	}
 
 	/**
 	* Deletes the action log from the database. Also notifies the appropriate model listeners.
 	*
 	* @param actionLog the action log
+	* @return the action log that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteActionLog(org.gnenc.yams.model.ActionLog actionLog)
+	public static org.gnenc.yams.model.ActionLog deleteActionLog(
+		org.gnenc.yams.model.ActionLog actionLog)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteActionLog(actionLog);
+		return getService().deleteActionLog(actionLog);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -257,13 +263,19 @@ public class ActionLogLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static org.gnenc.yams.model.ActionLog addAction(long userId,
-		java.lang.String email, java.lang.String fullName,
+		long modifiedUserId, java.lang.String email, java.lang.String fullName,
 		java.lang.String modifiedFqgn, java.lang.String modifiedDescription)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addAction(userId, email, fullName, modifiedFqgn,
-			modifiedDescription);
+				   .addAction(userId, modifiedUserId, email, fullName,
+			modifiedFqgn, modifiedDescription);
 	}
 
 	public static void clearService() {
@@ -272,34 +284,27 @@ public class ActionLogLocalServiceUtil {
 
 	public static ActionLogLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					ActionLogLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					ActionLogLocalService.class.getName(), portletClassLoader);
-
-			_service = new ActionLogLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof ActionLogLocalService) {
+				_service = (ActionLogLocalService)invokableLocalService;
+			}
+			else {
+				_service = new ActionLogLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(ActionLogLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(ActionLogLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ActionLogLocalService service) {
-		MethodCache.remove(ActionLogLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ActionLogLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ActionLogLocalService.class);
 	}
 
 	private static ActionLogLocalService _service;

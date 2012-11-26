@@ -118,6 +118,10 @@ public class LdapAccountHelper {
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
 			account.setAttribute("esuccMailForward", ldap.getEsuccMailForward());
+			account.setAttribute("esuccAccountEnabled", ldap.getEsuccAccountEnabled());
+			// This attribute may not always exist.  Spring should return null if it does not exist or it it's empty
+			account.setAttribute("esuccAccountDisabledReason", Validator.isNotNull(
+					ldap.getEsuccAccountDisabledReason()) ? ldap.getEsuccAccountDisabledReason() : StringPool.BLANK);
 //			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 		}
 
@@ -151,6 +155,10 @@ public class LdapAccountHelper {
 					ldap.getEmployeeNumber() == null ? 0 : ldap.getEmployeeNumber());
 			account.setUid(ldap.getUid() == null ? StringPool.BLANK : ldap.getUid());
 			account.setAttribute("esuccMailForward", ldap.getEsuccMailForward());
+			account.setAttribute("esuccAccountEnabled", ldap.getEsuccAccountEnabled());
+			// This attribute may not always exist.  Spring should return null if it does not exist or it it's empty
+			account.setAttribute("esuccAccountDisabledReason", Validator.isNotNull(
+					ldap.getEsuccAccountDisabledReason()) ? ldap.getEsuccAccountDisabledReason() : StringPool.BLANK);
 //			account.setAttribute("title", Validator.isNotNull(ldap.getTitle()) ? ldap.getTitle() : StringPool.BLANK);
 //			account.setDepartmentName(ldap.getDepartmentName());
 

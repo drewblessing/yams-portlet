@@ -40,6 +40,7 @@ import org.gnenc.yams.model.Account;
 import org.gnenc.yams.model.AccountType;
 import org.gnenc.yams.model.EntityGroup;
 import org.gnenc.yams.model.Group;
+import org.gnenc.yams.model.JobQueue;
 import org.gnenc.yams.model.PermissionsDefined;
 import org.gnenc.yams.model.SearchFilter;
 import org.gnenc.yams.model.SearchFilter.Filter;
@@ -48,6 +49,7 @@ import org.gnenc.yams.portlet.Search;
 import org.gnenc.yams.portlet.search.UserDisplayTerms;
 import org.gnenc.yams.portlet.search.UserSearchTerms;
 import org.gnenc.yams.service.AccountManagementService;
+import org.gnenc.yams.service.JobQueueLocalServiceUtil;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 
@@ -80,11 +82,24 @@ import edu.vt.middleware.password.UppercaseCharacterRule;
 import edu.vt.middleware.password.UsernameRule;
 import edu.vt.middleware.password.WhitespaceRule;
 public class PortletUtil {
+	
 	private static List<SubSystem> checkAccountExists(String mail) 
 			throws ValidationException {
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		
 		return ams.checkAccountExists(mail);
+	}
+	
+	public static List<JobQueue> getRemovalJobsByEmailAddress(Account account) {
+		List<JobQueue> jobs = null;
+		try {
+			jobs = JobQueueLocalServiceUtil.getByEmailAddressAndJobAction(
+					account.getMail().get(0), PortletUtil.JOB_ACTION_REMOVE);
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jobs;
 	}
 	
 	public static HashMap<String, String> editAccount(ResourceRequest resourceRequest,
@@ -411,6 +426,10 @@ public class PortletUtil {
 	public static final String PERMISSIONS = "permissions";
 
 	public static final String SEARCH_TABS_NAMES = "accounts,organizations";
+	
+	public static final String JOB_ACTION_REMOVE = "remove";
+	
+	public static final String JOB_ACTION_REMOVE_EMAIL_NOTICE = "remove_email_notice";
 
 	// Directories
 	public static final String SEARCH_TABS_JSP_DIRECTORY = "/html/portlet/search/tabs";
@@ -474,6 +493,15 @@ public class PortletUtil {
 	
 	public final static String ACCT_MGMT_ACCOUNT_PERMISSIONS_CHOOSE_PERMISSIONS_JSP =
 			PORTLET_ACCT_MGMT_PERMISSIONS_DIRECTORY + "/choose_permissions.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_REMOVE_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/remove.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_REMOVE_FORCE_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/remove_force.jsp";
+	
+	public final static String ACCT_MGMT_ACCOUNT_REMOVE_SCHEDULED_JSP = 
+			PORTLET_ACCT_MGMT_DIRECTORY + "/account/remove_scheduled.jsp";
 
 	public static final String ACCT_MGMT_ORGANIZATION_EDIT_JSP =
 			PORTLET_ACCT_MGMT_DIRECTORY + "/organization/edit.jsp";

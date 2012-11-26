@@ -22,7 +22,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,8 +35,6 @@ import java.util.TreeMap;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.xml.bind.ValidationException;
@@ -49,9 +52,11 @@ import org.gnenc.yams.portlet.search.util.SearchUtil;
 import org.gnenc.yams.portlet.util.PermissionsChecker;
 import org.gnenc.yams.portlet.util.PermissionsUtil;
 import org.gnenc.yams.portlet.util.PortletUtil;
+import org.gnenc.yams.portlet.util.PropsValues;
 import org.gnenc.yams.portlet.util.UnknownImportAccountsHeaderException;
 import org.gnenc.yams.service.AccountManagementService;
 import org.gnenc.yams.service.ActionLogLocalServiceUtil;
+import org.gnenc.yams.service.JobQueueLocalServiceUtil;
 import org.gnenc.yams.service.PermissionsLocalServiceUtil;
 import org.gnenc.yams.service.impl.AccountManagementServiceImpl;
 
@@ -70,6 +75,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.mail.MailEngine;
 public class AccountManagement extends MVCPortlet {
 	public void addAccount(
 				ActionRequest actionRequest, ActionResponse actionResponse) {
@@ -162,7 +168,6 @@ public class AccountManagement extends MVCPortlet {
 		} else {	
 			subsystems.add(SubSystem.LDAP);
 			try {
-				System.out.println("First name: " + account.getGivenName());
 				newAccount = ams.modifyAccount(account, subsystems);
 			} catch (ValidationException e) {
 				e.printStackTrace();
@@ -184,15 +189,13 @@ public class AccountManagement extends MVCPortlet {
 		try {
 			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
 		} catch (Exception e1) {
-			e1.printStackTrace();
-			
+			e1.printStackTrace();	
 		}
 		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
 		String jspPage = null;
 		boolean valid = false; 
 	    String backURL = DAOParamUtil.getString(actionRequest, "backURL");
 	    boolean delete = DAOParamUtil.getBoolean(actionRequest, "delete");
-	    System.out.println("Delete? " + delete);
 		String forward = DAOParamUtil.getString(actionRequest, "forward");
 		String verify = DAOParamUtil.getString(actionRequest, "verify_forward");
 		Account account = ActionUtil.accountFromUidNumber(
@@ -513,6 +516,165 @@ public class AccountManagement extends MVCPortlet {
 	    		 PortletUtil.ACCT_MGMT_ACCOUNT_IMPORT_ACCOUNTS_SUMMARY_JSP);	     
 	}
 	
+	public static void removeAccount(
+			ActionRequest actionRequest, ActionResponse actionResponse) {
+		Account callingAccount =  null;
+		try {
+			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+		} catch (Exception e1) {
+			e1.printStackTrace();	
+		}
+		AccountManagementService ams = AccountManagementServiceImpl.getInstance();
+		String jspPage = null;
+		List<SubSystem> subsystems = new ArrayList<SubSystem>();
+	    String backURL = DAOParamUtil.getString(actionRequest, "backURL");
+	    boolean remove = DAOParamUtil.getBoolean(actionRequest, "remove");
+		Account account = ActionUtil.accountFromUidNumber(
+				DAOParamUtil.getString(actionRequest, "uidNumber"));
+		
+		actionResponse.setRenderParameter("uidNumber", account.getAttribute("uidNumber"));
+		actionResponse.setRenderParameter("backURL", backURL);
+		
+		if (PermissionsChecker.hasPermission(
+				callingAccount, account, PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE)) {	
+			subsystems.add(SubSystem.LDAP);
+			if (remove) {
+				try {
+					account.setAttribute("removeAccount", "TRUE");
+					ams.modifyAccount(account, subsystems);
+				} catch (ValidationException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// That's Ok
+				}
+			}
+			jspPage = PortletUtil.SEARCH_VIEW_JSP;
+		} else {
+			SessionErrors.add(actionRequest, "insufficient-privileges");
+
+			jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+		}
+			
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Immediate account removal");
+		actionResponse.setRenderParameter("jspPage", jspPage);
+	}
+	
+	public void removeAccountOnSchedule(ActionRequest actionRequest, 
+			ActionResponse actionResponse) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+		            WebKeys.THEME_DISPLAY);
+		Account callingAccount =  null;
+		try {
+			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+		} catch (Exception e1) {
+			e1.printStackTrace();	
+		}
+		String jspPage = null;
+	    String backURL = DAOParamUtil.getString(actionRequest, "backURL");
+		String dateString = DAOParamUtil.getString(actionRequest, "remove-date");
+		Date date = null;
+		Date noticeDate = null;
+		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+		try {
+			date = new SimpleDateFormat("MM/dd/yy").parse(dateString);
+			Calendar cal = Calendar.getInstance();
+	        cal.setTime(date);
+	        cal.add(Calendar.DATE, -6);
+	        noticeDate = cal.getTime();
+		} catch (ParseException e1) {
+			SessionErrors.add(actionRequest, "remove-account-failed");
+			
+			jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+		}
+		Account account = ActionUtil.accountFromUidNumber(
+				DAOParamUtil.getString(actionRequest, "uidNumber"));
+		
+		actionResponse.setRenderParameter("uidNumber", account.getAttribute("uidNumber"));
+		actionResponse.setRenderParameter("backURL", backURL);
+		
+		if (PermissionsChecker.hasPermission(
+				callingAccount, account, PermissionsChecker.PERMISSION_ACCOUNT_REMOVE)) {
+			try {
+				// Send email 7 days before removal
+				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), callingAccount.getMail().get(0), 
+						callingAccount.getDisplayName(), "Scheduled removal of" + account.getMail().get(0), 
+						PortletUtil.JOB_ACTION_REMOVE_EMAIL_NOTICE, noticeDate);
+				// Remove the account on the date
+				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), callingAccount.getMail().get(0), 
+						callingAccount.getDisplayName(), "Scheduled removal of" + account.getMail().get(0), 
+						PortletUtil.JOB_ACTION_REMOVE, date);
+				// Send an email immediately
+				
+				MailEngine.send(PropsValues.JOB_FROM_EMAIL_ADDRESS, 
+						account.getMail().get(0), 
+						PropsValues.JOB_REMOVE_NOTICE_EMAIL_SUBJECT, 
+						PropsValues.JOB_REMOVE_NOTICE_EMAIL_BODY
+						+ "\n\nRemoval date: " + df.format(date));
+			} catch (Exception e) {
+				SessionErrors.add(actionRequest, "remove-account-failed");
+				
+				jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+			}
+
+			jspPage = PortletUtil.SEARCH_VIEW_JSP;
+		} else {
+			SessionErrors.add(actionRequest, "insufficient-privileges");
+			
+			jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+		}
+			
+		writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Scheduled account removal for " + df.format(date));
+		actionResponse.setRenderParameter("jspPage", jspPage);
+	}
+	
+	public void deleteScheduledRemovalJob(ActionRequest actionRequest,
+			ActionResponse actionResponse) {
+		Account callingAccount =  null;
+		String jspPage = null;
+		try {
+			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+		} catch (Exception e1) {
+			e1.printStackTrace();	
+		}
+		Account account = ActionUtil.accountFromUidNumber(
+				DAOParamUtil.getString(actionRequest, "uidNumber"));
+		String backURL = DAOParamUtil.getString(actionRequest, "backURL");
+	    boolean delete = DAOParamUtil.getBoolean(actionRequest, "delete");
+	    
+	    actionResponse.setRenderParameter("uidNumber", account.getAttribute("uidNumber"));
+		actionResponse.setRenderParameter("backURL", backURL);
+	    
+	    if (PermissionsChecker.hasPermission(
+				callingAccount, account, PermissionsChecker.PERMISSION_ACCOUNT_REMOVE_FORCE)) {
+	    	if (delete) {
+	    		try {
+					JobQueueLocalServiceUtil.deleteJobByEmailAddressAndJobAction(
+							account.getMail().get(0), PortletUtil.JOB_ACTION_REMOVE);
+		    		JobQueueLocalServiceUtil.deleteJobByEmailAddressAndJobAction(
+		    				account.getMail().get(0), PortletUtil.JOB_ACTION_REMOVE_EMAIL_NOTICE);
+				} catch (SystemException e) {
+					SessionErrors.add(actionRequest, "delete-removal-job-failed");
+					
+					jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+				}
+	    	}
+	    	jspPage = PortletUtil.SEARCH_VIEW_JSP;
+	    } else {
+	    	SessionErrors.add(actionRequest, "insufficient-privileges");
+			
+			jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
+	    }
+	    
+	    writeActionLog(actionRequest, account.getMail().get(0), 
+				account.getDisplayName(), account.getAttribute("esuccEntity"), 
+				"Deleted scheduled removal jobs");
+		actionResponse.setRenderParameter("jspPage", jspPage);
+	}
+	
 	public static List<EntityGroup> getAllGroups() {
 		List<SearchFilter> filters = new ArrayList<SearchFilter>();
 		filters.add(new SearchFilter(
@@ -615,8 +777,12 @@ public class AccountManagement extends MVCPortlet {
 			userId = UserLocalServiceUtil.getUserIdByEmailAddress(
 					themeDisplay.getCompanyId(), 
 					themeDisplay.getUser().getEmailAddress());
-//			modifiedUserId = UserLocalServiceUtil.getUserIdByEmailAddress(
-//					themeDisplay.getCompanyId(), account.getMail().get(0));
+			if (!description.equals("Add account")) {
+				modifiedUserId = UserLocalServiceUtil.getUserIdByEmailAddress(
+						themeDisplay.getCompanyId(), emailAddress);
+			} else {
+				modifiedUserId = 1234;
+			}
 		} catch (PortalException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -641,7 +807,7 @@ public class AccountManagement extends MVCPortlet {
 		
 		try {
 			ActionLogLocalServiceUtil.addAction(
-					userId, emailAddress, fullName, fqgn, description);
+					userId, modifiedUserId, emailAddress, fullName, fqgn, description);
 		} catch (SystemException e) {
 			// It's just the log, life goes on
 			System.out.println("Unabled to write to YAMS Action Log");

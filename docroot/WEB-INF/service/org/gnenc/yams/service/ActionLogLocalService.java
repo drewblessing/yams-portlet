@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.service.BaseLocalService;
+import com.liferay.portal.service.InvokableLocalService;
 import com.liferay.portal.service.PersistedModelLocalService;
 
 /**
@@ -36,7 +38,8 @@ import com.liferay.portal.service.PersistedModelLocalService;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface ActionLogLocalService extends PersistedModelLocalService {
+public interface ActionLogLocalService extends BaseLocalService,
+	InvokableLocalService, PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -66,10 +69,11 @@ public interface ActionLogLocalService extends PersistedModelLocalService {
 	* Deletes the action log with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param id the primary key of the action log
+	* @return the action log that was removed
 	* @throws PortalException if a action log with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteActionLog(long id)
+	public org.gnenc.yams.model.ActionLog deleteActionLog(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -77,10 +81,14 @@ public interface ActionLogLocalService extends PersistedModelLocalService {
 	* Deletes the action log from the database. Also notifies the appropriate model listeners.
 	*
 	* @param actionLog the action log
+	* @return the action log that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteActionLog(org.gnenc.yams.model.ActionLog actionLog)
+	public org.gnenc.yams.model.ActionLog deleteActionLog(
+		org.gnenc.yams.model.ActionLog actionLog)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
@@ -231,8 +239,12 @@ public interface ActionLogLocalService extends PersistedModelLocalService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
+
 	public org.gnenc.yams.model.ActionLog addAction(long userId,
-		java.lang.String email, java.lang.String fullName,
+		long modifiedUserId, java.lang.String email, java.lang.String fullName,
 		java.lang.String modifiedFqgn, java.lang.String modifiedDescription)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

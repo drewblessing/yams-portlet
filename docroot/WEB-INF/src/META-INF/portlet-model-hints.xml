@@ -14,6 +14,20 @@
 		<field name="modifiedDescription" type="String" />
 		<field name="modifiedFqgn" type="String" />
 	</model>
+	<model name="org.gnenc.yams.model.JobQueue">
+		<field name="id" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="modifiedDate" type="Date" />
+		<field name="userEmailAddress" type="String" />
+		<field name="jobUserId" type="long" />
+		<field name="jobUserName" type="String" />
+		<field name="jobUserEmailAddress" type="String" />
+		<field name="jobDescription" type="String" />
+		<field name="jobAction" type="String" />
+		<field name="jobDate" type="Date" />
+	</model>
 	<model name="org.gnenc.yams.model.Permissions">
 		<field name="id" type="long" />
 		<field name="companyId" type="long" />

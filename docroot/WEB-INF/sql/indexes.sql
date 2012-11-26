@@ -8,6 +8,11 @@ create index IX_48F29883 on yams_ActionLog (modifiedUserEmailAddress);
 create index IX_E420AEDA on yams_ActionLog (userEmailAddress);
 create index IX_CA89135A on yams_ActionLog (userEmailAddress, modifiedUserEmailAddress);
 
+create index IX_8755C9F8 on yams_JobQueue (jobAction);
+create index IX_EC8B9BD3 on yams_JobQueue (jobDate, jobAction);
+create index IX_73C678A5 on yams_JobQueue (jobUserEmailAddress);
+create index IX_C12A817E on yams_JobQueue (jobUserEmailAddress, jobAction);
+
 create index IX_5315C845 on yams_Permissions (emailAddress);
 create index IX_67802AEB on yams_Permissions (emailAddress, fqgn);
 create index IX_40D70BD3 on yams_Permissions (emailAddress, fqgn, groupPermission);

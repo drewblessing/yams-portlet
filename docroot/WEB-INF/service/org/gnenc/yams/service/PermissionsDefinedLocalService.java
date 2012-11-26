@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.service.BaseLocalService;
+import com.liferay.portal.service.InvokableLocalService;
 import com.liferay.portal.service.PersistedModelLocalService;
 
 /**
@@ -36,8 +38,8 @@ import com.liferay.portal.service.PersistedModelLocalService;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface PermissionsDefinedLocalService
-	extends PersistedModelLocalService {
+public interface PermissionsDefinedLocalService extends BaseLocalService,
+	InvokableLocalService, PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -68,10 +70,12 @@ public interface PermissionsDefinedLocalService
 	* Deletes the permissions defined with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionKey the primary key of the permissions defined
+	* @return the permissions defined that was removed
 	* @throws PortalException if a permissions defined with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissionsDefined(java.lang.String permissionKey)
+	public org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
+		java.lang.String permissionKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -79,11 +83,14 @@ public interface PermissionsDefinedLocalService
 	* Deletes the permissions defined from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionsDefined the permissions defined
+	* @return the permissions defined that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissionsDefined(
+	public org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
 		org.gnenc.yams.model.PermissionsDefined permissionsDefined)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
@@ -236,6 +243,10 @@ public interface PermissionsDefinedLocalService
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
+
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
 
 	/**
 	* NOTE FOR DEVELOPERS:

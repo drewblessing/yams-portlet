@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -304,10 +305,10 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ActionLogModelImpl.ENTITY_CACHE_ENABLED,
 			ActionLogModelImpl.FINDER_CACHE_ENABLED, ActionLogImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ActionLogModelImpl.ENTITY_CACHE_ENABLED,
 			ActionLogModelImpl.FINDER_CACHE_ENABLED, ActionLogImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ActionLogModelImpl.ENTITY_CACHE_ENABLED,
 			ActionLogModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -917,6 +918,17 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(userEmailAddress,
+							actionLog.getUserEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -992,10 +1004,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where userEmailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userEmailAddress the user email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching action log
@@ -1005,32 +1013,47 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findByuserEmailAddress_First(String userEmailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchByuserEmailAddress_First(userEmailAddress,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where userEmailAddress = &#63;.
+	 *
+	 * @param userEmailAddress the user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchByuserEmailAddress_First(String userEmailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<ActionLog> list = findByuserEmailAddress(userEmailAddress, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where userEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userEmailAddress the user email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1041,34 +1064,49 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findByuserEmailAddress_Last(String userEmailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchByuserEmailAddress_Last(userEmailAddress,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where userEmailAddress = &#63;.
+	 *
+	 * @param userEmailAddress the user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchByuserEmailAddress_Last(String userEmailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByuserEmailAddress(userEmailAddress);
 
 		List<ActionLog> list = findByuserEmailAddress(userEmailAddress,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param userEmailAddress the user email address
@@ -1292,6 +1330,16 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedDate, actionLog.getModifiedDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1362,10 +1410,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedDate = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedDate the modified date
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching action log
@@ -1375,32 +1419,47 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedDate_First(Date modifiedDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDate_First(modifiedDate,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedDate = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDate_First(Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<ActionLog> list = findBymodifiedDate(modifiedDate, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedDate the modified date
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1411,34 +1470,49 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedDate_Last(Date modifiedDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDate_Last(modifiedDate,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedDate = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDate_Last(Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countBymodifiedDate(modifiedDate);
 
 		List<ActionLog> list = findBymodifiedDate(modifiedDate, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedDate the modified date
@@ -1659,6 +1733,17 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedDescription,
+							actionLog.getModifiedDescription())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1734,10 +1819,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedDescription = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedDescription the modified description
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching action log
@@ -1747,32 +1828,48 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedDescription_First(
 		String modifiedDescription, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDescription_First(modifiedDescription,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDescription=");
+		msg.append(modifiedDescription);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedDescription = &#63;.
+	 *
+	 * @param modifiedDescription the modified description
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDescription_First(
+		String modifiedDescription, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<ActionLog> list = findBymodifiedDescription(modifiedDescription,
 				0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDescription=");
-			msg.append(modifiedDescription);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedDescription = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedDescription the modified description
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1783,34 +1880,50 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedDescription_Last(
 		String modifiedDescription, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDescription_Last(modifiedDescription,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDescription=");
+		msg.append(modifiedDescription);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedDescription = &#63;.
+	 *
+	 * @param modifiedDescription the modified description
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDescription_Last(
+		String modifiedDescription, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countBymodifiedDescription(modifiedDescription);
 
 		List<ActionLog> list = findBymodifiedDescription(modifiedDescription,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDescription=");
-			msg.append(modifiedDescription);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedDescription the modified description
@@ -2034,6 +2147,16 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedFqgn, actionLog.getModifiedFqgn())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2109,10 +2232,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedFqgn = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedFqgn the modified fqgn
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching action log
@@ -2122,32 +2241,47 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedFqgn_First(String modifiedFqgn,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedFqgn_First(modifiedFqgn,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedFqgn=");
+		msg.append(modifiedFqgn);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedFqgn = &#63;.
+	 *
+	 * @param modifiedFqgn the modified fqgn
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedFqgn_First(String modifiedFqgn,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<ActionLog> list = findBymodifiedFqgn(modifiedFqgn, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedFqgn=");
-			msg.append(modifiedFqgn);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedFqgn = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedFqgn the modified fqgn
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2158,34 +2292,49 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedFqgn_Last(String modifiedFqgn,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedFqgn_Last(modifiedFqgn,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedFqgn=");
+		msg.append(modifiedFqgn);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedFqgn = &#63;.
+	 *
+	 * @param modifiedFqgn the modified fqgn
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedFqgn_Last(String modifiedFqgn,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countBymodifiedFqgn(modifiedFqgn);
 
 		List<ActionLog> list = findBymodifiedFqgn(modifiedFqgn, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedFqgn=");
-			msg.append(modifiedFqgn);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedFqgn the modified fqgn
@@ -2412,6 +2561,17 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedUserEmailAddress,
+							actionLog.getModifiedUserEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2487,10 +2647,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedUserEmailAddress the modified user email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching action log
@@ -2500,32 +2656,48 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedUserEmailAddress_First(
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedUserEmailAddress_First(modifiedUserEmailAddress,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedUserEmailAddress_First(
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<ActionLog> list = findBymodifiedUserEmailAddress(modifiedUserEmailAddress,
 				0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedUserEmailAddress the modified user email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2536,34 +2708,50 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	public ActionLog findBymodifiedUserEmailAddress_Last(
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedUserEmailAddress_Last(modifiedUserEmailAddress,
+				orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedUserEmailAddress_Last(
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countBymodifiedUserEmailAddress(modifiedUserEmailAddress);
 
 		List<ActionLog> list = findBymodifiedUserEmailAddress(modifiedUserEmailAddress,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedUserEmailAddress the modified user email address
@@ -2794,6 +2982,18 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedFqgn, actionLog.getModifiedFqgn()) ||
+						!Validator.equals(modifiedDate,
+							actionLog.getModifiedDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2880,10 +3080,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedFqgn the modified fqgn
 	 * @param modifiedDate the modified date
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2895,35 +3091,52 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String modifiedFqgn, Date modifiedDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedFqgnAndModifiedDate_First(modifiedFqgn,
+				modifiedDate, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedFqgn=");
+		msg.append(modifiedFqgn);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param modifiedFqgn the modified fqgn
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedFqgnAndModifiedDate_First(
+		String modifiedFqgn, Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<ActionLog> list = findBymodifiedFqgnAndModifiedDate(modifiedFqgn,
 				modifiedDate, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedFqgn=");
-			msg.append(modifiedFqgn);
-
-			msg.append(", modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedFqgn the modified fqgn
 	 * @param modifiedDate the modified date
@@ -2936,38 +3149,55 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String modifiedFqgn, Date modifiedDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedFqgnAndModifiedDate_Last(modifiedFqgn,
+				modifiedDate, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedFqgn=");
+		msg.append(modifiedFqgn);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param modifiedFqgn the modified fqgn
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedFqgnAndModifiedDate_Last(
+		String modifiedFqgn, Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countBymodifiedFqgnAndModifiedDate(modifiedFqgn,
 				modifiedDate);
 
 		List<ActionLog> list = findBymodifiedFqgnAndModifiedDate(modifiedFqgn,
 				modifiedDate, count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedFqgn=");
-			msg.append(modifiedFqgn);
-
-			msg.append(", modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedFqgn the modified fqgn
@@ -3213,6 +3443,19 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(userEmailAddress,
+							actionLog.getUserEmailAddress()) ||
+						!Validator.equals(modifiedUserEmailAddress,
+							actionLog.getModifiedUserEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3304,10 +3547,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userEmailAddress the user email address
 	 * @param modifiedUserEmailAddress the modified user email address
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3319,35 +3558,52 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String userEmailAddress, String modifiedUserEmailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchByuserEmailAddressAndModifiedUserEmailAddress_First(userEmailAddress,
+				modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchByuserEmailAddressAndModifiedUserEmailAddress_First(
+		String userEmailAddress, String modifiedUserEmailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<ActionLog> list = findByuserEmailAddressAndModifiedUserEmailAddress(userEmailAddress,
 				modifiedUserEmailAddress, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userEmailAddress the user email address
 	 * @param modifiedUserEmailAddress the modified user email address
@@ -3360,38 +3616,55 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String userEmailAddress, String modifiedUserEmailAddress,
 		OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchByuserEmailAddressAndModifiedUserEmailAddress_Last(userEmailAddress,
+				modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchByuserEmailAddressAndModifiedUserEmailAddress_Last(
+		String userEmailAddress, String modifiedUserEmailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByuserEmailAddressAndModifiedUserEmailAddress(userEmailAddress,
 				modifiedUserEmailAddress);
 
 		List<ActionLog> list = findByuserEmailAddressAndModifiedUserEmailAddress(userEmailAddress,
 				modifiedUserEmailAddress, count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param userEmailAddress the user email address
@@ -3651,6 +3924,20 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedDate, actionLog.getModifiedDate()) ||
+						!Validator.equals(userEmailAddress,
+							actionLog.getUserEmailAddress()) ||
+						!Validator.equals(modifiedUserEmailAddress,
+							actionLog.getModifiedUserEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3753,10 +4040,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedDate the modified date
 	 * @param userEmailAddress the user email address
 	 * @param modifiedUserEmailAddress the modified user email address
@@ -3769,39 +4052,58 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		Date modifiedDate, String userEmailAddress,
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_First(modifiedDate,
+				userEmailAddress, modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(", userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_First(
+		Date modifiedDate, String userEmailAddress,
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<ActionLog> list = findBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress(modifiedDate,
 				userEmailAddress, modifiedUserEmailAddress, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(", userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedDate the modified date
 	 * @param userEmailAddress the user email address
@@ -3815,6 +4117,45 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		Date modifiedDate, String userEmailAddress,
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_Last(modifiedDate,
+				userEmailAddress, modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(", userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_Last(
+		Date modifiedDate, String userEmailAddress,
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress(modifiedDate,
 				userEmailAddress, modifiedUserEmailAddress);
 
@@ -3822,35 +4163,15 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 				userEmailAddress, modifiedUserEmailAddress, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDate=");
-			msg.append(modifiedDate);
-
-			msg.append(", userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedDate the modified date
@@ -4124,6 +4445,21 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		List<ActionLog> list = (List<ActionLog>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ActionLog actionLog : list) {
+				if (!Validator.equals(modifiedDescription,
+							actionLog.getModifiedDescription()) ||
+						!Validator.equals(userEmailAddress,
+							actionLog.getUserEmailAddress()) ||
+						!Validator.equals(modifiedUserEmailAddress,
+							actionLog.getModifiedUserEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4231,10 +4567,6 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 	/**
 	 * Returns the first action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param modifiedDescription the modified description
 	 * @param userEmailAddress the user email address
 	 * @param modifiedUserEmailAddress the modified user email address
@@ -4247,39 +4579,58 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String modifiedDescription, String userEmailAddress,
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_First(modifiedDescription,
+				userEmailAddress, modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDescription=");
+		msg.append(modifiedDescription);
+
+		msg.append(", userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedDescription the modified description
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_First(
+		String modifiedDescription, String userEmailAddress,
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<ActionLog> list = findBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress(modifiedDescription,
 				userEmailAddress, modifiedUserEmailAddress, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDescription=");
-			msg.append(modifiedDescription);
-
-			msg.append(", userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param modifiedDescription the modified description
 	 * @param userEmailAddress the user email address
@@ -4293,6 +4644,45 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 		String modifiedDescription, String userEmailAddress,
 		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
 		throws NoSuchActionLogException, SystemException {
+		ActionLog actionLog = fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_Last(modifiedDescription,
+				userEmailAddress, modifiedUserEmailAddress, orderByComparator);
+
+		if (actionLog != null) {
+			return actionLog;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("modifiedDescription=");
+		msg.append(modifiedDescription);
+
+		msg.append(", userEmailAddress=");
+		msg.append(userEmailAddress);
+
+		msg.append(", modifiedUserEmailAddress=");
+		msg.append(modifiedUserEmailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	 *
+	 * @param modifiedDescription the modified description
+	 * @param userEmailAddress the user email address
+	 * @param modifiedUserEmailAddress the modified user email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ActionLog fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_Last(
+		String modifiedDescription, String userEmailAddress,
+		String modifiedUserEmailAddress, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress(modifiedDescription,
 				userEmailAddress, modifiedUserEmailAddress);
 
@@ -4300,35 +4690,15 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 				userEmailAddress, modifiedUserEmailAddress, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("modifiedDescription=");
-			msg.append(modifiedDescription);
-
-			msg.append(", userEmailAddress=");
-			msg.append(userEmailAddress);
-
-			msg.append(", modifiedUserEmailAddress=");
-			msg.append(modifiedUserEmailAddress);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchActionLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param id the primary key of the current action log
 	 * @param modifiedDescription the modified description
@@ -4570,11 +4940,11 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 
@@ -5541,6 +5911,8 @@ public class ActionLogPersistenceImpl extends BasePersistenceImpl<ActionLog>
 
 	@BeanReference(type = ActionLogPersistence.class)
 	protected ActionLogPersistence actionLogPersistence;
+	@BeanReference(type = JobQueuePersistence.class)
+	protected JobQueuePersistence jobQueuePersistence;
 	@BeanReference(type = PermissionsPersistence.class)
 	protected PermissionsPersistence permissionsPersistence;
 	@BeanReference(type = PermissionsDefinedPersistence.class)

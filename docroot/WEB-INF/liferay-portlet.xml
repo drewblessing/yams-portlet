@@ -13,6 +13,26 @@
 	<portlet>
 		<portlet-name>account-management</portlet-name>
 		<icon>/icon.png</icon>
+		<scheduler-entry>
+ 		<scheduler-description>Remove accounts</scheduler-description>
+ 			<scheduler-event-listener-class>org.gnenc.yams.portlet.job.RemoveAccountJob</scheduler-event-listener-class>
+ 			<trigger>
+ 				<cron>
+ 					<cron-trigger-value>0 37 17 * * ?</cron-trigger-value>
+<!--      				<cron-trigger-value>0 1 0 * * ?</cron-trigger-value> -->
+ 				</cron>
+ 			</trigger>
+		</scheduler-entry>
+		<scheduler-entry>
+ 		<scheduler-description>Pre-remove email notice</scheduler-description>
+ 			<scheduler-event-listener-class>org.gnenc.yams.portlet.job.RemoveAccountEmailNoticeJob</scheduler-event-listener-class>
+ 			<trigger>
+ 				<cron>
+ 					<cron-trigger-value>0 40 17 * * ?</cron-trigger-value>
+<!--      				<cron-trigger-value>0 1 1 * * ?</cron-trigger-value> -->
+ 				</cron>
+ 			</trigger>
+		</scheduler-entry>
 		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
 		<friendly-url-mapping>yams</friendly-url-mapping>
 		<friendly-url-routes>org/gnenc/yams/yams-friendly-url-routes.xml</friendly-url-routes>

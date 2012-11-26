@@ -17,6 +17,7 @@ package org.gnenc.yams.model;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
@@ -27,6 +28,8 @@ import java.io.Serializable;
 import java.lang.reflect.Proxy;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Drew A. Blessing
@@ -58,6 +61,94 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("id", getId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("emailAddress", getEmailAddress());
+		attributes.put("fqgn", getFqgn());
+		attributes.put("permissions", getPermissions());
+		attributes.put("permissionsGrantable", getPermissionsGrantable());
+		attributes.put("groupPermission", getGroupPermission());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String emailAddress = (String)attributes.get("emailAddress");
+
+		if (emailAddress != null) {
+			setEmailAddress(emailAddress);
+		}
+
+		String fqgn = (String)attributes.get("fqgn");
+
+		if (fqgn != null) {
+			setFqgn(fqgn);
+		}
+
+		Long permissions = (Long)attributes.get("permissions");
+
+		if (permissions != null) {
+			setPermissions(permissions);
+		}
+
+		Long permissionsGrantable = (Long)attributes.get("permissionsGrantable");
+
+		if (permissionsGrantable != null) {
+			setPermissionsGrantable(permissionsGrantable);
+		}
+
+		Boolean groupPermission = (Boolean)attributes.get("groupPermission");
+
+		if (groupPermission != null) {
+			setGroupPermission(groupPermission);
+		}
 	}
 
 	public long getId() {
@@ -158,6 +249,14 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 
 	public void setGroupPermission(boolean groupPermission) {
 		_groupPermission = groupPermission;
+	}
+
+	public BaseModel<?> getPermissionsRemoteModel() {
+		return _permissionsRemoteModel;
+	}
+
+	public void setPermissionsRemoteModel(BaseModel<?> permissionsRemoteModel) {
+		_permissionsRemoteModel = permissionsRemoteModel;
 	}
 
 	public void persist() throws SystemException {
@@ -336,4 +435,5 @@ public class PermissionsClp extends BaseModelImpl<Permissions>
 	private long _permissions;
 	private long _permissionsGrantable;
 	private boolean _groupPermission;
+	private BaseModel<?> _permissionsRemoteModel;
 }

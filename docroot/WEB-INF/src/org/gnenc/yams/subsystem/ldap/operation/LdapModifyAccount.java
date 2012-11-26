@@ -67,6 +67,10 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, staff);
 				
 				staff.setDn(LdapAccountHelper.parseDn(staff.getDn().toString()));
+				if (account.getAttribute("removeAccount").equalsIgnoreCase("TRUE")) {
+					staff.setEsuccAccountEnabled("FALSE");
+					staff.setEsuccAccountDisabledReason("Removed");
+				}
 				
 				if(!account.getPassword().isEmpty()) {
 					staff.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));
@@ -85,6 +89,10 @@ public class LdapModifyAccount extends AbstractLdapOperation implements
 				LdapAccountHelper.convertSystemAccountToExistingLdapAccount(account, student);
 			
 				student.setDn(LdapAccountHelper.parseDn(student.getDn().toString()));
+				if (account.getAttribute("removeAccount").equalsIgnoreCase("TRUE")) {
+					student.setEsuccAccountEnabled("FALSE");
+					student.setEsuccAccountDisabledReason("Removed");
+				}
 				
 				if(!account.getPassword().isEmpty()) {
 					student.setUserPassword(passwordEncoder.encryptSha1(account.getPassword()));

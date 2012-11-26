@@ -61,25 +61,32 @@ public class PermissionsDefinedLocalServiceWrapper
 	* Deletes the permissions defined with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionKey the primary key of the permissions defined
+	* @return the permissions defined that was removed
 	* @throws PortalException if a permissions defined with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissionsDefined(java.lang.String permissionKey)
+	public org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
+		java.lang.String permissionKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_permissionsDefinedLocalService.deletePermissionsDefined(permissionKey);
+		return _permissionsDefinedLocalService.deletePermissionsDefined(permissionKey);
 	}
 
 	/**
 	* Deletes the permissions defined from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionsDefined the permissions defined
+	* @return the permissions defined that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissionsDefined(
+	public org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
 		org.gnenc.yams.model.PermissionsDefined permissionsDefined)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		_permissionsDefinedLocalService.deletePermissionsDefined(permissionsDefined);
+		return _permissionsDefinedLocalService.deletePermissionsDefined(permissionsDefined);
+	}
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _permissionsDefinedLocalService.dynamicQuery();
 	}
 
 	/**
@@ -256,6 +263,13 @@ public class PermissionsDefinedLocalServiceWrapper
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_permissionsDefinedLocalService.setBeanIdentifier(beanIdentifier);
+	}
+
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _permissionsDefinedLocalService.invokeMethod(name,
+			parameterTypes, arguments);
 	}
 
 	/**

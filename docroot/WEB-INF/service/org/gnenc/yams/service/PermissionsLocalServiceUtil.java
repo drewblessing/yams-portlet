@@ -15,9 +15,8 @@
 package org.gnenc.yams.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the permissions local service. This utility wraps {@link org.gnenc.yams.service.impl.PermissionsLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -66,25 +65,31 @@ public class PermissionsLocalServiceUtil {
 	* Deletes the permissions with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param id the primary key of the permissions
+	* @return the permissions that was removed
 	* @throws PortalException if a permissions with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deletePermissions(long id)
+	public static org.gnenc.yams.model.Permissions deletePermissions(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deletePermissions(id);
+		return getService().deletePermissions(id);
 	}
 
 	/**
 	* Deletes the permissions from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissions the permissions
+	* @return the permissions that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deletePermissions(
+	public static org.gnenc.yams.model.Permissions deletePermissions(
 		org.gnenc.yams.model.Permissions permissions)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deletePermissions(permissions);
+		return getService().deletePermissions(permissions);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -258,6 +263,12 @@ public class PermissionsLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	/**
 	* NOTE FOR DEVELOPERS:
 	*
@@ -318,34 +329,27 @@ public class PermissionsLocalServiceUtil {
 
 	public static PermissionsLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					PermissionsLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					PermissionsLocalService.class.getName(), portletClassLoader);
-
-			_service = new PermissionsLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof PermissionsLocalService) {
+				_service = (PermissionsLocalService)invokableLocalService;
+			}
+			else {
+				_service = new PermissionsLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(PermissionsLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(PermissionsLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PermissionsLocalService service) {
-		MethodCache.remove(PermissionsLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PermissionsLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PermissionsLocalService.class);
 	}
 
 	private static PermissionsLocalService _service;

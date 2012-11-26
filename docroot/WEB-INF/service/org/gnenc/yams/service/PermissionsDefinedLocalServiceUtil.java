@@ -15,9 +15,8 @@
 package org.gnenc.yams.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the permissions defined local service. This utility wraps {@link org.gnenc.yams.service.impl.PermissionsDefinedLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -67,25 +66,32 @@ public class PermissionsDefinedLocalServiceUtil {
 	* Deletes the permissions defined with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionKey the primary key of the permissions defined
+	* @return the permissions defined that was removed
 	* @throws PortalException if a permissions defined with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deletePermissionsDefined(java.lang.String permissionKey)
+	public static org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
+		java.lang.String permissionKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deletePermissionsDefined(permissionKey);
+		return getService().deletePermissionsDefined(permissionKey);
 	}
 
 	/**
 	* Deletes the permissions defined from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissionsDefined the permissions defined
+	* @return the permissions defined that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deletePermissionsDefined(
+	public static org.gnenc.yams.model.PermissionsDefined deletePermissionsDefined(
 		org.gnenc.yams.model.PermissionsDefined permissionsDefined)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deletePermissionsDefined(permissionsDefined);
+		return getService().deletePermissionsDefined(permissionsDefined);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -262,6 +268,12 @@ public class PermissionsDefinedLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	/**
 	* NOTE FOR DEVELOPERS:
 	*
@@ -279,35 +291,27 @@ public class PermissionsDefinedLocalServiceUtil {
 
 	public static PermissionsDefinedLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					PermissionsDefinedLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					PermissionsDefinedLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new PermissionsDefinedLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof PermissionsDefinedLocalService) {
+				_service = (PermissionsDefinedLocalService)invokableLocalService;
+			}
+			else {
+				_service = new PermissionsDefinedLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(PermissionsDefinedLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(PermissionsDefinedLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PermissionsDefinedLocalService service) {
-		MethodCache.remove(PermissionsDefinedLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PermissionsDefinedLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PermissionsDefinedLocalService.class);
 	}
 
 	private static PermissionsDefinedLocalService _service;

@@ -16,6 +16,10 @@ package org.gnenc.yams.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ActionLog}.
@@ -36,6 +40,94 @@ public class ActionLogWrapper implements ActionLog, ModelWrapper<ActionLog> {
 
 	public String getModelClassName() {
 		return ActionLog.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("id", getId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("userEmailAddress", getUserEmailAddress());
+		attributes.put("modifiedUserId", getModifiedUserId());
+		attributes.put("modifiedUserName", getModifiedUserName());
+		attributes.put("modifiedUserEmailAddress", getModifiedUserEmailAddress());
+		attributes.put("modifiedDescription", getModifiedDescription());
+		attributes.put("modifiedFqgn", getModifiedFqgn());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String userEmailAddress = (String)attributes.get("userEmailAddress");
+
+		if (userEmailAddress != null) {
+			setUserEmailAddress(userEmailAddress);
+		}
+
+		Long modifiedUserId = (Long)attributes.get("modifiedUserId");
+
+		if (modifiedUserId != null) {
+			setModifiedUserId(modifiedUserId);
+		}
+
+		String modifiedUserName = (String)attributes.get("modifiedUserName");
+
+		if (modifiedUserName != null) {
+			setModifiedUserName(modifiedUserName);
+		}
+
+		String modifiedUserEmailAddress = (String)attributes.get(
+				"modifiedUserEmailAddress");
+
+		if (modifiedUserEmailAddress != null) {
+			setModifiedUserEmailAddress(modifiedUserEmailAddress);
+		}
+
+		String modifiedDescription = (String)attributes.get(
+				"modifiedDescription");
+
+		if (modifiedDescription != null) {
+			setModifiedDescription(modifiedDescription);
+		}
+
+		String modifiedFqgn = (String)attributes.get("modifiedFqgn");
+
+		if (modifiedFqgn != null) {
+			setModifiedFqgn(modifiedFqgn);
+		}
 	}
 
 	/**

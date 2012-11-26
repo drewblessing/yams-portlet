@@ -12,6 +12,21 @@ create table yams_ActionLog (
 	modifiedFqgn VARCHAR(75) null
 );
 
+create table yams_JobQueue (
+	id_ LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	modifiedDate DATE null,
+	userEmailAddress VARCHAR(75) null,
+	jobUserId LONG,
+	jobUserName VARCHAR(75) null,
+	jobUserEmailAddress VARCHAR(75) null,
+	jobDescription VARCHAR(75) null,
+	jobAction VARCHAR(75) null,
+	jobDate DATE null
+);
+
 create table yams_Permissions (
 	id_ LONG not null primary key,
 	companyId LONG,

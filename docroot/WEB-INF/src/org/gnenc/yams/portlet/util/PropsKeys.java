@@ -28,6 +28,12 @@ import com.liferay.util.portlet.PortletProps;
  */
 public class PropsKeys {
 
+	public static final String JOB_FROM_EMAIL_ADDRESS = "yams.job.from.email.address";
+	
+	public static final String JOB_REMOVE_NOTICE_EMAIL_SUBJECT = "yams.job.remove.notice.email.subject";
+	
+	public static final String JOB_REMOVE_NOTICE_EMAIL_BODY = "yams.job.remove.notice.email.body";
+	
 	public static final String LDAP_PROVIDER_URL = "ldap.provider.url";
 
 	public static final String LDAP_BASE_DN = "ldap.base.dn";

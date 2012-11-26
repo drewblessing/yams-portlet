@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.messaging.Message;
 
 import org.gnenc.yams.service.ActionLogLocalServiceUtil;
 import org.gnenc.yams.service.ClpSerializer;
+import org.gnenc.yams.service.JobQueueLocalServiceUtil;
 import org.gnenc.yams.service.PermissionsDefinedLocalServiceUtil;
 import org.gnenc.yams.service.PermissionsLocalServiceUtil;
 
@@ -38,6 +39,8 @@ public class ClpMessageListener extends BaseMessageListener {
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
 			ActionLogLocalServiceUtil.clearService();
+
+			JobQueueLocalServiceUtil.clearService();
 
 			PermissionsLocalServiceUtil.clearService();
 

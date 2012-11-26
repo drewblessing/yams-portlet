@@ -59,24 +59,31 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 	* Deletes the permissions with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param id the primary key of the permissions
+	* @return the permissions that was removed
 	* @throws PortalException if a permissions with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissions(long id)
+	public org.gnenc.yams.model.Permissions deletePermissions(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_permissionsLocalService.deletePermissions(id);
+		return _permissionsLocalService.deletePermissions(id);
 	}
 
 	/**
 	* Deletes the permissions from the database. Also notifies the appropriate model listeners.
 	*
 	* @param permissions the permissions
+	* @return the permissions that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deletePermissions(org.gnenc.yams.model.Permissions permissions)
+	public org.gnenc.yams.model.Permissions deletePermissions(
+		org.gnenc.yams.model.Permissions permissions)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		_permissionsLocalService.deletePermissions(permissions);
+		return _permissionsLocalService.deletePermissions(permissions);
+	}
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _permissionsLocalService.dynamicQuery();
 	}
 
 	/**
@@ -248,6 +255,13 @@ public class PermissionsLocalServiceWrapper implements PermissionsLocalService,
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_permissionsLocalService.setBeanIdentifier(beanIdentifier);
+	}
+
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _permissionsLocalService.invokeMethod(name, parameterTypes,
+			arguments);
 	}
 
 	/**

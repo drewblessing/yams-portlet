@@ -148,10 +148,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where userEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param userEmailAddress the user email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching action log
@@ -165,11 +161,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where userEmailAddress = &#63;.
+	* Returns the first action log in the ordered set where userEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param userEmailAddress the user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchByuserEmailAddress_First(
+		java.lang.String userEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where userEmailAddress = &#63;.
 	*
 	* @param userEmailAddress the user email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -184,11 +189,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63;.
+	* Returns the last action log in the ordered set where userEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param userEmailAddress the user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchByuserEmailAddress_Last(
+		java.lang.String userEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param userEmailAddress the user email address
@@ -253,10 +267,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedDate the modified date
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching action log
@@ -270,11 +280,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedDate = &#63;.
+	* Returns the first action log in the ordered set where modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDate_First(
+		java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedDate = &#63;.
 	*
 	* @param modifiedDate the modified date
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -289,11 +308,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63;.
+	* Returns the last action log in the ordered set where modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDate_Last(
+		java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedDate the modified date
@@ -358,10 +386,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedDescription = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedDescription the modified description
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching action log
@@ -375,11 +399,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedDescription = &#63;.
+	* Returns the first action log in the ordered set where modifiedDescription = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDescription the modified description
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDescription_First(
+		java.lang.String modifiedDescription,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedDescription = &#63;.
 	*
 	* @param modifiedDescription the modified description
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -394,11 +427,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63;.
+	* Returns the last action log in the ordered set where modifiedDescription = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDescription the modified description
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDescription_Last(
+		java.lang.String modifiedDescription,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedDescription the modified description
@@ -463,10 +505,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedFqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedFqgn the modified fqgn
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching action log
@@ -480,11 +518,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedFqgn = &#63;.
+	* Returns the first action log in the ordered set where modifiedFqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedFqgn the modified fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedFqgn_First(
+		java.lang.String modifiedFqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedFqgn = &#63;.
 	*
 	* @param modifiedFqgn the modified fqgn
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -499,11 +546,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63;.
+	* Returns the last action log in the ordered set where modifiedFqgn = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedFqgn the modified fqgn
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedFqgn_Last(
+		java.lang.String modifiedFqgn,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedFqgn the modified fqgn
@@ -568,10 +624,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedUserEmailAddress the modified user email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching action log
@@ -585,11 +637,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedUserEmailAddress = &#63;.
+	* Returns the first action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedUserEmailAddress_First(
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	*
 	* @param modifiedUserEmailAddress the modified user email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -604,11 +665,20 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedUserEmailAddress = &#63;.
+	* Returns the last action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedUserEmailAddress_Last(
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedUserEmailAddress = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedUserEmailAddress the modified user email address
@@ -677,10 +747,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedFqgn the modified fqgn
 	* @param modifiedDate the modified date
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -695,11 +761,21 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
+	* Returns the first action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedFqgn the modified fqgn
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedFqgnAndModifiedDate_First(
+		java.lang.String modifiedFqgn, java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	*
 	* @param modifiedFqgn the modified fqgn
 	* @param modifiedDate the modified date
@@ -715,11 +791,21 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
+	* Returns the last action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedFqgn the modified fqgn
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedFqgnAndModifiedDate_Last(
+		java.lang.String modifiedFqgn, java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedFqgn = &#63; and modifiedDate = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedFqgn the modified fqgn
@@ -791,10 +877,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param userEmailAddress the user email address
 	* @param modifiedUserEmailAddress the modified user email address
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -810,11 +892,22 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the first action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchByuserEmailAddressAndModifiedUserEmailAddress_First(
+		java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param userEmailAddress the user email address
 	* @param modifiedUserEmailAddress the modified user email address
@@ -831,11 +924,22 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the last action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchByuserEmailAddressAndModifiedUserEmailAddress_Last(
+		java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param userEmailAddress the user email address
@@ -911,10 +1015,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedDate the modified date
 	* @param userEmailAddress the user email address
 	* @param modifiedUserEmailAddress the modified user email address
@@ -931,11 +1031,23 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the first action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDate the modified date
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_First(
+		java.util.Date modifiedDate, java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param modifiedDate the modified date
 	* @param userEmailAddress the user email address
@@ -953,11 +1065,23 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the last action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDate the modified date
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDateAndUserEmailAddressAndModifiedUserEmailAddress_Last(
+		java.util.Date modifiedDate, java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedDate = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedDate the modified date
@@ -1038,10 +1162,6 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 	/**
 	* Returns the first action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param modifiedDescription the modified description
 	* @param userEmailAddress the user email address
 	* @param modifiedUserEmailAddress the modified user email address
@@ -1059,11 +1179,24 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the last action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the first action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDescription the modified description
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_First(
+		java.lang.String modifiedDescription,
+		java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param modifiedDescription the modified description
 	* @param userEmailAddress the user email address
@@ -1082,11 +1215,24 @@ public interface ActionLogPersistence extends BasePersistence<ActionLog> {
 			org.gnenc.yams.NoSuchActionLogException;
 
 	/**
-	* Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
+	* Returns the last action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param modifiedDescription the modified description
+	* @param userEmailAddress the user email address
+	* @param modifiedUserEmailAddress the modified user email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching action log, or <code>null</code> if a matching action log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.gnenc.yams.model.ActionLog fetchBymodifiedDescriptionAndUserEmailAddressAndModifiedUserEmailAddress_Last(
+		java.lang.String modifiedDescription,
+		java.lang.String userEmailAddress,
+		java.lang.String modifiedUserEmailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the action logs before and after the current action log in the ordered set where modifiedDescription = &#63; and userEmailAddress = &#63; and modifiedUserEmailAddress = &#63;.
 	*
 	* @param id the primary key of the current action log
 	* @param modifiedDescription the modified description

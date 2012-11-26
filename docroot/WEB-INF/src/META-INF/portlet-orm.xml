@@ -24,7 +24,35 @@
 			<basic name="modifiedUserEmailAddress" />
 			<basic name="modifiedDescription" />
 			<basic name="modifiedFqgn" />
+			<transient name="modelAttributes" />
 			<transient name="modifiedUserUuid" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.gnenc.yams.model.impl.JobQueueModelImpl">
+		<attributes>
+			<id name="id">
+				<column name="ID_" />
+			</id>
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="userEmailAddress" />
+			<basic name="jobUserId" />
+			<basic name="jobUserName" />
+			<basic name="jobUserEmailAddress" />
+			<basic name="jobDescription" />
+			<basic name="jobAction" />
+			<basic name="jobDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="jobUserUuid" />
+			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -49,6 +77,7 @@
 			<basic name="permissions" />
 			<basic name="permissionsGrantable" />
 			<basic name="groupPermission" />
+			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -67,6 +96,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="bitLocation" />
+			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -74,6 +104,10 @@
 	</mapped-superclass>
 	<entity class="org.gnenc.yams.model.impl.ActionLogImpl" name="ActionLog">
 		<table name="yams_ActionLog" />
+		<attributes />
+	</entity>
+	<entity class="org.gnenc.yams.model.impl.JobQueueImpl" name="JobQueue">
+		<table name="yams_JobQueue" />
 		<attributes />
 	</entity>
 	<entity class="org.gnenc.yams.model.impl.PermissionsImpl" name="Permissions">

@@ -28,6 +28,12 @@ import com.liferay.util.portlet.PortletProps;
  *
  */
 public class PropsValues {
+	
+	public static final String JOB_FROM_EMAIL_ADDRESS = PortletProps.get(PropsKeys.JOB_FROM_EMAIL_ADDRESS);
+	
+	public static final String JOB_REMOVE_NOTICE_EMAIL_SUBJECT = PortletProps.get(PropsKeys.JOB_REMOVE_NOTICE_EMAIL_SUBJECT);
+	
+	public static final String JOB_REMOVE_NOTICE_EMAIL_BODY = PortletProps.get(PropsKeys.JOB_REMOVE_NOTICE_EMAIL_BODY);
 
 	public static final String LDAP_PROVIDER_URL = PortletProps.get(PropsKeys.LDAP_PROVIDER_URL);
 

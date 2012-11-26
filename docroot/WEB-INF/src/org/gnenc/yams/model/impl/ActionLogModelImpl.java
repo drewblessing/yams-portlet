@@ -37,6 +37,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the ActionLog service. Represents a row in the &quot;yams_ActionLog&quot; database table, with each column mapped to a property of this class.
@@ -121,6 +123,96 @@ public class ActionLogModelImpl extends BaseModelImpl<ActionLog>
 
 	public String getModelClassName() {
 		return ActionLog.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("id", getId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("userEmailAddress", getUserEmailAddress());
+		attributes.put("modifiedUserId", getModifiedUserId());
+		attributes.put("modifiedUserName", getModifiedUserName());
+		attributes.put("modifiedUserEmailAddress", getModifiedUserEmailAddress());
+		attributes.put("modifiedDescription", getModifiedDescription());
+		attributes.put("modifiedFqgn", getModifiedFqgn());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String userEmailAddress = (String)attributes.get("userEmailAddress");
+
+		if (userEmailAddress != null) {
+			setUserEmailAddress(userEmailAddress);
+		}
+
+		Long modifiedUserId = (Long)attributes.get("modifiedUserId");
+
+		if (modifiedUserId != null) {
+			setModifiedUserId(modifiedUserId);
+		}
+
+		String modifiedUserName = (String)attributes.get("modifiedUserName");
+
+		if (modifiedUserName != null) {
+			setModifiedUserName(modifiedUserName);
+		}
+
+		String modifiedUserEmailAddress = (String)attributes.get(
+				"modifiedUserEmailAddress");
+
+		if (modifiedUserEmailAddress != null) {
+			setModifiedUserEmailAddress(modifiedUserEmailAddress);
+		}
+
+		String modifiedDescription = (String)attributes.get(
+				"modifiedDescription");
+
+		if (modifiedDescription != null) {
+			setModifiedDescription(modifiedDescription);
+		}
+
+		String modifiedFqgn = (String)attributes.get("modifiedFqgn");
+
+		if (modifiedFqgn != null) {
+			setModifiedFqgn(modifiedFqgn);
+		}
 	}
 
 	public long getId() {
@@ -313,6 +405,19 @@ public class ActionLogModelImpl extends BaseModelImpl<ActionLog>
 	}
 
 	@Override
+	public ExpandoBridge getExpandoBridge() {
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			ActionLog.class.getName(), getPrimaryKey());
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
 	public ActionLog toEscapedModel() {
 		if (_escapedModelProxy == null) {
 			_escapedModelProxy = (ActionLog)ProxyUtil.newProxyInstance(_classLoader,
@@ -321,21 +426,6 @@ public class ActionLogModelImpl extends BaseModelImpl<ActionLog>
 		}
 
 		return _escapedModelProxy;
-	}
-
-	@Override
-	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					ActionLog.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
-	}
-
-	@Override
-	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
 	}
 
 	@Override
@@ -603,7 +693,6 @@ public class ActionLogModelImpl extends BaseModelImpl<ActionLog>
 	private String _originalModifiedDescription;
 	private String _modifiedFqgn;
 	private String _originalModifiedFqgn;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
 	private ActionLog _escapedModelProxy;
 }

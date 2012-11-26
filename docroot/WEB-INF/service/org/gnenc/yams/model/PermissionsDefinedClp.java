@@ -17,6 +17,7 @@ package org.gnenc.yams.model;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
@@ -27,6 +28,8 @@ import java.io.Serializable;
 import java.lang.reflect.Proxy;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Drew A. Blessing
@@ -58,6 +61,66 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey((String)primaryKeyObj);
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("permissionKey", getPermissionKey());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("bitLocation", getBitLocation());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String permissionKey = (String)attributes.get("permissionKey");
+
+		if (permissionKey != null) {
+			setPermissionKey(permissionKey);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Integer bitLocation = (Integer)attributes.get("bitLocation");
+
+		if (bitLocation != null) {
+			setBitLocation(bitLocation);
+		}
 	}
 
 	public String getPermissionKey() {
@@ -122,6 +185,15 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 
 	public void setBitLocation(int bitLocation) {
 		_bitLocation = bitLocation;
+	}
+
+	public BaseModel<?> getPermissionsDefinedRemoteModel() {
+		return _permissionsDefinedRemoteModel;
+	}
+
+	public void setPermissionsDefinedRemoteModel(
+		BaseModel<?> permissionsDefinedRemoteModel) {
+		_permissionsDefinedRemoteModel = permissionsDefinedRemoteModel;
 	}
 
 	public void persist() throws SystemException {
@@ -277,4 +349,5 @@ public class PermissionsDefinedClp extends BaseModelImpl<PermissionsDefined>
 	private Date _createDate;
 	private Date _modifiedDate;
 	private int _bitLocation;
+	private BaseModel<?> _permissionsDefinedRemoteModel;
 }

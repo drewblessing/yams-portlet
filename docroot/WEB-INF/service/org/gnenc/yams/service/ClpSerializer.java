@@ -14,20 +14,28 @@
 
 package org.gnenc.yams.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 
 import org.gnenc.yams.model.ActionLogClp;
+import org.gnenc.yams.model.JobQueueClp;
 import org.gnenc.yams.model.PermissionsClp;
 import org.gnenc.yams.model.PermissionsDefinedClp;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,10 +100,6 @@ public class ClpSerializer {
 		}
 	}
 
-	public static void setClassLoader(ClassLoader classLoader) {
-		_classLoader = classLoader;
-	}
-
 	public static Object translateInput(BaseModel<?> oldModel) {
 		Class<?> oldModelClass = oldModel.getClass();
 
@@ -103,6 +107,10 @@ public class ClpSerializer {
 
 		if (oldModelClassName.equals(ActionLogClp.class.getName())) {
 			return translateInputActionLog(oldModel);
+		}
+
+		if (oldModelClassName.equals(JobQueueClp.class.getName())) {
+			return translateInputJobQueue(oldModel);
 		}
 
 		if (oldModelClassName.equals(PermissionsClp.class.getName())) {
@@ -129,293 +137,43 @@ public class ClpSerializer {
 	}
 
 	public static Object translateInputActionLog(BaseModel<?> oldModel) {
-		ActionLogClp oldCplModel = (ActionLogClp)oldModel;
+		ActionLogClp oldClpModel = (ActionLogClp)oldModel;
 
-		Thread currentThread = Thread.currentThread();
+		BaseModel<?> newModel = oldClpModel.getActionLogRemoteModel();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
+		return newModel;
+	}
 
-			try {
-				Class<?> newModelClass = Class.forName("org.gnenc.yams.model.impl.ActionLogImpl",
-						true, _classLoader);
+	public static Object translateInputJobQueue(BaseModel<?> oldModel) {
+		JobQueueClp oldClpModel = (JobQueueClp)oldModel;
 
-				Object newModel = newModelClass.newInstance();
+		BaseModel<?> newModel = oldClpModel.getJobQueueRemoteModel();
 
-				Method method0 = newModelClass.getMethod("setId",
-						new Class[] { Long.TYPE });
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
-				Long value0 = new Long(oldCplModel.getId());
-
-				method0.invoke(newModel, value0);
-
-				Method method1 = newModelClass.getMethod("setCompanyId",
-						new Class[] { Long.TYPE });
-
-				Long value1 = new Long(oldCplModel.getCompanyId());
-
-				method1.invoke(newModel, value1);
-
-				Method method2 = newModelClass.getMethod("setUserId",
-						new Class[] { Long.TYPE });
-
-				Long value2 = new Long(oldCplModel.getUserId());
-
-				method2.invoke(newModel, value2);
-
-				Method method3 = newModelClass.getMethod("setUserName",
-						new Class[] { String.class });
-
-				String value3 = oldCplModel.getUserName();
-
-				method3.invoke(newModel, value3);
-
-				Method method4 = newModelClass.getMethod("setModifiedDate",
-						new Class[] { Date.class });
-
-				Date value4 = oldCplModel.getModifiedDate();
-
-				method4.invoke(newModel, value4);
-
-				Method method5 = newModelClass.getMethod("setUserEmailAddress",
-						new Class[] { String.class });
-
-				String value5 = oldCplModel.getUserEmailAddress();
-
-				method5.invoke(newModel, value5);
-
-				Method method6 = newModelClass.getMethod("setModifiedUserId",
-						new Class[] { Long.TYPE });
-
-				Long value6 = new Long(oldCplModel.getModifiedUserId());
-
-				method6.invoke(newModel, value6);
-
-				Method method7 = newModelClass.getMethod("setModifiedUserName",
-						new Class[] { String.class });
-
-				String value7 = oldCplModel.getModifiedUserName();
-
-				method7.invoke(newModel, value7);
-
-				Method method8 = newModelClass.getMethod("setModifiedUserEmailAddress",
-						new Class[] { String.class });
-
-				String value8 = oldCplModel.getModifiedUserEmailAddress();
-
-				method8.invoke(newModel, value8);
-
-				Method method9 = newModelClass.getMethod("setModifiedDescription",
-						new Class[] { String.class });
-
-				String value9 = oldCplModel.getModifiedDescription();
-
-				method9.invoke(newModel, value9);
-
-				Method method10 = newModelClass.getMethod("setModifiedFqgn",
-						new Class[] { String.class });
-
-				String value10 = oldCplModel.getModifiedFqgn();
-
-				method10.invoke(newModel, value10);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	public static Object translateInputPermissions(BaseModel<?> oldModel) {
-		PermissionsClp oldCplModel = (PermissionsClp)oldModel;
+		PermissionsClp oldClpModel = (PermissionsClp)oldModel;
 
-		Thread currentThread = Thread.currentThread();
+		BaseModel<?> newModel = oldClpModel.getPermissionsRemoteModel();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
-
-			try {
-				Class<?> newModelClass = Class.forName("org.gnenc.yams.model.impl.PermissionsImpl",
-						true, _classLoader);
-
-				Object newModel = newModelClass.newInstance();
-
-				Method method0 = newModelClass.getMethod("setId",
-						new Class[] { Long.TYPE });
-
-				Long value0 = new Long(oldCplModel.getId());
-
-				method0.invoke(newModel, value0);
-
-				Method method1 = newModelClass.getMethod("setCompanyId",
-						new Class[] { Long.TYPE });
-
-				Long value1 = new Long(oldCplModel.getCompanyId());
-
-				method1.invoke(newModel, value1);
-
-				Method method2 = newModelClass.getMethod("setUserId",
-						new Class[] { Long.TYPE });
-
-				Long value2 = new Long(oldCplModel.getUserId());
-
-				method2.invoke(newModel, value2);
-
-				Method method3 = newModelClass.getMethod("setUserName",
-						new Class[] { String.class });
-
-				String value3 = oldCplModel.getUserName();
-
-				method3.invoke(newModel, value3);
-
-				Method method4 = newModelClass.getMethod("setCreateDate",
-						new Class[] { Date.class });
-
-				Date value4 = oldCplModel.getCreateDate();
-
-				method4.invoke(newModel, value4);
-
-				Method method5 = newModelClass.getMethod("setModifiedDate",
-						new Class[] { Date.class });
-
-				Date value5 = oldCplModel.getModifiedDate();
-
-				method5.invoke(newModel, value5);
-
-				Method method6 = newModelClass.getMethod("setEmailAddress",
-						new Class[] { String.class });
-
-				String value6 = oldCplModel.getEmailAddress();
-
-				method6.invoke(newModel, value6);
-
-				Method method7 = newModelClass.getMethod("setFqgn",
-						new Class[] { String.class });
-
-				String value7 = oldCplModel.getFqgn();
-
-				method7.invoke(newModel, value7);
-
-				Method method8 = newModelClass.getMethod("setPermissions",
-						new Class[] { Long.TYPE });
-
-				Long value8 = new Long(oldCplModel.getPermissions());
-
-				method8.invoke(newModel, value8);
-
-				Method method9 = newModelClass.getMethod("setPermissionsGrantable",
-						new Class[] { Long.TYPE });
-
-				Long value9 = new Long(oldCplModel.getPermissionsGrantable());
-
-				method9.invoke(newModel, value9);
-
-				Method method10 = newModelClass.getMethod("setGroupPermission",
-						new Class[] { Boolean.TYPE });
-
-				Boolean value10 = new Boolean(oldCplModel.getGroupPermission());
-
-				method10.invoke(newModel, value10);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	public static Object translateInputPermissionsDefined(BaseModel<?> oldModel) {
-		PermissionsDefinedClp oldCplModel = (PermissionsDefinedClp)oldModel;
+		PermissionsDefinedClp oldClpModel = (PermissionsDefinedClp)oldModel;
 
-		Thread currentThread = Thread.currentThread();
+		BaseModel<?> newModel = oldClpModel.getPermissionsDefinedRemoteModel();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
-
-			try {
-				Class<?> newModelClass = Class.forName("org.gnenc.yams.model.impl.PermissionsDefinedImpl",
-						true, _classLoader);
-
-				Object newModel = newModelClass.newInstance();
-
-				Method method0 = newModelClass.getMethod("setPermissionKey",
-						new Class[] { String.class });
-
-				String value0 = oldCplModel.getPermissionKey();
-
-				method0.invoke(newModel, value0);
-
-				Method method1 = newModelClass.getMethod("setCompanyId",
-						new Class[] { Long.TYPE });
-
-				Long value1 = new Long(oldCplModel.getCompanyId());
-
-				method1.invoke(newModel, value1);
-
-				Method method2 = newModelClass.getMethod("setUserId",
-						new Class[] { Long.TYPE });
-
-				Long value2 = new Long(oldCplModel.getUserId());
-
-				method2.invoke(newModel, value2);
-
-				Method method3 = newModelClass.getMethod("setUserName",
-						new Class[] { String.class });
-
-				String value3 = oldCplModel.getUserName();
-
-				method3.invoke(newModel, value3);
-
-				Method method4 = newModelClass.getMethod("setCreateDate",
-						new Class[] { Date.class });
-
-				Date value4 = oldCplModel.getCreateDate();
-
-				method4.invoke(newModel, value4);
-
-				Method method5 = newModelClass.getMethod("setModifiedDate",
-						new Class[] { Date.class });
-
-				Date value5 = oldCplModel.getModifiedDate();
-
-				method5.invoke(newModel, value5);
-
-				Method method6 = newModelClass.getMethod("setBitLocation",
-						new Class[] { Integer.TYPE });
-
-				Integer value6 = new Integer(oldCplModel.getBitLocation());
-
-				method6.invoke(newModel, value6);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	public static Object translateInput(Object obj) {
@@ -437,6 +195,10 @@ public class ClpSerializer {
 
 		if (oldModelClassName.equals("org.gnenc.yams.model.impl.ActionLogImpl")) {
 			return translateOutputActionLog(oldModel);
+		}
+
+		if (oldModelClassName.equals("org.gnenc.yams.model.impl.JobQueueImpl")) {
+			return translateOutputJobQueue(oldModel);
 		}
 
 		if (oldModelClassName.equals(
@@ -476,266 +238,120 @@ public class ClpSerializer {
 		}
 	}
 
-	public static Object translateOutputActionLog(BaseModel<?> oldModel) {
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		try {
-			currentThread.setContextClassLoader(_classLoader);
-
+	public static Throwable translateThrowable(Throwable throwable) {
+		if (_useReflectionToTranslateThrowable) {
 			try {
-				ActionLogClp newModel = new ActionLogClp();
+				UnsyncByteArrayOutputStream unsyncByteArrayOutputStream = new UnsyncByteArrayOutputStream();
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(unsyncByteArrayOutputStream);
 
-				Class<?> oldModelClass = oldModel.getClass();
+				objectOutputStream.writeObject(throwable);
 
-				Method method0 = oldModelClass.getMethod("getId");
+				objectOutputStream.flush();
+				objectOutputStream.close();
 
-				Long value0 = (Long)method0.invoke(oldModel, (Object[])null);
+				UnsyncByteArrayInputStream unsyncByteArrayInputStream = new UnsyncByteArrayInputStream(unsyncByteArrayOutputStream.unsafeGetByteArray(),
+						0, unsyncByteArrayOutputStream.size());
 
-				newModel.setId(value0);
+				Thread currentThread = Thread.currentThread();
 
-				Method method1 = oldModelClass.getMethod("getCompanyId");
+				ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
-				Long value1 = (Long)method1.invoke(oldModel, (Object[])null);
+				ObjectInputStream objectInputStream = new ClassLoaderObjectInputStream(unsyncByteArrayInputStream,
+						contextClassLoader);
 
-				newModel.setCompanyId(value1);
+				throwable = (Throwable)objectInputStream.readObject();
 
-				Method method2 = oldModelClass.getMethod("getUserId");
+				objectInputStream.close();
 
-				Long value2 = (Long)method2.invoke(oldModel, (Object[])null);
-
-				newModel.setUserId(value2);
-
-				Method method3 = oldModelClass.getMethod("getUserName");
-
-				String value3 = (String)method3.invoke(oldModel, (Object[])null);
-
-				newModel.setUserName(value3);
-
-				Method method4 = oldModelClass.getMethod("getModifiedDate");
-
-				Date value4 = (Date)method4.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedDate(value4);
-
-				Method method5 = oldModelClass.getMethod("getUserEmailAddress");
-
-				String value5 = (String)method5.invoke(oldModel, (Object[])null);
-
-				newModel.setUserEmailAddress(value5);
-
-				Method method6 = oldModelClass.getMethod("getModifiedUserId");
-
-				Long value6 = (Long)method6.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedUserId(value6);
-
-				Method method7 = oldModelClass.getMethod("getModifiedUserName");
-
-				String value7 = (String)method7.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedUserName(value7);
-
-				Method method8 = oldModelClass.getMethod(
-						"getModifiedUserEmailAddress");
-
-				String value8 = (String)method8.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedUserEmailAddress(value8);
-
-				Method method9 = oldModelClass.getMethod(
-						"getModifiedDescription");
-
-				String value9 = (String)method9.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedDescription(value9);
-
-				Method method10 = oldModelClass.getMethod("getModifiedFqgn");
-
-				String value10 = (String)method10.invoke(oldModel,
-						(Object[])null);
-
-				newModel.setModifiedFqgn(value10);
-
-				return newModel;
+				return throwable;
 			}
-			catch (Exception e) {
-				_log.error(e, e);
+			catch (SecurityException se) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Do not use reflection to translate throwable");
+				}
+
+				_useReflectionToTranslateThrowable = false;
+			}
+			catch (Throwable throwable2) {
+				_log.error(throwable2, throwable2);
+
+				return throwable2;
 			}
 		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
+
+		Class<?> clazz = throwable.getClass();
+
+		String className = clazz.getName();
+
+		if (className.equals(PortalException.class.getName())) {
+			return new PortalException();
 		}
 
-		return oldModel;
+		if (className.equals(SystemException.class.getName())) {
+			return new SystemException();
+		}
+
+		if (className.equals("org.gnenc.yams.NoSuchActionLogException")) {
+			return new org.gnenc.yams.NoSuchActionLogException();
+		}
+
+		if (className.equals("org.gnenc.yams.NoSuchJobQueueException")) {
+			return new org.gnenc.yams.NoSuchJobQueueException();
+		}
+
+		if (className.equals("org.gnenc.yams.NoSuchPermissionsException")) {
+			return new org.gnenc.yams.NoSuchPermissionsException();
+		}
+
+		if (className.equals("org.gnenc.yams.NoSuchPermissionsDefinedException")) {
+			return new org.gnenc.yams.NoSuchPermissionsDefinedException();
+		}
+
+		return throwable;
+	}
+
+	public static Object translateOutputActionLog(BaseModel<?> oldModel) {
+		ActionLogClp newModel = new ActionLogClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setActionLogRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputJobQueue(BaseModel<?> oldModel) {
+		JobQueueClp newModel = new JobQueueClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setJobQueueRemoteModel(oldModel);
+
+		return newModel;
 	}
 
 	public static Object translateOutputPermissions(BaseModel<?> oldModel) {
-		Thread currentThread = Thread.currentThread();
+		PermissionsClp newModel = new PermissionsClp();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
+		newModel.setPermissionsRemoteModel(oldModel);
 
-			try {
-				PermissionsClp newModel = new PermissionsClp();
-
-				Class<?> oldModelClass = oldModel.getClass();
-
-				Method method0 = oldModelClass.getMethod("getId");
-
-				Long value0 = (Long)method0.invoke(oldModel, (Object[])null);
-
-				newModel.setId(value0);
-
-				Method method1 = oldModelClass.getMethod("getCompanyId");
-
-				Long value1 = (Long)method1.invoke(oldModel, (Object[])null);
-
-				newModel.setCompanyId(value1);
-
-				Method method2 = oldModelClass.getMethod("getUserId");
-
-				Long value2 = (Long)method2.invoke(oldModel, (Object[])null);
-
-				newModel.setUserId(value2);
-
-				Method method3 = oldModelClass.getMethod("getUserName");
-
-				String value3 = (String)method3.invoke(oldModel, (Object[])null);
-
-				newModel.setUserName(value3);
-
-				Method method4 = oldModelClass.getMethod("getCreateDate");
-
-				Date value4 = (Date)method4.invoke(oldModel, (Object[])null);
-
-				newModel.setCreateDate(value4);
-
-				Method method5 = oldModelClass.getMethod("getModifiedDate");
-
-				Date value5 = (Date)method5.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedDate(value5);
-
-				Method method6 = oldModelClass.getMethod("getEmailAddress");
-
-				String value6 = (String)method6.invoke(oldModel, (Object[])null);
-
-				newModel.setEmailAddress(value6);
-
-				Method method7 = oldModelClass.getMethod("getFqgn");
-
-				String value7 = (String)method7.invoke(oldModel, (Object[])null);
-
-				newModel.setFqgn(value7);
-
-				Method method8 = oldModelClass.getMethod("getPermissions");
-
-				Long value8 = (Long)method8.invoke(oldModel, (Object[])null);
-
-				newModel.setPermissions(value8);
-
-				Method method9 = oldModelClass.getMethod(
-						"getPermissionsGrantable");
-
-				Long value9 = (Long)method9.invoke(oldModel, (Object[])null);
-
-				newModel.setPermissionsGrantable(value9);
-
-				Method method10 = oldModelClass.getMethod("getGroupPermission");
-
-				Boolean value10 = (Boolean)method10.invoke(oldModel,
-						(Object[])null);
-
-				newModel.setGroupPermission(value10);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	public static Object translateOutputPermissionsDefined(
 		BaseModel<?> oldModel) {
-		Thread currentThread = Thread.currentThread();
+		PermissionsDefinedClp newModel = new PermissionsDefinedClp();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
+		newModel.setPermissionsDefinedRemoteModel(oldModel);
 
-			try {
-				PermissionsDefinedClp newModel = new PermissionsDefinedClp();
-
-				Class<?> oldModelClass = oldModel.getClass();
-
-				Method method0 = oldModelClass.getMethod("getPermissionKey");
-
-				String value0 = (String)method0.invoke(oldModel, (Object[])null);
-
-				newModel.setPermissionKey(value0);
-
-				Method method1 = oldModelClass.getMethod("getCompanyId");
-
-				Long value1 = (Long)method1.invoke(oldModel, (Object[])null);
-
-				newModel.setCompanyId(value1);
-
-				Method method2 = oldModelClass.getMethod("getUserId");
-
-				Long value2 = (Long)method2.invoke(oldModel, (Object[])null);
-
-				newModel.setUserId(value2);
-
-				Method method3 = oldModelClass.getMethod("getUserName");
-
-				String value3 = (String)method3.invoke(oldModel, (Object[])null);
-
-				newModel.setUserName(value3);
-
-				Method method4 = oldModelClass.getMethod("getCreateDate");
-
-				Date value4 = (Date)method4.invoke(oldModel, (Object[])null);
-
-				newModel.setCreateDate(value4);
-
-				Method method5 = oldModelClass.getMethod("getModifiedDate");
-
-				Date value5 = (Date)method5.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedDate(value5);
-
-				Method method6 = oldModelClass.getMethod("getBitLocation");
-
-				Integer value6 = (Integer)method6.invoke(oldModel,
-						(Object[])null);
-
-				newModel.setBitLocation(value6);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ClpSerializer.class);
-	private static ClassLoader _classLoader;
 	private static String _servletContextName;
+	private static boolean _useReflectionToTranslateThrowable = true;
 }

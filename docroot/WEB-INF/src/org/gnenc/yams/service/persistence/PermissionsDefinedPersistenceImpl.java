@@ -102,11 +102,11 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PermissionsDefinedModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsDefinedModelImpl.FINDER_CACHE_ENABLED,
 			PermissionsDefinedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PermissionsDefinedModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsDefinedModelImpl.FINDER_CACHE_ENABLED,
 			PermissionsDefinedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PermissionsDefinedModelImpl.ENTITY_CACHE_ENABLED,
 			PermissionsDefinedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -531,6 +531,16 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 		List<PermissionsDefined> list = (List<PermissionsDefined>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PermissionsDefined permissionsDefined : list) {
+				if ((bitLocation != permissionsDefined.getBitLocation())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -594,10 +604,6 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 	/**
 	 * Returns the first permissions defined in the ordered set where bitLocation = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param bitLocation the bit location
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching permissions defined
@@ -607,32 +613,47 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 	public PermissionsDefined findByBitLocation_First(int bitLocation,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsDefinedException, SystemException {
+		PermissionsDefined permissionsDefined = fetchByBitLocation_First(bitLocation,
+				orderByComparator);
+
+		if (permissionsDefined != null) {
+			return permissionsDefined;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("bitLocation=");
+		msg.append(bitLocation);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsDefinedException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permissions defined in the ordered set where bitLocation = &#63;.
+	 *
+	 * @param bitLocation the bit location
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permissions defined, or <code>null</code> if a matching permissions defined could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PermissionsDefined fetchByBitLocation_First(int bitLocation,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<PermissionsDefined> list = findByBitLocation(bitLocation, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("bitLocation=");
-			msg.append(bitLocation);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsDefinedException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permissions defined in the ordered set where bitLocation = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param bitLocation the bit location
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -643,34 +664,49 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 	public PermissionsDefined findByBitLocation_Last(int bitLocation,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionsDefinedException, SystemException {
+		PermissionsDefined permissionsDefined = fetchByBitLocation_Last(bitLocation,
+				orderByComparator);
+
+		if (permissionsDefined != null) {
+			return permissionsDefined;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("bitLocation=");
+		msg.append(bitLocation);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionsDefinedException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permissions defined in the ordered set where bitLocation = &#63;.
+	 *
+	 * @param bitLocation the bit location
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permissions defined, or <code>null</code> if a matching permissions defined could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PermissionsDefined fetchByBitLocation_Last(int bitLocation,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByBitLocation(bitLocation);
 
 		List<PermissionsDefined> list = findByBitLocation(bitLocation,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("bitLocation=");
-			msg.append(bitLocation);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionsDefinedException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissions defineds before and after the current permissions defined in the ordered set where bitLocation = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param permissionKey the primary key of the current permissions defined
 	 * @param bitLocation the bit location
@@ -863,11 +899,11 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 
@@ -1079,6 +1115,8 @@ public class PermissionsDefinedPersistenceImpl extends BasePersistenceImpl<Permi
 
 	@BeanReference(type = ActionLogPersistence.class)
 	protected ActionLogPersistence actionLogPersistence;
+	@BeanReference(type = JobQueuePersistence.class)
+	protected JobQueuePersistence jobQueuePersistence;
 	@BeanReference(type = PermissionsPersistence.class)
 	protected PermissionsPersistence permissionsPersistence;
 	@BeanReference(type = PermissionsDefinedPersistence.class)
