@@ -185,9 +185,11 @@ public class AccountManagement extends MVCPortlet {
 	
 	public static void editForward(
 			ActionRequest actionRequest, ActionResponse actionResponse) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+	            WebKeys.THEME_DISPLAY);
 		Account callingAccount =  null;
 		try {
-			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+			callingAccount = ActionUtil.accountFromEmailAddress(themeDisplay.getUser().getEmailAddress());
 		} catch (Exception e1) {
 			e1.printStackTrace();	
 		}
@@ -379,8 +381,6 @@ public class AccountManagement extends MVCPortlet {
 		List<Domain> domains = Search.getDomains(filters, null, 
 				StringPool.BLANK, StringPool.BLANK, false);
 		
-		System.out.println("Domains: " + domains.size());
-		
 		boolean valid = PortletUtil.validatePasswordFields(account.getPassword(), 
 				account.getPassword(), account.getGivenName(), 
 				account.getSn(), responses);
@@ -392,7 +392,7 @@ public class AccountManagement extends MVCPortlet {
 		if (valid) {
 			boolean matched = false;
 			for (Domain domain : domains) {
-				System.out.println("Domain 1: " + domain.getOrganization());
+				
 				if (domain.getOrganization().equals(account.getAttribute("esuccMailPrimaryDomain"))) {
 					matched = true;
 					break;
@@ -478,8 +478,6 @@ public class AccountManagement extends MVCPortlet {
 	     String group = ParamUtil.getString(actionRequest, "group");
 	     MutableInt importCount = new MutableInt();
 	     
-	     System.out.println("Entity/group: " + group);
-	     
 	     try {	    	 
 	    	 File file = new File(filePath);
 	    	 if (!file.exists()) {
@@ -518,9 +516,11 @@ public class AccountManagement extends MVCPortlet {
 	
 	public static void removeAccount(
 			ActionRequest actionRequest, ActionResponse actionResponse) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+		            WebKeys.THEME_DISPLAY);
 		Account callingAccount =  null;
 		try {
-			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+			callingAccount = ActionUtil.accountFromEmailAddress(themeDisplay.getUser().getEmailAddress());
 		} catch (Exception e1) {
 			e1.printStackTrace();	
 		}
@@ -567,7 +567,7 @@ public class AccountManagement extends MVCPortlet {
 		            WebKeys.THEME_DISPLAY);
 		Account callingAccount =  null;
 		try {
-			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+			callingAccount = ActionUtil.accountFromEmailAddress(themeDisplay.getUser().getEmailAddress());
 		} catch (Exception e1) {
 			e1.printStackTrace();	
 		}
@@ -598,12 +598,12 @@ public class AccountManagement extends MVCPortlet {
 				callingAccount, account, PermissionsChecker.PERMISSION_ACCOUNT_REMOVE)) {
 			try {
 				// Send email 7 days before removal
-				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), callingAccount.getMail().get(0), 
-						callingAccount.getDisplayName(), "Scheduled removal of" + account.getMail().get(0), 
+				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), account.getMail().get(0), 
+						account.getDisplayName(), "Scheduled removal of " + account.getMail().get(0), 
 						PortletUtil.JOB_ACTION_REMOVE_EMAIL_NOTICE, noticeDate);
 				// Remove the account on the date
-				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), callingAccount.getMail().get(0), 
-						callingAccount.getDisplayName(), "Scheduled removal of" + account.getMail().get(0), 
+				JobQueueLocalServiceUtil.addJob(themeDisplay.getUserId(), account.getMail().get(0), 
+						account.getDisplayName(), "Scheduled removal of " + account.getMail().get(0), 
 						PortletUtil.JOB_ACTION_REMOVE, date);
 				// Send an email immediately
 				
@@ -614,7 +614,7 @@ public class AccountManagement extends MVCPortlet {
 						+ "\n\nRemoval date: " + df.format(date));
 			} catch (Exception e) {
 				SessionErrors.add(actionRequest, "remove-account-failed");
-				
+				e.printStackTrace();
 				jspPage = PortletUtil.ACCT_MGMT_ACCOUNT_REMOVE_JSP;
 			}
 
@@ -633,13 +633,15 @@ public class AccountManagement extends MVCPortlet {
 	
 	public void deleteScheduledRemovalJob(ActionRequest actionRequest,
 			ActionResponse actionResponse) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+	            WebKeys.THEME_DISPLAY);
 		Account callingAccount =  null;
-		String jspPage = null;
 		try {
-			callingAccount = PortletUtil.getAccountFromRequest(actionRequest);
+			callingAccount = ActionUtil.accountFromEmailAddress(themeDisplay.getUser().getEmailAddress());
 		} catch (Exception e1) {
 			e1.printStackTrace();	
 		}
+		String jspPage = null;
 		Account account = ActionUtil.accountFromUidNumber(
 				DAOParamUtil.getString(actionRequest, "uidNumber"));
 		String backURL = DAOParamUtil.getString(actionRequest, "backURL");
@@ -757,7 +759,7 @@ public class AccountManagement extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		
 		for (Map.Entry<String, String> response : responses.entrySet()) {
-			System.out.println(response.getKey());
+			
 			jsonObject.put(response.getKey(), response.getValue());
 		}
 		
@@ -777,12 +779,8 @@ public class AccountManagement extends MVCPortlet {
 			userId = UserLocalServiceUtil.getUserIdByEmailAddress(
 					themeDisplay.getCompanyId(), 
 					themeDisplay.getUser().getEmailAddress());
-			if (!description.equals("Add account")) {
-				modifiedUserId = UserLocalServiceUtil.getUserIdByEmailAddress(
-						themeDisplay.getCompanyId(), emailAddress);
-			} else {
-				modifiedUserId = 1234;
-			}
+//			modifiedUserId = UserLocalServiceUtil.getUserIdByEmailAddress(
+//					themeDisplay.getCompanyId(), account.getMail().get(0));
 		} catch (PortalException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -807,7 +805,7 @@ public class AccountManagement extends MVCPortlet {
 		
 		try {
 			ActionLogLocalServiceUtil.addAction(
-					userId, modifiedUserId, emailAddress, fullName, fqgn, description);
+					userId, emailAddress, fullName, fqgn, description);
 		} catch (SystemException e) {
 			// It's just the log, life goes on
 			System.out.println("Unabled to write to YAMS Action Log");

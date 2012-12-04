@@ -109,7 +109,7 @@ public class ActionLogLocalServiceClpInvoker {
 		_methodName54 = "addAction";
 
 		_methodParameterTypes54 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 	}
@@ -216,9 +216,8 @@ public class ActionLogLocalServiceClpInvoker {
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return ActionLogLocalServiceUtil.addAction(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String)arguments[4], (java.lang.String)arguments[5]);
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
 		}
 
 		throw new UnsupportedOperationException();

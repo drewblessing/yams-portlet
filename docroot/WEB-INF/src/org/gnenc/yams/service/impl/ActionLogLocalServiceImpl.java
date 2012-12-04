@@ -44,7 +44,7 @@ public class ActionLogLocalServiceImpl extends ActionLogLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link org.gnenc.yams.service.ActionLogLocalServiceUtil} to access the action log local service.
 	 */
-	public ActionLog addAction(long userId, long modifiedUserId, String email, String fullName, 
+	public ActionLog addAction(long userId, String email, String fullName, 
 			String modifiedFqgn, String modifiedDescription) throws SystemException {
 		
 		User user = UserLocalServiceUtil.fetchUser(userId);
@@ -61,7 +61,7 @@ public class ActionLogLocalServiceImpl extends ActionLogLocalServiceBaseImpl {
 		logEntry.setUserName(user.getFullName());
 		logEntry.setUserEmailAddress(user.getEmailAddress());
 		logEntry.setModifiedDate(now);
-		logEntry.setModifiedUserId(modifiedUserId);
+		logEntry.setModifiedUserId(1234);
 		logEntry.setModifiedUserName(fullName);
 		logEntry.setModifiedUserEmailAddress(email);
 		logEntry.setModifiedFqgn(modifiedFqgn);

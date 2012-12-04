@@ -42,6 +42,8 @@ for (JobQueue job : removalJobs) {
 	removalDate = df.format(job.getJobDate());
 }
 %>
+<liferay-ui:error key="insufficient-privileges" message="insufficient-privileges" />
+<liferay-ui:error key="remove-account-failed" message="remove-account-failed" />
 
 <c:if test="<%= portletName.equals(PortletKeys.ACCOUNT_MANAGEMENT) %>">
 	<liferay-util:include

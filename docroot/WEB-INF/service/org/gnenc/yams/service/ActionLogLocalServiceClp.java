@@ -109,7 +109,7 @@ public class ActionLogLocalServiceClp implements ActionLogLocalService {
 		_methodName19 = "addAction";
 
 		_methodParameterTypes19 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 	}
@@ -637,7 +637,7 @@ public class ActionLogLocalServiceClp implements ActionLogLocalService {
 	}
 
 	public org.gnenc.yams.model.ActionLog addAction(long userId,
-		long modifiedUserId, java.lang.String email, java.lang.String fullName,
+		java.lang.String email, java.lang.String fullName,
 		java.lang.String modifiedFqgn, java.lang.String modifiedDescription)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -647,8 +647,6 @@ public class ActionLogLocalServiceClp implements ActionLogLocalService {
 					_methodParameterTypes19,
 					new Object[] {
 						userId,
-						
-					modifiedUserId,
 						
 					ClpSerializer.translateInput(email),
 						

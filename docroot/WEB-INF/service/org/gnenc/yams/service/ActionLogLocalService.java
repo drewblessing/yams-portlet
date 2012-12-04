@@ -244,7 +244,7 @@ public interface ActionLogLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	public org.gnenc.yams.model.ActionLog addAction(long userId,
-		long modifiedUserId, java.lang.String email, java.lang.String fullName,
+		java.lang.String email, java.lang.String fullName,
 		java.lang.String modifiedFqgn, java.lang.String modifiedDescription)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }
